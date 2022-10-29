@@ -1,4 +1,4 @@
-﻿namespace AuctionExpert.Web
+namespace AuctionExpert.Web
 {
     using System.Reflection;
 

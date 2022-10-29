@@ -6,6 +6,21 @@
 
         public const string AdministratorRoleName = "Administrator";
 
+        public class RegisterConstraints
+        {
+            public const int UsernameMaxLength = 15;
+
+            public const int UsernameMinLength = 2;
+
+            public const int PasswordMaxLength = 100;
+
+            public const int PasswordMinLength = 6;
+
+            public const string UsernameTaken = "This username is already taken.";
+
+            public const string EmailTaken = "This Email adress is already taken.";
+        }
+
         public class FilePaths
         {
             public const string DirectoryUp = "..";

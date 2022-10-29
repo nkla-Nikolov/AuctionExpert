@@ -75,7 +75,6 @@
                 .HasOne(x => x.Auction)
                 .WithMany(x => x.Bids);
 
-
             // Needed for Identity models configuration
             base.OnModelCreating(builder);
 

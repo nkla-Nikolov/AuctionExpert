@@ -3,6 +3,6 @@
     public enum ConditionType
     {
         BrandNew = 1,
-        Used = 2
+        Used = 2,
     }
 }
