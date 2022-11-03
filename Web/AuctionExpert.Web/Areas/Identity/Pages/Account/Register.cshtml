@@ -3,11 +3,6 @@
 
 @{
     ViewData["Title"] = "Register";
-    var cs = this.Model.Countries.Select(x => new SelectListItem()
-            {
-                Value = x.Id.ToString(),
-                Text = x.Name,
-            });
 }
 
 <div class="inner-banner">
@@ -53,6 +48,14 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-6">
+                                <div class="form-inner">
+                                    <label asp-for="Input.Age">Age *</label>
+                                    <input asp-for="Input.Age" class="form-control" placeholder="Enter your age">
+                                    <span asp-validation-for="Input.Age" class="text-danger"></span>
+                                </div>
+                            </div>
+
                             <div class="col-md-12">
                                 <div class="form-inner">
                                     <label asp-for="Input.Username">Username *</label>
@@ -72,14 +75,12 @@
                             <div class="col-md-12">
                                 <div class="form-inner">
                                     <label asp-for="Input.CountryId">Country *</label>
-
                                     <select asp-for="Input.CountryId">
                                         @foreach (var country in Model.Countries)
                                         {
                                             <option value="@country.Id">@country.Name</option>
                                         }
                                     </select>
-
                                     <span asp-validation-for="Input.CountryId" class="text-danger"></span>
                                 </div>
                             </div>
@@ -89,7 +90,6 @@
                                     <label asp-for="Input.Password">Password *</label>
                                     <input asp-for="Input.Password" class="form-control" type="password" placeholder="Create A Password" />
                                     <span asp-validation-for="Input.Password" class="text-danger"></span>
-                                    <i class="bi bi-eye-slash" id="togglePassword"></i>
                                 </div>
                             </div>
 

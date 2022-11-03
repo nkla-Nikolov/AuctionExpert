@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuctionExpert.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221102200249_SomeChanges")]
-    partial class SomeChanges
+    [Migration("20221103131715_AddedAgeToUser")]
+    partial class AddedAgeToUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -73,8 +73,8 @@ namespace AuctionExpert.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()

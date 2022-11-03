@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 namespace AuctionExpert.Web.Areas.Identity.Pages.Account
 {
+    using System;
 #nullable disable
 
     using System.Collections.Generic;
@@ -94,14 +95,12 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             public string ConfirmPassword { get; set; }
 
-            //[Required]
-            //[DataType(DataType.Date)]
-            //public DateTime BirthDate { get; set; }
+            [Required]
+            [Range(AgeMinLength, AgeMaxLength)]
+            public int Age { get; set; }
 
             [Required]
             public int CountryId { get; set; }
-
-            public IEnumerable<CountryListModel> Countries { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -141,7 +140,9 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
                         FirstName = this.Input.FirstName,
                         LastName = this.Input.LastName,
                         UserName = this.Input.Username,
+                        CountryId = this.Input.CountryId,
                         Email = this.Input.Email,
+                        Age = this.Input.Age,
                     };
 
                     var result = await this.userManager.CreateAsync(user, this.Input.Password);

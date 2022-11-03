@@ -24,6 +24,10 @@
 
             public const int PasswordMinLength = 6;
 
+            public const int AgeMinLength = 18;
+
+            public const int AgeMaxLength = 100;
+
             public const string UsernameTaken = "This username is already taken.";
 
             public const string EmailTaken = "This Email adress is already taken.";
@@ -31,6 +35,10 @@
             public const string RangeMessage = "The {0} must be at least {2} and maximum {1} characters long!";
 
             public const string PasswordDoesNotMatchMessage = "The password and confirmation password do not match!";
+
+            public const string AgeMinMessage = "You cannot register until you are 18 years old!";
+
+            public const string AgeMaxMessage = "You should be dead!";
         }
 
         public class FilePaths
