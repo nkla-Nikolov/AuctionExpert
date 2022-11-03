@@ -24,9 +24,5 @@
         public ConditionType Condition { get; set; }
 
         public string Description { get; set; }
-
-        public int AuctionId { get; set; }
-
-        public virtual Auction Auction { get; set; }
     }
 }

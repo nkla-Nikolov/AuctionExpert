@@ -5,6 +5,7 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
 #nullable disable
 
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Text;
     using System.Text.Encodings.Web;
@@ -12,14 +13,14 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
 
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
-    using AuctionExpert.Web.ViewModels.Authentication;
+    using AuctionExpert.Services.Data;
+    using AuctionExpert.Services.Data.Models;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
 
     using static AuctionExpert.Common.GlobalConstants.RegisterConstraints;
@@ -31,27 +32,77 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
+        private readonly ICountryService countryService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IDeletableEntityRepository<ApplicationUser> userRepository)
+            IDeletableEntityRepository<ApplicationUser> userRepository,
+            ICountryService countryService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
             this.emailSender = emailSender;
             this.userRepository = userRepository;
+            this.countryService = countryService;
+            this.Countries = this.countryService.GetCountries();
         }
 
         [BindProperty]
-        public RegisterViewModel Input { get; set; }
+        public InputModel Input { get; set; }
 
         public string ReturnUrl { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
+        public IEnumerable<CountryListModel> Countries { get; set; }
+
+        public class InputModel
+        {
+            [Required]
+            [StringLength(FirstNameMaxLenth, ErrorMessage = RangeMessage, MinimumLength = FirstNameMinLength)]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [StringLength(LastNameMaxLenth, ErrorMessage = RangeMessage, MinimumLength = LastNameMinLenth)]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
+            [Required]
+            [StringLength(UsernameMaxLength, ErrorMessage = RangeMessage, MinimumLength = UsernameMinLength)]
+            [Display(Name = "Username")]
+            public string Username { get; set; }
+
+            [Required]
+            [EmailAddress]
+            [Display(Name = "Email")]
+            public string Email { get; set; }
+
+            [Required]
+            [StringLength(PasswordMaxLength, ErrorMessage = RangeMessage, MinimumLength = PasswordMinLength)]
+            [DataType(DataType.Password)]
+            [Display(Name = "Password")]
+            public string Password { get; set; }
+
+            [Required]
+            [Compare(nameof(Password), ErrorMessage = PasswordDoesNotMatchMessage)]
+            [DataType(DataType.Password)]
+            [Display(Name = "Confirm password")]
+            public string ConfirmPassword { get; set; }
+
+            //[Required]
+            //[DataType(DataType.Date)]
+            //public DateTime BirthDate { get; set; }
+
+            [Required]
+            public int CountryId { get; set; }
+
+            public IEnumerable<CountryListModel> Countries { get; set; }
+        }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
@@ -67,13 +118,13 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
 
             if (this.ModelState.IsValid)
             {
-                bool usernameExist = await this.userRepository
+                bool usernameExist = this.userRepository
                     .AllAsNoTracking()
-                    .AnyAsync(x => x.NormalizedUserName == this.Input.Username.ToLower());
+                    .Any(x => x.NormalizedUserName == this.Input.Username.ToUpper());
 
-                bool emailExist = await this.userRepository
+                bool emailExist = this.userRepository
                     .AllAsNoTracking()
-                    .AnyAsync(x => x.NormalizedEmail == this.Input.Email.ToLower());
+                    .Any(x => x.NormalizedEmail == this.Input.Email.ToUpper());
 
                 if (usernameExist)
                 {
@@ -87,6 +138,8 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
                 {
                     var user = new ApplicationUser()
                     {
+                        FirstName = this.Input.FirstName,
+                        LastName = this.Input.LastName,
                         UserName = this.Input.Username,
                         Email = this.Input.Email,
                     };

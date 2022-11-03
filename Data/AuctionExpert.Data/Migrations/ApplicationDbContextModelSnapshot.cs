@@ -94,8 +94,14 @@ namespace AuctionExpert.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -199,8 +205,7 @@ namespace AuctionExpert.Data.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.HasIndex("ProductId")
-                        .IsUnique();
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("SubCategoryId");
 
@@ -355,9 +360,6 @@ namespace AuctionExpert.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AuctionId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Brand")
                         .HasColumnType("nvarchar(max)");
@@ -647,8 +649,8 @@ namespace AuctionExpert.Data.Migrations
                         .HasForeignKey("OwnerId");
 
                     b.HasOne("AuctionExpert.Data.Models.Product", "Product")
-                        .WithOne("Auction")
-                        .HasForeignKey("AuctionExpert.Data.Models.Auction", "ProductId")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -798,11 +800,6 @@ namespace AuctionExpert.Data.Migrations
                     b.Navigation("Cities");
 
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("AuctionExpert.Data.Models.Product", b =>
-                {
-                    b.Navigation("Auction");
                 });
 
             modelBuilder.Entity("AuctionExpert.Data.Models.SubCategory", b =>

@@ -5,11 +5,11 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
 #nullable disable
 
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
 
     using AuctionExpert.Data.Models;
-    using AuctionExpert.Web.ViewModels.Authentication;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -28,7 +28,7 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
         }
 
         [BindProperty]
-        public LoginViewModel Input { get; set; }
+        public InputModel Input { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
@@ -36,6 +36,19 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
 
         [TempData]
         public string ErrorMessage { get; set; }
+
+        public class InputModel
+        {
+            [Required]
+            public string Username { get; set; }
+
+            [Required]
+            [DataType(DataType.Password)]
+            public string Password { get; set; }
+
+            [Display(Name = "Remember me?")]
+            public bool RememberMe { get; set; }
+        }
 
         public async Task OnGetAsync(string returnUrl = null)
         {

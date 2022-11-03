@@ -62,18 +62,25 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Auction>()
-                .HasOne(x => x.Owner)
-                .WithMany(x => x.Auctions);
+            builder.Entity<Country>()
+                .HasMany(x => x.Users)
+                .WithOne(x => x.Country)
+                .HasForeignKey(x => x.CountryId);
+
+            builder.Entity<ApplicationUser>()
+                .HasOne(x => x.Country)
+                .WithMany(x => x.Users)
+                .HasForeignKey(x => x.CountryId);
 
             builder.Entity<Auction>()
-                .HasOne(x => x.Product)
-                .WithOne(x => x.Auction)
-                .HasForeignKey<Auction>(x => x.ProductId);
+                .HasOne(x => x.Owner)
+                .WithMany(x => x.Auctions)
+                .HasForeignKey(x => x.OwnerId);
 
             builder.Entity<Bid>()
                 .HasOne(x => x.Auction)
-                .WithMany(x => x.Bids);
+                .WithMany(x => x.Bids)
+                .HasForeignKey(x => x.AuctionId);
 
             // Needed for Identity models configuration
             base.OnModelCreating(builder);
