@@ -9,44 +9,21 @@
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/assets/css/register-page.css">
-
-    <link rel="icon" href="~/assets/images/bg/sm-logo.png" type="image/gif" sizes="20x20">
-
-    <link rel="stylesheet" href="~/assets/css/animate.css">
-    <!-- css file link -->
-    <link rel="stylesheet" href="~/assets/css/all.css">
-
-    <!-- bootstrap 5 -->
-    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css">
-
-    <!-- box-icon -->
-    <link rel="stylesheet" href="~/assets/css/boxicons.min.css">
-
-    <!-- bootstrap icon -->
-    <link rel="stylesheet" href="~/assets/css/bootstrap-icons.css">
-
-    <!-- jquery ui -->
-    <link rel="stylesheet" href="~/assets/css/jquery-ui.css">
-
-    <!-- swiper-slide -->
-    <link rel="stylesheet" href="~/assets/css/swiper-bundle.min.css">
-
-    <!-- slick-slide -->
-    <link rel="stylesheet" href="~/assets/css/slick-theme.css">
-    <link rel="stylesheet" href="~/assets/css/slick.css">
-
-    <!-- select 2 -->
-    <link rel="stylesheet" href="~/assets/css/nice-select.css">
-
-    <!-- animate css -->
-    <link rel="stylesheet" href="~/assets/css/magnific-popup.css">
-
-    <!-- odometer css -->
-    <link rel="stylesheet" href="~/assets/css/odometer.css">
-
-    <!-- style css -->
-    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/register-page.css" asp-append-version="true">
+    <link rel="icon" href="~/assets/images/bg/sm-logo.png" type="image/gif" sizes="20x20" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/css/animate.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/css/all.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/css/boxicons.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/css/bootstrap-icons.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/css/jquery-ui.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/css/swiper-bundle.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/css/slick-theme.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/css/slick.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/css/nice-select.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/css/magnific-popup.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/css/odometer.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/css/style.css" asp-append-version="true">
 </head>
 <body>
     <div class="preloader">
@@ -60,26 +37,19 @@
 
     <header class="header-area style-1">
         <div class="header-logo" style="background:none">
-            @*<a href="index.html"><img alt="image" src="~/assets/images/bg/header-logo.png"></a>*@
         </div>
         <div class="main-menu">
-            <div class="mobile-logo-area d-lg-none d-flex justify-content-between align-items-center">
-                <div class="mobile-logo-wrap ">
-                    <a href="index.html"><img alt="image" src="~/assets/images/bg/header-logo.png"></a>
-
-                </div>
-                <div class="menu-close-btn">
-                    <i class="bi bi-x-lg"></i>
-                </div>
+            @*<div class="mobile-logo-area d-lg-none d-flex justify-content-between align-items-center">
+            <div class="mobile-logo-wrap ">
+            <a href="index.html"><img alt="image" src="~/assets/images/bg/header-logo.png"></a>
             </div>
+            <div class="menu-close-btn">
+            <i class="bi bi-x-lg"></i>
+            </div>
+            </div>*@
             <ul class="menu-list">
-                <li class="menu-item-has-children">
-                    <a href="#" class="drop-down">Home</a><i class='bx bx-plus dropdown-icon'></i>
-                    <ul class="submenu">
-                        <li><a href="index.html">Home 1</a></li>
-                        <li><a href="index2.html">Home 2</a></li>
-                        <li><a href="index3.html">Home 3</a></li>
-                    </ul>
+                <li class="menu-item">
+                    <a asp-controller="Home" asp-action="Index">Home</a>
                 </li>
                 <li>
                     <a href="about.html">About Us</a>
@@ -109,14 +79,14 @@
                     </ul>
                 </li>
                 <li><a href="contact.html">Contact</a></li>
-               
+
             </ul>
         </div>
         @if (this.User.Identity.IsAuthenticated)
         {
             <div class="nav-right d-flex align-items-center">
                 <div class="eg-btn btn--primary header-btn">
-                    <a href="dashboard.html">My Account</a>
+                    <a asp-controller="Users" asp-action="Dashboard">My Account</a>
                 </div>
             </div>
         }
@@ -131,32 +101,32 @@
     </header>
 
     @*<header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@GlobalConstants.SystemName</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
+    <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container">
+    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@GlobalConstants.SystemName</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+    <ul class="navbar-nav flex-grow-1">
+    <li class="nav-item">
+    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link text-dark" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </li>
+    </ul>
+    <partial name="_LoginPartial" />
+    </div>
+    </div>
+    </nav>
     </header>*@
 
-    <div class="container">
+    <div @*class="container"*@>
         @*<partial name="_CookieConsentPartial" />*@
         <main role="main" class="pb-3">
             @this.RenderBody()
@@ -279,9 +249,9 @@
     </footer>
 
     @*<footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <div class="container">
+    &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
     </footer>*@
 
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
@@ -290,17 +260,17 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
 
-    <script src="~/assets/js/jquery-3.6.0.min.js"></script>
-    <script src="~/assets/js/jquery-ui.js"></script>
-    <script src="~/assets/js/bootstrap.bundle.min.js"></script>
-    <script src="~/assets/js/wow.min.js"></script>
-    <script src="~/assets/js/swiper-bundle.min.js"></script>
-    <script src="~/assets/js/slick.js"></script>
-    <script src="~/assets/js/jquery.nice-select.js"></script>
-    <script src="~/assets/js/odometer.min.js"></script>
-    <script src="~/assets/js/viewport.jquery.js"></script>
-    <script src="~/assets/js/jquery.magnific-popup.min.js"></script>
-    <script src="~/assets/js/main.js"></script>
+    <script src="~/assets/js/jquery-3.6.0.min.js" asp-append-version="true"></script>
+    <script src="~/assets/js/jquery-ui.js" asp-append-version="true"></script>
+    <script src="~/assets/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <script src="~/assets/js/wow.min.js" asp-append-version="true"></script>
+    <script src="~/assets/js/swiper-bundle.min.js" asp-append-version="true"></script>
+    <script src="~/assets/js/slick.js" asp-append-version="true"></script>
+    <script src="~/assets/js/jquery.nice-select.js" asp-append-version="true"></script>
+    <script src="~/assets/js/odometer.min.js" asp-append-version="true"></script>
+    <script src="~/assets/js/viewport.jquery.js" asp-append-version="true"></script>
+    <script src="~/assets/js/jquery.magnific-popup.min.js" asp-append-version="true"></script>
+    <script src="~/assets/js/main.js" asp-append-version="true"></script>
     @await this.RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

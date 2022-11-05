@@ -2,10 +2,8 @@
 {
     using System.Linq;
 
-    using AuctionExpert.Services.Data.Models;
-
     public interface ICountryService
     {
-        IQueryable<CountryListModel> GetCountries();
+        IQueryable<T> GetCountries<T>();
     }
 }

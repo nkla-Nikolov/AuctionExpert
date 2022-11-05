@@ -1,6 +1,7 @@
 ﻿namespace AuctionExpert.Data.Models
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using AuctionExpert.Data.Common.Models;
 
@@ -11,8 +12,10 @@
             this.Auctions = new HashSet<Auction>();
         }
 
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         public int CategoryId { get; set; }
 
         public virtual Category Category { get; set; }

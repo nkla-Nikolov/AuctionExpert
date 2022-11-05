@@ -14,6 +14,7 @@
             this.Auctions = new HashSet<Auction>();
         }
 
+        [Required]
         public string Name { get; set; }
 
         public virtual ICollection<City> Cities { get; set; }

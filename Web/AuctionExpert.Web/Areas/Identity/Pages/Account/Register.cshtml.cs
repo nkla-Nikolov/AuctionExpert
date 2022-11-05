@@ -15,7 +15,7 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Data;
-    using AuctionExpert.Services.Data.Models;
+    using AuctionExpert.Web.ViewModels.Country;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.UI.Services;
@@ -49,7 +49,7 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
             this.emailSender = emailSender;
             this.userRepository = userRepository;
             this.countryService = countryService;
-            this.Countries = this.countryService.GetCountries();
+            this.Countries = this.countryService.GetCountries<CountryListModel>();
         }
 
         [BindProperty]
@@ -117,19 +117,11 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
 
             if (this.ModelState.IsValid)
             {
-                bool usernameExist = this.userRepository
-                    .AllAsNoTracking()
-                    .Any(x => x.NormalizedUserName == this.Input.Username.ToUpper());
-
                 bool emailExist = this.userRepository
                     .AllAsNoTracking()
                     .Any(x => x.NormalizedEmail == this.Input.Email.ToUpper());
 
-                if (usernameExist)
-                {
-                    this.ModelState.AddModelError(string.Empty, UsernameTaken);
-                }
-                else if (emailExist)
+                if (emailExist)
                 {
                     this.ModelState.AddModelError(string.Empty, EmailTaken);
                 }

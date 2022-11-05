@@ -4,7 +4,7 @@
 
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
-    using AuctionExpert.Services.Data.Models;
+    using AuctionExpert.Services.Mapping;
 
     public class CountryService : ICountryService
     {
@@ -15,15 +15,11 @@
             this.countryRepository = countryRepository;
         }
 
-        public IQueryable<CountryListModel> GetCountries()
+        public IQueryable<T> GetCountries<T>()
         {
             return this.countryRepository
                 .AllAsNoTracking()
-                .Select(x => new CountryListModel()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                });
+                .To<T>();
         }
     }
 }

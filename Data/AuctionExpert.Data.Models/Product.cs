@@ -1,6 +1,7 @@
 ﻿namespace AuctionExpert.Data.Models
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
 
     using AuctionExpert.Data.Common.Enumerations;
     using AuctionExpert.Data.Common.Models;
@@ -21,6 +22,7 @@
 
         public int? Weight { get; set; }
 
+        [Required]
         public ConditionType Condition { get; set; }
 
         public string Description { get; set; }
