@@ -6,7 +6,7 @@
 
         public const string AdministratorRoleName = "Administrator";
 
-        public class RegisterConstraints
+        public class RegisterConstraintsAndMessages
         {
             public const int FirstNameMaxLenth = 20;
 
@@ -39,6 +39,19 @@
             public const string AgeMinMessage = "You cannot register until you are 18 years old!";
 
             public const string AgeMaxMessage = "You should be dead!";
+        }
+
+        public class CreateAuctionConstraintsAndMessages
+        {
+            public const int TitleMinLenght = 10;
+
+            public const int TitleMaxLenght = 60;
+
+            public const int DescriptionMinLength = 20;
+
+            public const int DescriptionMaxLength = 2000;
+
+            public const string LengthMessage = "The {0} must be at least {2} and maximum {1} characters long!";
         }
 
         public class FilePaths

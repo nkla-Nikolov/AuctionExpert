@@ -24,7 +24,7 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.Logging;
 
-    using static AuctionExpert.Common.GlobalConstants.RegisterConstraints;
+    using static AuctionExpert.Common.GlobalConstants.RegisterConstraintsAndMessages;
 
     public class RegisterModel : PageModel
     {
@@ -33,7 +33,7 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
-        private readonly ICountryService countryService;
+        private readonly ICountriesService countryService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -41,7 +41,7 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IDeletableEntityRepository<ApplicationUser> userRepository,
-            ICountryService countryService)
+            ICountriesService countryService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -49,7 +49,7 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
             this.emailSender = emailSender;
             this.userRepository = userRepository;
             this.countryService = countryService;
-            this.Countries = this.countryService.GetCountries<CountryListModel>();
+            this.Countries = this.countryService.GetAllCountries<CountryListModel>();
         }
 
         [BindProperty]

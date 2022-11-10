@@ -64,7 +64,9 @@ namespace AuctionExpert.Web
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
-            services.AddTransient<ICountryService, CountryService>();
+            services.AddTransient<ICountriesService, CountriesService>();
+            services.AddTransient<ICategoriesService, CategoriesService>();
+            services.AddTransient<ISubCategoriesService, SubCategoriesService>();
         }
 
         private static void Configure(WebApplication app)

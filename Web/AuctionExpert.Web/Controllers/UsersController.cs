@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace AuctionExpert.Web.Controllers
+﻿namespace AuctionExpert.Web.Controllers
 {
-    public class UsersController : Controller
+    using Microsoft.AspNetCore.Mvc;
+
+    public class UsersController : BaseController
     {
         public IActionResult Dashboard()
         {
-            return View();
+            return this.View();
         }
     }
 }

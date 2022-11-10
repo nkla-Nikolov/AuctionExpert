@@ -40,22 +40,25 @@
         </div>
         <div class="main-menu">
             @*<div class="mobile-logo-area d-lg-none d-flex justify-content-between align-items-center">
-            <div class="mobile-logo-wrap ">
-            <a href="index.html"><img alt="image" src="~/assets/images/bg/header-logo.png"></a>
-            </div>
-            <div class="menu-close-btn">
-            <i class="bi bi-x-lg"></i>
-            </div>
+                <div class="mobile-logo-wrap ">
+                    <a href="index.html"><img alt="image" src="~/assets/images/bg/HEADER LOGO SOON!"></a>
+                </div>
+                <div class="menu-close-btn">
+                    <i class="bi bi-x-lg"></i>
+                </div>
             </div>*@
             <ul class="menu-list">
                 <li class="menu-item">
                     <a asp-controller="Home" asp-action="Index">Home</a>
                 </li>
-                <li>
-                    <a href="about.html">About Us</a>
+                <li class="menu-item">
+                    <a asp-controller="Auction" asp-action="Sell">Sell</a>
                 </li>
                 <li>
-                    <a href="how-works.html">How It Works</a>
+                    <a asp-controller="Home" asp-action="About">About Us</a>
+                </li>
+                <li>
+                    <a asp-controller="Home" asp-action="HowWorks">How It Works</a>
                 </li>
                 <li>
                     <a href="live-auction.html">Browse Product</a>
@@ -100,33 +103,7 @@
         }
     </header>
 
-    @*<header>
-    <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container">
-    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@GlobalConstants.SystemName</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-    aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-    <ul class="navbar-nav flex-grow-1">
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </li>
-    </ul>
-    <partial name="_LoginPartial" />
-    </div>
-    </div>
-    </nav>
-    </header>*@
-
-    <div @*class="container"*@>
+    <div>
         @*<partial name="_CookieConsentPartial" />*@
         <main role="main" class="pb-3">
             @this.RenderBody()
@@ -139,7 +116,7 @@
                 <div class="row gy-5">
                     <div class="col-lg-3 col-md-6">
                         <div class="footer-item">
-                            <a href="index.html"><img src="~/assets/images/bg/footer-logo.png" alt=""></a>
+                            @*<a href="index.html"><img src="~/assets/images/bg/FOOTER LOGO SOON" alt=""></a>*@
                             <p>
                                 Lorem ipsum dolor sit amet consecte tur adipisicing elit, sed do eiusmod tempor
                                 incididunt ut labore.
@@ -247,12 +224,6 @@
             </div>
         </div>
     </footer>
-
-    @*<footer class="border-top footer text-muted">
-    <div class="container">
-    &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
-    </footer>*@
 
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>

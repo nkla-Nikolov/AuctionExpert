@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
+    using AuctionExpert.Data.Common.Enumerations;
     using AuctionExpert.Data.Common.Models;
 
     public class Auction : BaseDeletableModel<int>
@@ -13,22 +14,31 @@
         }
 
         [Required]
-        public string Name { get; set; }
+        [MaxLength(50)]
+        public string Title { get; set; }
 
         public int Views { get; set; }
 
         [Required]
         public decimal StartPrice { get; set; }
 
+        [Required]
+        public TypeSale AuctionType { get; set; }
+
+        [Required]
+        [MaxLength(10)]
+        public int Duration { get; set; }
+
+        [Required]
         public string OwnerId { get; set; }
 
         public virtual ApplicationUser Owner { get; set; }
 
         [Required]
-        public int ProductId { get; set; }
+        [MaxLength(500)]
+        public string Description { get; set; }
 
-        public virtual Product Product { get; set; }
-
+        [Required]
         public int CountryId { get; set; }
 
         public virtual Country Country { get; set; }

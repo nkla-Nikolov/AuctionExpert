@@ -3,16 +3,13 @@
     using System.Diagnostics;
 
     using AuctionExpert.Web.ViewModels;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : BaseController
     {
+        [AllowAnonymous]
         public IActionResult Index()
-        {
-            return this.View();
-        }
-
-        public IActionResult Privacy()
         {
             return this.View();
         }
