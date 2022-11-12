@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\AuctionExpert.Common\AuctionExpert.Common.csproj" />
     <ProjectReference Include="..\AuctionExpert.Data.Common\AuctionExpert.Data.Common.csproj" />
   </ItemGroup>
   

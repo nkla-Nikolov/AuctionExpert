@@ -1,20 +1,24 @@
 ﻿namespace AuctionExpert.Data.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using AuctionExpert.Data.Common.Enumerations;
     using AuctionExpert.Data.Common.Models;
 
+    using static AuctionExpert.Common.GlobalConstants.CreateAuctionConstraintsAndMessages;
+
     public class Auction : BaseDeletableModel<int>
     {
         public Auction()
         {
             this.Bids = new HashSet<Bid>();
+            this.Images = new HashSet<Image>();
         }
 
         [Required]
-        [MaxLength(50)]
+        [StringLength(TitleMaxLenght, MinimumLength = TitleMinLenght)]
         public string Title { get; set; }
 
         public int Views { get; set; }
@@ -26,8 +30,7 @@
         public TypeSale AuctionType { get; set; }
 
         [Required]
-        [MaxLength(10)]
-        public int Duration { get; set; }
+        public DateTime Duration { get; set; }
 
         [Required]
         public string OwnerId { get; set; }
@@ -35,7 +38,7 @@
         public virtual ApplicationUser Owner { get; set; }
 
         [Required]
-        [MaxLength(500)]
+        [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
         public string Description { get; set; }
 
         [Required]
@@ -49,5 +52,7 @@
         public virtual SubCategory SubCategory { get; set; }
 
         public virtual ICollection<Bid> Bids { get; set; }
+
+        public virtual ICollection<Image> Images { get; set; }
     }
 }

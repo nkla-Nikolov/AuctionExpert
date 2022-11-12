@@ -6,11 +6,11 @@
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Mapping;
 
-    public class SubCategoriesService : ISubCategoriesService
+    public class SubCategoryService : ISubCategoryService
     {
         private readonly IDeletableEntityRepository<SubCategory> subCategoryRepository;
 
-        public SubCategoriesService(IDeletableEntityRepository<SubCategory> subCategoryRepository)
+        public SubCategoryService(IDeletableEntityRepository<SubCategory> subCategoryRepository)
         {
             this.subCategoryRepository = subCategoryRepository;
         }

@@ -2,7 +2,7 @@
 {
     using System.Linq;
 
-    public interface ISubCategoriesService
+    public interface ISubCategoryService
     {
         IQueryable<T> GetAllSubCategories<T>();
 

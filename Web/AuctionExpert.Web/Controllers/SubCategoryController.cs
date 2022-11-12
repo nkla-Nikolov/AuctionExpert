@@ -10,9 +10,9 @@
     [ApiController]
     public class SubCategoryController : ControllerBase
     {
-        private readonly ISubCategoriesService subCategoryService;
+        private readonly ISubCategoryService subCategoryService;
 
-        public SubCategoryController(ISubCategoriesService subCategoryService)
+        public SubCategoryController(ISubCategoryService subCategoryService)
         {
             this.subCategoryService = subCategoryService;
         }

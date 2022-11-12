@@ -45,7 +45,9 @@
         {
             public const int TitleMinLenght = 10;
 
-            public const int TitleMaxLenght = 60;
+            public const int TitleMaxLenght = 50;
+
+            public const int DurationMaxDays = 7;
 
             public const int DescriptionMinLength = 20;
 

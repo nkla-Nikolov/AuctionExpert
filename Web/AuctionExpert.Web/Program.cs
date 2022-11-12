@@ -1,5 +1,7 @@
 namespace AuctionExpert.Web
 {
+    using System;
+    using System.Linq;
     using System.Reflection;
 
     using AuctionExpert.Data;
@@ -12,6 +14,7 @@ namespace AuctionExpert.Web
     using AuctionExpert.Services.Mapping;
     using AuctionExpert.Services.Messaging;
     using AuctionExpert.Web.ViewModels;
+    using CloudinaryDotNet;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -33,6 +36,18 @@ namespace AuctionExpert.Web
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            var cloudinaryName = configuration.GetValue<string>("Cloudinary:CloudName");
+            var apiKey = configuration.GetValue<string>("Cloudinary:ApiKey");
+            var apiSecret = configuration.GetValue<string>("Cloudinary:ApiSecret");
+
+            if (new[] { cloudinaryName, apiKey, apiSecret }.Any(string.IsNullOrWhiteSpace))
+            {
+                throw new ArgumentException("Please specify Cloudinary account details!");
+            }
+
+            Account account = new Account(cloudinaryName, apiKey, apiSecret);
+            Cloudinary cloudinary = new Cloudinary(account);
+
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
@@ -55,6 +70,7 @@ namespace AuctionExpert.Web
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddSingleton(configuration);
+            services.AddSingleton(cloudinary);
 
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
@@ -64,9 +80,9 @@ namespace AuctionExpert.Web
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
-            services.AddTransient<ICountriesService, CountriesService>();
-            services.AddTransient<ICategoriesService, CategoriesService>();
-            services.AddTransient<ISubCategoriesService, SubCategoriesService>();
+            services.AddTransient<ICountryService, CountryService>();
+            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<ISubCategoryService, SubCategoryService>();
         }
 
         private static void Configure(WebApplication app)
