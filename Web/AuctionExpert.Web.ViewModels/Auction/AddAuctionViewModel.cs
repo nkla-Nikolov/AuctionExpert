@@ -6,6 +6,7 @@
 
     using AuctionExpert.Data.Common.Enumerations;
     using AuctionExpert.Web.ViewModels.Category;
+    using Microsoft.AspNetCore.Http;
 
     using static AuctionExpert.Common.GlobalConstants.CreateAuctionConstraintsAndMessages;
 
@@ -39,12 +40,13 @@
         public TypeSale Type { get; set; }
 
         [Required]
-        public decimal StartPrice { get; set; }
+        public int StartPrice { get; set; }
 
         [Required]
         [Range(1, 7)]
         public int? Duration { get; set; }
 
-        public DateTime? DateOfProduction { get; set; }
+        [Required]
+        public IFormFileCollection Images { get; set; }
     }
 }

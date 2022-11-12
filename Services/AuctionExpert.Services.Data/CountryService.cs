@@ -15,7 +15,7 @@
             this.countryRepository = countryRepository;
         }
 
-        public IQueryable<T> GetCountries<T>()
+        public IQueryable<T> GetAllCountries<T>()
         {
             return this.countryRepository
                 .AllAsNoTracking()

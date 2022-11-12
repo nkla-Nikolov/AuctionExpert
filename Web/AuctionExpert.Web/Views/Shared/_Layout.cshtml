@@ -89,7 +89,7 @@
         {
             <div class="nav-right d-flex align-items-center">
                 <div class="eg-btn btn--primary header-btn">
-                    <a asp-controller="Users" asp-action="Dashboard">My Account</a>
+                    <a asp-controller="Users" asp-action="Dashboard">Hello, @this.User.Identity.Name</a>
                 </div>
             </div>
         }

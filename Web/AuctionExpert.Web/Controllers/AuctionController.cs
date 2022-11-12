@@ -7,10 +7,10 @@
 
     public class AuctionController : BaseController
     {
-        private readonly ICategoriesService categoryService;
+        private readonly ICategoryService categoryService;
 
         public AuctionController(
-            ICategoriesService categoryService)
+            ICategoryService categoryService)
         {
             this.categoryService = categoryService;
         }
@@ -29,10 +29,11 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.RedirectToAction(nameof(this.Sell));
+                model.Categories = this.categoryService.GetAllCategories<CategoryListModel>();
+                return this.View(model);
             }
 
-            return this.RedirectToAction();
+            return this.RedirectToAction("Index", "Home");
         }
     }
 }

@@ -33,7 +33,7 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
-        private readonly ICountriesService countryService;
+        private readonly ICountryService countryService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -41,7 +41,7 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IDeletableEntityRepository<ApplicationUser> userRepository,
-            ICountriesService countryService)
+            ICountryService countryService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;

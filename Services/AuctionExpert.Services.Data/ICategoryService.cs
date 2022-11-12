@@ -2,7 +2,7 @@
 {
     using System.Linq;
 
-    public interface ICategoriesService
+    public interface ICategoryService
     {
         IQueryable<T> GetAllCategories<T>();
     }

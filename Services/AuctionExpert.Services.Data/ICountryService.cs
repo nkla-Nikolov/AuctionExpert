@@ -4,6 +4,6 @@
 
     public interface ICountryService
     {
-        IQueryable<T> GetCountries<T>();
+        IQueryable<T> GetAllCountries<T>();
     }
 }
