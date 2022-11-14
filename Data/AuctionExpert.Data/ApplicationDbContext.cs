@@ -62,6 +62,11 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Auction>()
+                .HasMany(x => x.Images)
+                .WithOne(x => x.Auction)
+                .HasForeignKey(x => x.AuctionId);
+
             builder.Entity<Country>()
                 .HasMany(x => x.Users)
                 .WithOne(x => x.Country)
@@ -77,10 +82,18 @@
                 .WithMany(x => x.Auctions)
                 .HasForeignKey(x => x.OwnerId);
 
+            builder.Entity<Auction>()
+                .Property(x => x.StartPrice)
+                .HasColumnType("decimal(10,2)");
+
             builder.Entity<Bid>()
                 .HasOne(x => x.Auction)
                 .WithMany(x => x.Bids)
                 .HasForeignKey(x => x.AuctionId);
+
+            builder.Entity<Bid>()
+                .Property(x => x.MoneyPlaced)
+                .HasColumnType("decimal(10,2)");
 
             // Needed for Identity models configuration
             base.OnModelCreating(builder);

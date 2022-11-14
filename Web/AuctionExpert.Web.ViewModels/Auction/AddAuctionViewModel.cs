@@ -44,7 +44,7 @@
 
         [Required]
         [Range(1, 7)]
-        public int? Duration { get; set; }
+        public int Duration { get; set; }
 
         [Required]
         public IFormFileCollection Images { get; set; }

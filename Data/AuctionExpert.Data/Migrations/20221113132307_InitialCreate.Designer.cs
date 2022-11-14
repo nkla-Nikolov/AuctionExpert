@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuctionExpert.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221106171815_DeletedProductEntity")]
-    partial class DeletedProductEntity
+    [Migration("20221113132307_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -169,6 +169,9 @@ namespace AuctionExpert.Data.Migrations
                     b.Property<int>("AuctionType")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("ClosesIn")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
@@ -180,11 +183,10 @@ namespace AuctionExpert.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<int>("Duration")
-                        .HasMaxLength(10)
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
@@ -193,20 +195,20 @@ namespace AuctionExpert.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("OwnerId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("StartPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<int>("SubCategoryId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Views")
                         .HasColumnType("int");
@@ -252,7 +254,7 @@ namespace AuctionExpert.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("MoneyPlaced")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("TimePlaced")
                         .HasColumnType("datetime2");
@@ -364,6 +366,38 @@ namespace AuctionExpert.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("Countries");
+                });
+
+            modelBuilder.Entity("AuctionExpert.Data.Models.Image", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AuctionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UrlPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuctionId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("AuctionExpert.Data.Models.Review", b =>
@@ -651,6 +685,17 @@ namespace AuctionExpert.Data.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("AuctionExpert.Data.Models.Image", b =>
+                {
+                    b.HasOne("AuctionExpert.Data.Models.Auction", "Auction")
+                        .WithMany("Images")
+                        .HasForeignKey("AuctionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Auction");
+                });
+
             modelBuilder.Entity("AuctionExpert.Data.Models.Review", b =>
                 {
                     b.HasOne("AuctionExpert.Data.Models.ApplicationUser", "User")
@@ -742,6 +787,8 @@ namespace AuctionExpert.Data.Migrations
             modelBuilder.Entity("AuctionExpert.Data.Models.Auction", b =>
                 {
                     b.Navigation("Bids");
+
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("AuctionExpert.Data.Models.Category", b =>

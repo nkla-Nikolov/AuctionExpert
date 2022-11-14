@@ -30,7 +30,10 @@
         public TypeSale AuctionType { get; set; }
 
         [Required]
-        public DateTime Duration { get; set; }
+        public int Duration { get; set; }
+
+        [Required]
+        public DateTime ClosesIn { get; set; }
 
         [Required]
         public string OwnerId { get; set; }

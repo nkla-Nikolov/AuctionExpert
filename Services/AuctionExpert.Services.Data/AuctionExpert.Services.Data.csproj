@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\AuctionExpert.Data.Common\AuctionExpert.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\AuctionExpert.Data.Models\AuctionExpert.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Web\AuctionExpert.Web.ViewModels\AuctionExpert.Web.ViewModels.csproj" />
     <ProjectReference Include="..\AuctionExpert.Services.Mapping\AuctionExpert.Services.Mapping.csproj" />
   </ItemGroup>
 

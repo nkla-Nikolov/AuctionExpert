@@ -1,4 +1,6 @@
 ﻿@using AuctionExpert.Common
+@using AuctionExpert.Web.ViewModels.Auction
+@model List<HomeAuctionViewModel>
 @{
     this.ViewData["Title"] = "Home Page";
 }
@@ -70,47 +72,57 @@
                 </div>
             </div>
         </div>
+
         <div class="row gy-4 mb-60 d-flex justify-content-center">
-            <div class="col-lg-4 col-md-6 col-sm-10 ">
-                <div data-wow-duration="1.5s" data-wow-delay="0.2s" class="eg-card auction-card1 wow animate fadeInDown">
-                    <div class="auction-img">
-                        <img alt="image" src="assets/images/bg/live-auc1.png">
-                        <div class="auction-timer">
-                            <div class="countdown" id="timer1">
-                                <h4><span id="hours1">05</span>H : <span id="minutes1">52</span>M : <span id="seconds1">32</span>S</h4>
-                            </div>
-                        </div>
-                        <div class="author-area">
-                            <div class="author-emo">
-                                <img alt="image" src="assets/images/icons/smile-emo.svg">
-                            </div>
-                            <div class="author-name">
-                                <span>by @*@robatfox*@</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="auction-content">
-                        <h4><a href="auction-details.html">Brand New royal Enfield 250 CC For Sale</a></h4>
-                        <p>Bidding Price : <span><span>$85.9</span></span></p>
-                        <div class="auction-card-bttm">
-                            <a href="auction-details.html" class="eg-btn btn--primary btn--sm">Place a Bid</a>
-                            <div class="share-area">
-                                <ul class="social-icons d-flex">
-                                    <li><a href="https://www.facebook.com/"><i class="bx bxl-facebook"></i></a></li>
-                                    <li><a href="https://www.twitter.com/"><i class="bx bxl-twitter"></i></a></li>
-                                    <li><a href="https://www.pinterest.com/"><i class="bx bxl-pinterest"></i></a></li>
-                                    <li><a href="https://www.instagram.com/"><i class="bx bxl-instagram"></i></a></li>
-                                </ul>
-                                <div>
-                                    <div class="share-btn"><i class='bx bxs-share-alt'></i></div>
+            @*card start!*@
+            
+            @foreach (var auction in Model)
+            {
+                <div class="col-lg-4 col-md-6 col-sm-10 ">
+                    <div data-wow-duration="1.5s" data-wow-delay="0.2s" class="eg-card auction-card1 wow animate fadeInDown">
+                        <div class="auction-img">
+                            <img alt="image" src=@auction.MainImage>
+                            <div class="auction-timer">
+                                <div class="countdown" id="timer1">
+                                    <h4><span id="hours1">05</span>H : <span id="minutes1">52</span>M : <span id="seconds1">32</span>S</h4>
                                 </div>
                             </div>
-
+                            <div class="author-area">
+                                <div class="author-emo">
+                                    <img alt="image" src="~/assets/images/icons/smile-emo.svg">
+                                </div>
+                                <div class="author-name">
+                                    <span>by @auction.AuthorName</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="auction-content">
+                            <h4><a href="auction-details.html">@auction.Title</a></h4>
+                            <p>Bidding Price : <span><span>@auction.LastBid</span></span></p>
+                            @if (this.User.Identity.IsAuthenticated)
+                            {
+                                <div class="auction-card-bttm">
+                                    <a href="auction-details.html" class="eg-btn btn--primary btn--sm">Place a Bid</a>
+                                    <div class="share-area">
+                                        <ul class="social-icons d-flex">
+                                            <li><a href="https://www.facebook.com/"><i class="bx bxl-facebook"></i></a></li>
+                                            <li><a href="https://www.twitter.com/"><i class="bx bxl-twitter"></i></a></li>
+                                            <li><a href="https://www.pinterest.com/"><i class="bx bxl-pinterest"></i></a></li>
+                                            <li><a href="https://www.instagram.com/"><i class="bx bxl-instagram"></i></a></li>
+                                        </ul>
+                                        <div>
+                                            <div class="share-btn"><i class='bx bxs-share-alt'></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-10 ">
+            }
+
+            @*card start!*@
+            @*<div class="col-lg-4 col-md-6 col-sm-10 ">
                 <div data-wow-duration="1.5s" data-wow-delay="0.4s" class="eg-card auction-card1 wow animate fadeInDown">
                     <div class="auction-img">
                         <img alt="image" src="assets/images/bg/live-auc2.png">
@@ -151,8 +163,8 @@
                     </div>
 
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-10 ">
+            </div>*@
+            @*<div class="col-lg-4 col-md-6 col-sm-10 ">
                 <div data-wow-duration="1.5s" data-wow-delay="0.6s" class="eg-card auction-card1 wow animate fadeInDown">
                     <div class="auction-img">
                         <img alt="image" src="assets/images/bg/live-auc3.png">
@@ -168,7 +180,7 @@
                                 <img alt="image" src="assets/images/icons/smile-emo.svg">
                             </div>
                             <div class="author-name">
-                                <span>by @*@robatfox*@</span>
+                                <span>by robatfox</span>
                             </div>
                         </div>
                     </div>
@@ -210,7 +222,7 @@
                                 <img alt="image" src="assets/images/icons/smile-emo.svg">
                             </div>
                             <div class="author-name">
-                                <span>by @*@robatfox*@</span>
+                                <span>by robatfox</span>
                             </div>
                         </div>
                     </div>
@@ -254,7 +266,7 @@
                                 <img alt="image" src="assets/images/icons/smile-emo.svg">
                             </div>
                             <div class="author-name">
-                                <span>by @*@robatfox*@</span>
+                                <span>by </span>
                             </div>
                         </div>
                     </div>
@@ -298,7 +310,7 @@
                                 <img alt="image" src="assets/images/icons/smile-emo.svg">
                             </div>
                             <div class="author-name">
-                                <span>by @*@robatfox*@</span>
+                                <span>by </span>
                             </div>
                         </div>
                     </div>
@@ -320,12 +332,10 @@
                                     <div class="share-btn"><i class='bx bxs-share-alt'></i></div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-
                 </div>
-            </div>
+            </div>*@
         </div>
         <div class="row d-flex justify-content-center">
             <div class="col-md-4 text-center">

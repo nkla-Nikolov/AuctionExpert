@@ -1,5 +1,7 @@
 ﻿namespace AuctionExpert.Services.Data
 {
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using AuctionExpert.Data.Models;
@@ -7,6 +9,6 @@
 
     public interface IImageService
     {
-        Task<Image> UploadImage(IFormFileCollection images);
+        Task<IEnumerable<Image>> UploadImages(IFormFileCollection images);
     }
 }

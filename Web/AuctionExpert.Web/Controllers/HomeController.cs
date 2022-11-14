@@ -1,17 +1,30 @@
 ﻿namespace AuctionExpert.Web.Controllers
 {
     using System.Diagnostics;
+    using System.Threading.Tasks;
 
+    using AuctionExpert.Services.Data;
     using AuctionExpert.Web.ViewModels;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : BaseController
     {
-        [AllowAnonymous]
-        public IActionResult Index()
+        private readonly IAuctionService auctionService;
+
+        public HomeController(
+            IAuctionService auctionService)
         {
-            return this.View();
+            this.auctionService = auctionService;
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var auctions = await this.auctionService.GetAllAuctions();
+
+            return this.View(auctions);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
