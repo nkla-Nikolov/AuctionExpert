@@ -22,7 +22,7 @@
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var auctions = await this.auctionService.GetAllAuctions();
+            var auctions = await this.auctionService.GetAllAuctionsAsHomeModel();
 
             return this.View(auctions);
         }

@@ -10,6 +10,7 @@
         [Required]
         public decimal MoneyPlaced { get; set; }
 
+        [Required]
         public DateTime TimePlaced { get; set; }
 
         [Required]

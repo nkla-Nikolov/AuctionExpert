@@ -1,8 +1,6 @@
 ﻿namespace AuctionExpert.Services.Data
 {
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using AuctionExpert.Data.Models;
@@ -12,6 +10,12 @@
     {
         Task CreateAsync(AddAuctionViewModel model, ApplicationUser user);
 
-        Task<List<HomeAuctionViewModel>> GetAllAuctions();
+        Task<List<HomeAuctionViewModel>> GetAllAuctionsAsHomeModel();
+
+        Task<DetailViewModel> GetDetailAuctionModelByIdAsync(int auctionId);
+
+        Task<Auction> GetAuctionById(int auctionId);
+
+        Task PlaceBidAsync(int currentBid, string userId, int auctionId);
     }
 }

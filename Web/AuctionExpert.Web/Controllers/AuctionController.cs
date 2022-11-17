@@ -1,5 +1,6 @@
 ﻿namespace AuctionExpert.Web.Controllers
 {
+    using System;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -46,6 +47,36 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
             await this.auctionService.CreateAsync(model, user);
+
+            return this.RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int auctionId)
+        {
+            var auction = await this.auctionService.GetDetailAuctionModelByIdAsync(auctionId);
+
+            if (auction == null)
+            {
+                throw new NullReferenceException("The auction does not exist");
+            }
+
+            return this.View(auction);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PlaceBid(DetailViewModel model)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            try
+            {
+                await this.auctionService.PlaceBidAsync(model.CurrentBid, userId, model.Id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
             return this.RedirectToAction("Index", "Home");
         }
