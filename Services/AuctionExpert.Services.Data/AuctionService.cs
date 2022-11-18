@@ -8,6 +8,7 @@
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
     using AuctionExpert.Web.ViewModels.Auction;
+    using AuctionExpert.Web.ViewModels.Image;
     using Microsoft.EntityFrameworkCore;
 
     public class AuctionService : IAuctionService
@@ -57,7 +58,7 @@
                     Id = x.Id,
                     AuthorName = x.Owner.FirstName,
                     ClosesIn = x.ClosesIn,
-                    LastBid = x.Bids == null ? x.StartPrice : x.Bids.OrderByDescending(x => x.MoneyPlaced).First().MoneyPlaced,
+                    LastBid = x.Bids.Count == 0 ? x.StartPrice : x.Bids.OrderByDescending(x => x.MoneyPlaced).First().MoneyPlaced,
                     MainImage = x.Images.First().UrlPath,
                     Title = x.Title,
                     Views = x.Views,
@@ -92,6 +93,12 @@
                         MoneyPlaced = b.MoneyPlaced,
                         TimePlaced = DateTime.UtcNow - b.TimePlaced,
                     }),
+                    Images = x.Images
+                    .ToList()
+                    .Select(x => new DetailsImageViewModel()
+                    {
+                        ImageUrl = x.UrlPath,
+                    }),
                 })
                 .FirstOrDefaultAsync();
 
@@ -113,12 +120,12 @@
                 throw new ArgumentNullException("The auction does not exist!");
             }
 
-            if (bids.Any() && currentBid < bids[0].MoneyPlaced)
+            if (bids.Any() && currentBid <= bids[0].MoneyPlaced)
             {
                 throw new InvalidOperationException("You cannot place bid that is lower than the last one!");
             }
 
-            if (!bids.Any() && currentBid < auction.StartPrice)
+            if (!bids.Any() && currentBid <= auction.StartPrice)
             {
                 throw new InvalidOperationException("Your bid should be higher than the auction's start price!");
             }
