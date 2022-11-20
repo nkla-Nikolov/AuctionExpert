@@ -19,12 +19,20 @@
     <div class="container">
         <div class="row g-4 mb-50">
             <div class="col-xl-6 col-lg-7 d-flex flex-row align-items-start justify-content-lg-start justify-content-center flex-md-nowrap flex-wrap gap-4">
+                <ul class="nav small-image-list d-flex flex-md-column flex-row justify-content-center gap-4  wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".4s">
+                    @for (int i = 0; i < Model.Images.Count(); i++)
+                    {
+                        var image = Model.Images.ToArray()[i];
+                        <li class="nav-item">
+                            <div data-bs-toggle="pill" id="image+@i" onclick="LoadBigImage(@i)">
+                                <img alt="image" src="@image.ImageUrl" class="img-fluid">
+                            </div>
+                        </li>
+                    }
+                </ul>
                 <div class="tab-content mb-4 d-flex justify-content-lg-start justify-content-center  wow fadeInUp" data-wow-duration="1.5s" data-wow-delay=".4s">
                     <div class="tab-pane big-image fade show active">
-                        @foreach (var image in Model.Images)
-                        {
-                            <img alt="image" src="@image.ImageUrl" class="img-fluid">
-                        }
+                        <img alt="image" id="bigImage" src="@Model.Images.First().ImageUrl" class="img-fluid">
                     </div>
                 </div>
             </div>
@@ -68,7 +76,7 @@
                     </li>
                     @*TODO: OTHER AUCTIONS SECTION SELECTED BY RANDOM*@
                     @*<li class="nav-item" role="presentation">
-                        <button class="nav-link details-tab-btn" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Other Auction</button>
+                    <button class="nav-link details-tab-btn" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Other Auction</button>
                     </li>*@
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
@@ -110,7 +118,7 @@
                                                         {
                                                             <p>@bidder.TimePlaced.Minutes Minutes Ago.</p>
                                                         }
-                                                        else if (bidder.TimePlaced.TotalMinutes >= 60 && bidder.TimePlaced.TotalMinutes < 86400)
+                                                        else if (bidder.TimePlaced.TotalMinutes >= 60 && bidder.TimePlaced.TotalMinutes < 1440)
                                                         {
                                                             <p>@bidder.TimePlaced.Hours Hours Ago.</p>
                                                         }
@@ -271,3 +279,14 @@
         </div>
     </div>
 </div>-->
+
+
+<script>
+    function LoadBigImage(id) {
+        let imageId = 'image+' + id;
+        let bigImageElement = document.querySelector('#bigImage');
+        let getImageSrc = document.getElementById(imageId).children[0].getAttribute('src');
+
+        bigImageElement.setAttribute('src', getImageSrc);
+    }
+</script>

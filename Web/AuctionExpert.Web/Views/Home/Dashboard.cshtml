@@ -1,0 +1,365 @@
+﻿@using AuctionExpert.Web.ViewModels.Profile;
+@model MyProfileViewModel
+
+<div class="inner-banner">
+    <div class="container">
+        <h2 class="inner-banner-title wow fadeInLeft" data-wow-duration="1.5s" data-wow-delay=".2s">Dashboard</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="dashboard-section pt-120 pb-120">
+    <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-top">
+    <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-bottom">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3">
+                <div class="nav flex-column nav-pills gap-4 wow fadeInUp" data-wow-duration="1.5s" data-wow-delay=".2s" id="v-pills-tab" role="tablist"
+                     aria-orientation="vertical">
+                    <button class="nav-link active nav-btn-style mx-auto  mb-20" id="v-pills-dashboard-tab" data-bs-toggle="pill" data-bs-target="#v-pills-dashboard" type="button" role="tab" aria-controls="v-pills-dashboard" aria-selected="true">
+                        Dashboard
+                    </button>
+                    <button class="nav-link nav-btn-style mx-auto mb-20" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="true">
+                        <i class="lar la-user"></i>
+                        My Profile
+                    </button>
+                    <button class="nav-link nav-btn-style mx-auto mb-20" id="v-pills-order-tab" data-bs-toggle="pill" data-bs-target="#v-pills-order" type="button" role="tab" aria-controls="v-pills-order" aria-selected="true">
+                        My Auctions
+                    </button>
+                    <button class="nav-link nav-btn-style mx-auto" id="v-pills-purchase-tab" data-bs-toggle="pill" data-bs-target="#v-pills-purchase" type="button" role="tab" aria-controls="v-pills-purchase" aria-selected="true">
+                        My Purchases
+                    </button>
+                    <button class="nav-link nav-btn-style mx-auto" type="button" role="tab">
+                        Logout
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-dashboard" role="tabpanel" aria-labelledby="v-pills-dashboard-tab">
+                        <div class="dashboard-area box--shadow">
+                            <div class="row g-4">
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="dashboard-card hover-border1 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
+                                        <div class="header">
+                                            <h5>Sells</h5>
+                                        </div>
+                                        <div class="body">
+                                            <div class="counter-item">
+                                                <h2>@Model.MyAuctions.Count()</h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="dashboard-card hover-border1 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".4s">
+                                        <div class="header">
+                                            <h5>Participated In Auctions</h5>
+                                        </div>
+                                        <div class="body">
+                                            <div class="counter-item">
+                                                <h2>@Model.ParticipatedInAuctionsCount</h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="dashboard-card hover-border1 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".6s">
+                                        <div class="header">
+                                            <h5>Auctions Won</h5>
+                                        </div>
+                                        <div class="body">
+                                            <div class="counter-item">
+                                                <h2>@Model.AuctionsWon</h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                        <div class="dashboard-profile">
+                            <div class="owner">
+                                @*TODO: CHECK FOR IMAGE*@
+                                <div class="image">
+                                    <img alt="image" src="~/assets/images/bg/pro-pic.png">
+                                </div>
+                                <div class="content">
+                                    <h3>@Model.FirstName @Model.LastName</h3>
+                                    <p class="para">@Model.Username</p>
+                                </div>
+                            </div>
+                            <div class="form-wrapper">
+                                <form action="#">
+                                    <div class="row">
+                                        <div class="col-xl-6 col-lg-12 col-md-6">
+                                            <div class="form-inner">
+                                                <label>Frist Name *</label>
+                                                <input type="text" placeholder="Your first name">
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-6">
+                                            <div class="form-inner">
+                                                <label>Last Name *</label>
+                                                <input type="text" placeholder="Your last name">
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-6">
+                                            <div class="form-inner">
+                                                <label>Contact Number</label>
+                                                <input type="text" placeholder="+8801">
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-6">
+                                            <div class="form-inner">
+                                                <label>Email</label>
+                                                <input type="text" placeholder="Your Email">
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-6">
+                                            <div class="form-inner">
+                                                <label>City</label>
+                                                <select id="city">
+                                                    <option>Dhaka</option>
+                                                    <option>Sylhet</option>
+                                                    <option>Chittagong</option>
+                                                    <option>Rajshahi</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-6">
+                                            <div class="form-inner">
+                                                <label>Country</label>
+                                                <select>
+                                                    <option>Bangladesh</option>
+                                                    <option>Afganistan</option>
+                                                    <option>India</option>
+                                                    <option>China</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-inner">
+                                                <label>Password *</label>
+                                                <input type="password" name="password" id="password" placeholder="Create A Password" />
+                                                <i class="bi bi-eye-slash" id="togglePassword"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-inner mb-0">
+                                                <label>Confirm Password *</label>
+                                                <input type="password" name="password" id="password2" placeholder="Create A Password" />
+                                                <i class="bi bi-eye-slash" id="togglePassword2"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="button-group">
+                                                <button type="submit" class="eg-btn profile-btn">Update Profile</button>
+                                                <button class="eg-btn cancel-btn">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-order" role="tabpanel"
+                         aria-labelledby="v-pills-order-tab">
+                        <!-- table title-->
+                        <div class="table-title-area">
+                            <h3>My Auction List</h3>
+                            <select>
+                                <option value="01">Show: Last 5 Auctions</option>
+                                <option value="02">Show: Last 10 Auctions</option>
+                                <option value="03">Show: Last 15 Auctions</option>
+                                <option value="04">Show: Last 20 Auctions</option>
+                            </select>
+                        </div>
+
+                        <!-- table -->
+                        <div class="table-wrapper">
+                            <table class="eg-table order-table table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Initial Price</th>
+                                        <th>Highest Bid</th>
+                                        <th>Type</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var auction in Model.MyAuctions)
+                                    {
+                                        <tr>
+                                            <td data-label="Image"><img alt="image" src="@auction.ImageUrl" class="img-fluid"></td>
+                                            <td data-label="Initial Price">$@auction.StartPrice</td>
+                                            <td data-label="Highest Bid">$@auction.HighestBid</td>
+                                            <td data-label="Type">@auction.Type</td>
+                                            @if (auction.Status == "Active")
+                                            {
+                                                <td data-label="Status" class="text-green">@auction.Status</td>
+                                            }
+                                            else
+                                            {
+                                                <td data-label="Status" class="text-red">@auction.Status</td>
+                                            }
+                                            <td data-label="Action"><button class="eg-btn action-btn green"><img alt="image" src="~/assets/images/icons/action-icon.svg"></button></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- pagination area -->
+                        <div class="table-pagination">
+                            <p>Showing 10 to 20 of 1 entries</p>
+                            <nav class="pagination-wrap">
+                                <ul class="pagination style-two d-flex justify-content-center gap-md-3 gap-2">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" tabindex="-1">Prev</a>
+                                    </li>
+                                    <li class="page-item active" aria-current="page"><a class="page-link" href="#">01</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">02</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">03</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-purchase" role="tabpanel"
+                         aria-labelledby="v-pills-purchase-tab">
+                        <!-- table title-->
+                        <div class="table-title-area">
+                            <h3>My Purchases</h3>
+                            <select id="order-category">
+                                <option value="01">Show: Last 05 Order</option>
+                                <option value="02">Show: Last 03 Order</option>
+                                <option value="03">Show: Last 15 Order</option>
+                                <option value="04">Show: Last 20 Order</option>
+                            </select>
+                        </div>
+
+                        <!-- table -->
+                        <div class="table-wrapper">
+                            <table class="eg-table order-table table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Bidding ID</th>
+                                        <th>Bid Amount(USD)</th>
+                                        <th>Image</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td data-label="Title">Auction Title 01</td>
+                                        <td data-label="Bidding ID">Bidding_HvO253gT</td>
+                                        <td data-label="Bid Amount(USD)">1222.8955</td>
+                                        <td data-label="Image"><img alt="image" src="assets/images/bg/order1.png" class="img-fluid"></td>
+                                        <td data-label="Status" class="text-green">Successfully</td>
+                                        <td data-label="Action"><button class="eg-btn action-btn green"><img alt="image" src="assets/images/icons/aiction-icon.svg"></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td data-label="Title">Auction Title 02</td>
+                                        <td data-label="Bidding ID">Bidding_HvO253gT</td>
+                                        <td data-label="Bid Amount(USD)">1222.8955</td>
+                                        <td data-label="Image"><img alt="image" src="assets/images/bg/order2.png"></td>
+                                        <td data-label="Status" class="text-green">Successfully</td>
+                                        <td data-label="Action"><button class="eg-btn action-btn green"><img alt="image" src="assets/images/icons/aiction-icon.svg"></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td data-label="Title">Auction Title 03</td>
+                                        <td data-label="Bidding ID">Bidding_HvO253gT</td>
+                                        <td data-label="Bid Amount(USD)">1222.8955</td>
+                                        <td data-label="Image"><img alt="image" src="assets/images/bg/order3.png"></td>
+                                        <td data-label="Status" class="text-green">Cancel</td>
+                                        <td data-label="Action"><button class="eg-btn action-btn green"><img alt="image" src="assets/images/icons/aiction-icon.svg"></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- pagination area -->
+                        <div class="table-pagination">
+                            <p>Showing 10 to 20 of 1 entries</p>
+                            <nav class="pagination-wrap">
+                                <ul class="pagination style-two d-flex justify-content-center gap-md-3 gap-2">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" tabindex="-1">Prev</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">01</a></li>
+                                    <li class="page-item active" aria-current="page">
+                                        <a class="page-link" href="#">02</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">03</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="about-us-counter pb-120">
+    <div class="container">
+        <div class="row g-4 d-flex justify-content-center">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-10 col-10">
+                <div class="counter-single text-center d-flex flex-row hover-border1 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
+                    <div class="counter-icon"> <img alt="image" src="assets/images/icons/employee.svg"> </div>
+                    <div class="coundown d-flex flex-column">
+                        <h3 class="odometer" data-odometer-final="5400">&nbsp;</h3>
+                        <p>Happy Customer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-10 col-10">
+                <div class="counter-single text-center d-flex flex-row hover-border1 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".4s">
+                    <div class="counter-icon"> <img alt="image" src="assets/images/icons/review.svg"> </div>
+                    <div class="coundown d-flex flex-column">
+                        <h3 class="odometer" data-odometer-final="1250">&nbsp;</h3>
+                        <p>Good Reviews</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-10 col-10">
+                <div class="counter-single text-center d-flex flex-row hover-border1 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".4s">
+                    <div class="counter-icon"> <img alt="image" src="assets/images/icons/smily.svg"> </div>
+                    <div class="coundown d-flex flex-column">
+                        <h3 class="odometer" data-odometer-final="4250">&nbsp;</h3>
+                        <p>Winner Customer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-10 col-10">
+                <div class="counter-single text-center d-flex flex-row hover-border1 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".8s">
+                    <div class="counter-icon"> <img alt="image" src="assets/images/icons/comment.svg"> </div>
+                    <div class="coundown d-flex flex-column">
+                        <h3 class="odometer" data-odometer-final="500">&nbsp;</h3>
+                        <p>New Comments</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

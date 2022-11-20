@@ -41,7 +41,7 @@
             public const string AgeMaxMessage = "You should be dead!";
         }
 
-        public class CreateAuctionConstraintsAndMessages
+        public class AuctionConstraintsAndMessages
         {
             public const int TitleMinLenght = 10;
 
@@ -54,6 +54,14 @@
             public const int DescriptionMaxLength = 2000;
 
             public const string LengthMessage = "The {0} must be at least {2} and maximum {1} characters long!";
+
+            public const string AuctionDoesNotExist = "The auction you are looking for does not exist!";
+
+            public const string InvalidInputValueForBid = "The value you entered is invalid!";
+
+            public const string InputBidIsLessThanLastOne = "You cannot place bid that is less than the last one!";
+
+            public const string InputBidIsLessThanAuctionStartPrice = "Your bid should be higher than the auction's start price!";
         }
 
         public class FilePaths

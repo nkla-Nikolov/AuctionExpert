@@ -2,6 +2,7 @@
 {
     using System.Collections;
     using System.Collections.Generic;
+    using System.Reflection;
     using System.Threading.Tasks;
 
     using AuctionExpert.Data.Common.Repositories;
@@ -9,6 +10,8 @@
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.EntityFrameworkCore.Query;
+    using Microsoft.EntityFrameworkCore.Query.Internal;
 
     public class ImageService : IImageService
     {
@@ -30,6 +33,7 @@
                     var parameters = new ImageUploadParams()
                     {
                         File = new FileDescription(imageFile.FileName, stream),
+                        Transformation = new Transformation().Width(444).Height(352),
                     };
 
                     var result = await this.cloudinary.UploadAsync(parameters);

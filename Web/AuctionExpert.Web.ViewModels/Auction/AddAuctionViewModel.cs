@@ -8,7 +8,7 @@
     using AuctionExpert.Web.ViewModels.Category;
     using Microsoft.AspNetCore.Http;
 
-    using static AuctionExpert.Common.GlobalConstants.CreateAuctionConstraintsAndMessages;
+    using static AuctionExpert.Common.GlobalConstants.AuctionConstraintsAndMessages;
 
     public class AddAuctionViewModel
     {

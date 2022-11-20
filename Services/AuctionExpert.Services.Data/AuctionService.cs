@@ -9,7 +9,10 @@
     using AuctionExpert.Data.Models;
     using AuctionExpert.Web.ViewModels.Auction;
     using AuctionExpert.Web.ViewModels.Image;
+    using AuctionExpert.Web.ViewModels.Profile;
     using Microsoft.EntityFrameworkCore;
+
+    using static AuctionExpert.Common.GlobalConstants.AuctionConstraintsAndMessages;
 
     public class AuctionService : IAuctionService
     {
@@ -49,9 +52,9 @@
             await this.auctionRepository.SaveChangesAsync();
         }
 
-        public async Task<List<HomeAuctionViewModel>> GetAllAuctionsAsHomeModel()
+        public IQueryable<HomeAuctionViewModel> GetAllAuctionsAsHomeModel()
         {
-            return await this.auctionRepository
+            return this.auctionRepository
                 .AllAsNoTracking()
                 .Select(x => new HomeAuctionViewModel()
                 {
@@ -62,8 +65,7 @@
                     MainImage = x.Images.First().UrlPath,
                     Title = x.Title,
                     Views = x.Views,
-                })
-                .ToListAsync();
+                });
         }
 
         public async Task<Auction> GetAuctionById(int auctionId)
@@ -104,41 +106,61 @@
 
             if (auction == null)
             {
-                throw new ArgumentNullException("The auction you are looking for does not exist");
+                throw new ArgumentNullException(AuctionDoesNotExist);
             }
 
             return auction;
         }
 
-        public async Task PlaceBidAsync(int currentBid, string userId, int auctionId)
+        public async Task PlaceBidAsync(int? currentBid, string userId, int auctionId)
         {
             var auction = await this.GetAuctionById(auctionId);
             var bids = await this.bidService.GetAllBidsByAuctionIdAsync(auctionId);
 
             if (auction == null)
             {
-                throw new ArgumentNullException("The auction does not exist!");
+                throw new ArgumentNullException(AuctionDoesNotExist);
+            }
+
+            if (currentBid == null)
+            {
+                throw new ArgumentNullException(InvalidInputValueForBid);
             }
 
             if (bids.Any() && currentBid <= bids[0].MoneyPlaced)
             {
-                throw new InvalidOperationException("You cannot place bid that is lower than the last one!");
+                throw new InvalidOperationException(InputBidIsLessThanLastOne);
             }
 
             if (!bids.Any() && currentBid <= auction.StartPrice)
             {
-                throw new InvalidOperationException("Your bid should be higher than the auction's start price!");
+                throw new InvalidOperationException(InputBidIsLessThanAuctionStartPrice);
             }
 
             auction.Bids.Add(new Bid()
             {
                 BidderId = userId,
-                MoneyPlaced = currentBid,
+                MoneyPlaced = (decimal)currentBid,
                 TimePlaced = DateTime.UtcNow,
             });
 
             this.auctionRepository.Update(auction);
             await this.auctionRepository.SaveChangesAsync();
+        }
+
+        public IQueryable<MyAuctionsViewModel> GetAuctionsByOwnerId(string ownerId)
+        {
+            return this.auctionRepository
+                .AllAsNoTrackingWithDeleted()
+                .Where(x => x.OwnerId == ownerId)
+                .Select(x => new MyAuctionsViewModel()
+                {
+                    HighestBid = x.Bids.Count == 0 ? 0 : x.Bids.OrderByDescending(x => x.MoneyPlaced).First().MoneyPlaced,
+                    ImageUrl = x.Images.First().UrlPath,
+                    StartPrice = x.StartPrice,
+                    Type = x.AuctionType.ToString().StartsWith("Fixed") ? "Fixed Price" : "Standard Auction",
+                    Status = x.IsDeleted == true ? "Finished" : "Active",
+                });
         }
     }
 }

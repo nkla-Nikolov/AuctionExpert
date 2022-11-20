@@ -7,7 +7,7 @@
     using AuctionExpert.Data.Common.Enumerations;
     using AuctionExpert.Data.Common.Models;
 
-    using static AuctionExpert.Common.GlobalConstants.CreateAuctionConstraintsAndMessages;
+    using static AuctionExpert.Common.GlobalConstants.AuctionConstraintsAndMessages;
 
     public class Auction : BaseDeletableModel<int>
     {
