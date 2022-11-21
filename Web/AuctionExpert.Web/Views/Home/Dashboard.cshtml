@@ -1,6 +1,10 @@
 ﻿@using AuctionExpert.Web.ViewModels.Profile;
 @model MyProfileViewModel
 
+@{
+    this.ViewData["Title"] = "My Profile";
+}
+
 <div class="inner-banner">
     <div class="container">
         <h2 class="inner-banner-title wow fadeInLeft" data-wow-duration="1.5s" data-wow-delay=".2s">Dashboard</h2>
@@ -34,9 +38,9 @@
                     <button class="nav-link nav-btn-style mx-auto" id="v-pills-purchase-tab" data-bs-toggle="pill" data-bs-target="#v-pills-purchase" type="button" role="tab" aria-controls="v-pills-purchase" aria-selected="true">
                         My Purchases
                     </button>
-                    <button class="nav-link nav-btn-style mx-auto" type="button" role="tab">
-                        Logout
-                    </button>
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })" method="post">
+                        <button class="nav-link nav-btn-style mx-auto" type="submit" role="tab">Logout</button>
+                    </form>
                 </div>
             </div>
             <div class="col-lg-9">

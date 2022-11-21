@@ -17,7 +17,9 @@
 
         public IQueryable<T> GetAllCategories<T>()
         {
-            return this.categoryRepository.AllAsNoTracking().To<T>();
+            return this.categoryRepository
+                .AllAsNoTracking()
+                .To<T>();
         }
     }
 }

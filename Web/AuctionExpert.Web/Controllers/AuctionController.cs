@@ -10,6 +10,9 @@
     using AuctionExpert.Web.ViewModels.Category;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+
+    using static AuctionExpert.Common.GlobalConstants.AuctionConstraintsAndMessages;
 
     public class AuctionController : BaseController
     {
@@ -58,7 +61,7 @@
 
             if (auction == null)
             {
-                throw new NullReferenceException("The auction does not exist");
+                throw new NullReferenceException(AuctionDoesNotExist);
             }
 
             return this.View(auction);
@@ -75,10 +78,19 @@
             }
             catch (Exception)
             {
+                // TODO: Appropriate exception handling!
                 throw;
             }
 
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction(nameof(this.Details), new { auctionId = model.Id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Browse(int categoryId)
+        {
+            var auctions = await this.auctionService.GetAllAuctionsByCategoryId<HomeAuctionViewModel>(categoryId).ToListAsync();
+
+            return this.View(auctions);
         }
     }
 }

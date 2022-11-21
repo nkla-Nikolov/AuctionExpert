@@ -3,9 +3,11 @@
     using System.Diagnostics;
     using System.Security.Claims;
     using System.Threading.Tasks;
+
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Data;
     using AuctionExpert.Web.ViewModels;
+    using AuctionExpert.Web.ViewModels.Auction;
     using AuctionExpert.Web.ViewModels.Profile;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -29,7 +31,7 @@
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var auctions = await this.auctionService.GetAllAuctionsAsHomeModel().ToListAsync();
+            var auctions = await this.auctionService.GetAllAuctions<HomeAuctionViewModel>().ToListAsync();
 
             return this.View(auctions);
         }
@@ -52,7 +54,7 @@
                 LastName = user.LastName,
                 Username = user.UserName,
                 MyAuctions = await this.auctionService
-                .GetAuctionsByOwnerId(user.Id)
+                .GetAuctionsByOwnerId<MyAuctionsViewModel>(user.Id)
                 .ToListAsync(),
             };
 

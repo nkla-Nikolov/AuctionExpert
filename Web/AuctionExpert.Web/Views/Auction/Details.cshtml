@@ -1,6 +1,10 @@
 ﻿@using AuctionExpert.Web.ViewModels.Auction;
 @model DetailViewModel
 
+@{
+    this.ViewData["Title"] = "Auction Details";
+}
+
 <div class="inner-banner">
     <div class="container">
         <h2 class="inner-banner-title  wow fadeInLeft" data-wow-duration="1.5s" data-wow-delay=".4s">Auction Details</h2>
@@ -25,14 +29,14 @@
                         var image = Model.Images.ToArray()[i];
                         <li class="nav-item">
                             <div data-bs-toggle="pill" id="image+@i" onclick="LoadBigImage(@i)">
-                                <img alt="image" src="@image.ImageUrl" class="img-fluid">
+                                <img alt="image" src="@image.UrlPath" class="img-fluid">
                             </div>
                         </li>
                     }
                 </ul>
                 <div class="tab-content mb-4 d-flex justify-content-lg-start justify-content-center  wow fadeInUp" data-wow-duration="1.5s" data-wow-delay=".4s">
                     <div class="tab-pane big-image fade show active">
-                        <img alt="image" id="bigImage" src="@Model.Images.First().ImageUrl" class="img-fluid">
+                        <img alt="image" id="bigImage" src="@Model.Images.First().UrlPath" class="img-fluid">
                     </div>
                 </div>
             </div>

@@ -1,4 +1,11 @@
 ﻿@using AuctionExpert.Common
+@using AuctionExpert.Services.Data;
+@using AuctionExpert.Web.ViewModels.Category;
+@inject ICategoryService categoryService
+
+@{
+    var categories = categoryService.GetAllCategories<CategoryListModel>();
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -53,14 +60,20 @@
                 <li class="menu-item">
                     <a asp-area="" asp-controller="Auction" asp-action="Sell">Sell</a>
                 </li>
+                <li class="menu-item-has-children">
+                    <a asp-controller="Auction" asp-action="Browse">Categories</a><i class='bx bx-plus dropdown-icon'></i>
+                    <ul class="submenu">
+                        @foreach (var category in categories)
+                        {
+                            <li><a asp-controller="Auction" asp-action="Browse" asp-route-categoryId="@category.Id">@category.Name</a></li>
+                        }
+                    </ul>
+                </li>
                 <li>
                     <a asp-area="" asp-controller="Home" asp-action="About">About Us</a>
                 </li>
                 <li>
                     <a asp-area="" asp-controller="Home" asp-action="HowWorks">How It Works</a>
-                </li>
-                <li>
-                    <a href="live-auction.html">Browse Product</a>
                 </li>
                 <li>
                     <a href="contact.html">Contact</a>

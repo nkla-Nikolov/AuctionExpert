@@ -2,6 +2,6 @@
 {
     public class DetailsImageViewModel
     {
-        public string ImageUrl { get; set; }
+        public string UrlPath { get; set; }
     }
 }

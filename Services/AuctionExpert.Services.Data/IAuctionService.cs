@@ -1,25 +1,25 @@
 ﻿namespace AuctionExpert.Services.Data
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using AuctionExpert.Data.Models;
     using AuctionExpert.Web.ViewModels.Auction;
-    using AuctionExpert.Web.ViewModels.Profile;
 
     public interface IAuctionService
     {
         Task CreateAsync(AddAuctionViewModel model, ApplicationUser user);
 
-        IQueryable<HomeAuctionViewModel> GetAllAuctionsAsHomeModel();
+        IQueryable<T> GetAllAuctions<T>();
 
         Task<DetailViewModel> GetDetailAuctionModelByIdAsync(int auctionId);
 
-        IQueryable<MyAuctionsViewModel> GetAuctionsByOwnerId(string ownerId);
+        IQueryable<T> GetAuctionsByOwnerId<T>(string ownerId);
 
-        Task<Auction> GetAuctionById(int auctionId);
+        Task<T> GetAuctionById<T>(int auctionId);
 
         Task PlaceBidAsync(int? currentBid, string userId, int auctionId);
+
+        IQueryable<T> GetAllAuctionsByCategoryId<T>(int categoryId);
     }
 }

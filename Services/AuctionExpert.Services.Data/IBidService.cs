@@ -1,12 +1,9 @@
 ﻿namespace AuctionExpert.Services.Data
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-
-    using AuctionExpert.Web.ViewModels.Bid;
+    using System.Linq;
 
     public interface IBidService
     {
-        Task<List<BidListModel>> GetAllBidsByAuctionIdAsync(int auctionId);
+        IQueryable<T> GetAllBidsByAuctionId<T>(int auctionId);
     }
 }

@@ -1,15 +1,15 @@
 ﻿namespace AuctionExpert.Services.Data
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
+    using AuctionExpert.Services.Mapping;
     using AuctionExpert.Web.ViewModels.Auction;
+    using AuctionExpert.Web.ViewModels.Bid;
     using AuctionExpert.Web.ViewModels.Image;
-    using AuctionExpert.Web.ViewModels.Profile;
     using Microsoft.EntityFrameworkCore;
 
     using static AuctionExpert.Common.GlobalConstants.AuctionConstraintsAndMessages;
@@ -52,27 +52,19 @@
             await this.auctionRepository.SaveChangesAsync();
         }
 
-        public IQueryable<HomeAuctionViewModel> GetAllAuctionsAsHomeModel()
+        public IQueryable<T> GetAllAuctions<T>()
         {
             return this.auctionRepository
                 .AllAsNoTracking()
-                .Select(x => new HomeAuctionViewModel()
-                {
-                    Id = x.Id,
-                    AuthorName = x.Owner.FirstName,
-                    ClosesIn = x.ClosesIn,
-                    LastBid = x.Bids.Count == 0 ? x.StartPrice : x.Bids.OrderByDescending(x => x.MoneyPlaced).First().MoneyPlaced,
-                    MainImage = x.Images.First().UrlPath,
-                    Title = x.Title,
-                    Views = x.Views,
-                });
+                .To<T>();
         }
 
-        public async Task<Auction> GetAuctionById(int auctionId)
+        public async Task<T> GetAuctionById<T>(int auctionId)
         {
             return await this.auctionRepository
                 .AllAsNoTracking()
                 .Where(x => x.Id == auctionId)
+                .To<T>()
                 .FirstOrDefaultAsync();
         }
 
@@ -99,7 +91,7 @@
                     .ToList()
                     .Select(x => new DetailsImageViewModel()
                     {
-                        ImageUrl = x.UrlPath,
+                        UrlPath = x.UrlPath,
                     }),
                 })
                 .FirstOrDefaultAsync();
@@ -114,8 +106,8 @@
 
         public async Task PlaceBidAsync(int? currentBid, string userId, int auctionId)
         {
-            var auction = await this.GetAuctionById(auctionId);
-            var bids = await this.bidService.GetAllBidsByAuctionIdAsync(auctionId);
+            var auction = await this.GetAuctionById<Auction>(auctionId);
+            var bids = await this.bidService.GetAllBidsByAuctionId<BidListModel>(auctionId).ToListAsync();
 
             if (auction == null)
             {
@@ -148,19 +140,20 @@
             await this.auctionRepository.SaveChangesAsync();
         }
 
-        public IQueryable<MyAuctionsViewModel> GetAuctionsByOwnerId(string ownerId)
+        public IQueryable<T> GetAuctionsByOwnerId<T>(string ownerId)
         {
             return this.auctionRepository
                 .AllAsNoTrackingWithDeleted()
                 .Where(x => x.OwnerId == ownerId)
-                .Select(x => new MyAuctionsViewModel()
-                {
-                    HighestBid = x.Bids.Count == 0 ? 0 : x.Bids.OrderByDescending(x => x.MoneyPlaced).First().MoneyPlaced,
-                    ImageUrl = x.Images.First().UrlPath,
-                    StartPrice = x.StartPrice,
-                    Type = x.AuctionType.ToString().StartsWith("Fixed") ? "Fixed Price" : "Standard Auction",
-                    Status = x.IsDeleted == true ? "Finished" : "Active",
-                });
+                .To<T>();
+        }
+
+        public IQueryable<T> GetAllAuctionsByCategoryId<T>(int categoryId)
+        {
+            return this.auctionRepository
+                .AllAsNoTracking()
+                .Where(x => x.SubCategory.CategoryId == categoryId)
+                .To<T>();
         }
     }
 }

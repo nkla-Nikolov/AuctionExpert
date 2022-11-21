@@ -1,17 +1,12 @@
 ﻿namespace AuctionExpert.Services.Data
 {
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Reflection;
     using System.Threading.Tasks;
 
-    using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.EntityFrameworkCore.Query;
-    using Microsoft.EntityFrameworkCore.Query.Internal;
 
     public class ImageService : IImageService
     {
