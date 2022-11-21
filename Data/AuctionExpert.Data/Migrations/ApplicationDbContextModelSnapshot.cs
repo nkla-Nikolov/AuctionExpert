@@ -167,6 +167,9 @@ namespace AuctionExpert.Data.Migrations
                     b.Property<int>("AuctionType")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("ClosesIn")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
@@ -181,8 +184,8 @@ namespace AuctionExpert.Data.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<DateTime>("Duration")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -195,7 +198,7 @@ namespace AuctionExpert.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("StartPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<int>("SubCategoryId")
                         .HasColumnType("int");
@@ -249,7 +252,7 @@ namespace AuctionExpert.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("MoneyPlaced")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("TimePlaced")
                         .HasColumnType("datetime2");

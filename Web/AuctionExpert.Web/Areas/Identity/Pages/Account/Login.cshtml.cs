@@ -97,7 +97,7 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    this.ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    this.ModelState.AddModelError(string.Empty, "Invalid username or password.");
                     return this.Page();
                 }
             }

@@ -83,6 +83,9 @@ namespace AuctionExpert.Web
             services.AddTransient<ICountryService, CountryService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ISubCategoryService, SubCategoryService>();
+            services.AddTransient<IAuctionService, AuctionService>();
+            services.AddTransient<IImageService, ImageService>();
+            services.AddTransient<IBidService, BidService>();
         }
 
         private static void Configure(WebApplication app)

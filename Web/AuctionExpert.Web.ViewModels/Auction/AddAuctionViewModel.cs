@@ -8,7 +8,7 @@
     using AuctionExpert.Web.ViewModels.Category;
     using Microsoft.AspNetCore.Http;
 
-    using static AuctionExpert.Common.GlobalConstants.CreateAuctionConstraintsAndMessages;
+    using static AuctionExpert.Common.GlobalConstants.AuctionConstraintsAndMessages;
 
     public class AddAuctionViewModel
     {
@@ -44,7 +44,7 @@
 
         [Required]
         [Range(1, 7)]
-        public int? Duration { get; set; }
+        public int Duration { get; set; }
 
         [Required]
         public IFormFileCollection Images { get; set; }

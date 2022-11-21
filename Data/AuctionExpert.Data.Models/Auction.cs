@@ -7,7 +7,7 @@
     using AuctionExpert.Data.Common.Enumerations;
     using AuctionExpert.Data.Common.Models;
 
-    using static AuctionExpert.Common.GlobalConstants.CreateAuctionConstraintsAndMessages;
+    using static AuctionExpert.Common.GlobalConstants.AuctionConstraintsAndMessages;
 
     public class Auction : BaseDeletableModel<int>
     {
@@ -30,7 +30,10 @@
         public TypeSale AuctionType { get; set; }
 
         [Required]
-        public DateTime Duration { get; set; }
+        public int Duration { get; set; }
+
+        [Required]
+        public DateTime ClosesIn { get; set; }
 
         [Required]
         public string OwnerId { get; set; }
