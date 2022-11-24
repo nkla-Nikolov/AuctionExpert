@@ -1,6 +1,7 @@
 ﻿namespace AuctionExpert.Web.ViewModels.Profile
 {
     using System.Collections.Generic;
+    using AuctionExpert.Web.ViewModels.Auction;
 
     public class MyProfileViewModel
     {

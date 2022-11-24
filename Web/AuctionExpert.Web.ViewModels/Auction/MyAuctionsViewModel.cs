@@ -1,5 +1,6 @@
-﻿namespace AuctionExpert.Web.ViewModels.Profile
+﻿namespace AuctionExpert.Web.ViewModels.Auction
 {
+    using System;
     using System.Linq;
 
     using AuctionExpert.Data.Models;
@@ -8,11 +9,15 @@
 
     public class MyAuctionsViewModel : IMapFrom<Auction>, IHaveCustomMappings
     {
+        public int Id { get; set; }
+
         public string ImageUrl { get; set; }
 
         public decimal StartPrice { get; set; }
 
         public decimal HighestBid { get; set; }
+
+        public DateTime ClosesIn { get; set; }
 
         public string Type { get; set; }
 

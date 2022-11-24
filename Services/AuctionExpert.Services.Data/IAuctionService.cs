@@ -10,6 +10,8 @@
     {
         Task CreateAsync(AddAuctionViewModel model, ApplicationUser user);
 
+        Task DeteleAsync(int auctionId);
+
         IQueryable<T> GetAllAuctions<T>();
 
         Task<DetailViewModel> GetDetailAuctionModelByIdAsync(int auctionId);

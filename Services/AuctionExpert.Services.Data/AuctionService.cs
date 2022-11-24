@@ -155,5 +155,18 @@
                 .Where(x => x.SubCategory.CategoryId == categoryId)
                 .To<T>();
         }
+
+        public async Task DeteleAsync(int auctionId)
+        {
+            var auction = await this.GetAuctionById<Auction>(auctionId);
+
+            if (auction == null)
+            {
+                throw new NullReferenceException(AuctionDoesNotExist);
+            }
+
+            this.auctionRepository.Delete(auction);
+            await this.auctionRepository.SaveChangesAsync();
+        }
     }
 }

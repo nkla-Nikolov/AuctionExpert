@@ -51,11 +51,24 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="dashboard-card hover-border1 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
                                         <div class="header">
-                                            <h5>Sells</h5>
+                                            <h5>My auctions</h5>
                                         </div>
                                         <div class="body">
                                             <div class="counter-item">
                                                 <h2>@Model.MyAuctions.Count()</h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="dashboard-card hover-border1 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
+                                        <div class="header">
+                                            <h5>My Active Auctions</h5>
+                                        </div>
+                                        <div class="body">
+                                            <div class="counter-item">
+                                                <h2>@Model.MyAuctions.Where(x => x.Status == "Active").Count()</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -197,6 +210,7 @@
                                         <th>Initial Price</th>
                                         <th>Highest Bid</th>
                                         <th>Type</th>
+                                        <th>Expires At</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -209,6 +223,8 @@
                                             <td data-label="Initial Price">$@auction.StartPrice</td>
                                             <td data-label="Highest Bid">$@auction.HighestBid</td>
                                             <td data-label="Type">@auction.Type</td>
+                                            <td data-label="Expires At">@auction.ClosesIn</td>
+
                                             @if (auction.Status == "Active")
                                             {
                                                 <td data-label="Status" class="text-green">@auction.Status</td>
@@ -217,7 +233,16 @@
                                             {
                                                 <td data-label="Status" class="text-red">@auction.Status</td>
                                             }
-                                            <td data-label="Action"><button class="eg-btn action-btn green"><img alt="image" src="~/assets/images/icons/action-icon.svg"></button></td>
+                                            @if (auction.Status != "Finished")
+                                            {
+                                                <td data-label="Action">
+                                                    <form method="post">
+                                                        <button asp-controller="Auction" asp-action="Delete" asp-route-auctionId="@auction.Id" class="eg-btn action-btn text-danger">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            }
                                         </tr>
                                     }
                                 </tbody>

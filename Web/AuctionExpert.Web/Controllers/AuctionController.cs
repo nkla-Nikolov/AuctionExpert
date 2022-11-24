@@ -92,5 +92,20 @@
 
             return this.View(auctions);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int auctionId)
+        {
+            try
+            {
+                await this.auctionService.DeteleAsync(auctionId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return this.RedirectToAction("Dashboard", "User");
+        }
     }
 }

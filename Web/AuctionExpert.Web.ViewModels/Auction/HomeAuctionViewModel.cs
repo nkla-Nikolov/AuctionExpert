@@ -29,6 +29,8 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
+            configuration.CreateMap<Auction, Auction>();
+
             configuration.CreateMap<Auction, HomeAuctionViewModel>()
                 .ForMember(dest => dest.MainImage, opt => opt.MapFrom(x => x.Images.FirstOrDefault().UrlPath))
                 .ForMember(dest => dest.OwnerName, opt => opt.MapFrom(x => x.Owner.FirstName))
