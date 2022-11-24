@@ -4,6 +4,7 @@
 
 @{
     this.ViewData["Title"] = "Home Page";
+    int i = 0;
 }
 
 <div class="hero-area hero-style-one">
@@ -79,8 +80,8 @@
                         <div class="auction-img">
                             <img alt="image" src=@auction.MainImage>
                             <div class="auction-timer">
-                                <div class="countdown" id="timer1">
-                                    <h4><span id="hours1">05</span>H : <span id="minutes1">52</span>M : <span id="seconds1">32</span>S</h4>
+                                <div class="countdown" id="timer@(i)" data-endDate="@auction.ClosesIn.ToLocalTime()">
+                                    <h4><span id="days@(i)"></span>D : <span id="hours@(i)"></span>H : <span id="minutes@(i)"></span>M : <span id="seconds@(i)"></span>S</h4>
                                 </div>
                             </div>
                             <div class="author-area">
@@ -117,6 +118,7 @@
                         </div>
                     </div>
                 </div>
+                i++;
             }
         </div>
         <div class="row d-flex justify-content-center">
@@ -126,3 +128,5 @@
         </div>
     </div>
 </div>
+
+<script src="~/js/site.js"></script>
