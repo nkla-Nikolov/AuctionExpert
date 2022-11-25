@@ -16,6 +16,10 @@
     <EmbeddedResource Remove="Views\Users\**" />
     <None Remove="Views\Users\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Views\User\Dashboard.cshtml~RF49a3aa0f.TMP" />
+  </ItemGroup>
 	<ItemGroup>
 		<AdditionalFiles Include="..\..\stylecop.json" />
 	</ItemGroup>

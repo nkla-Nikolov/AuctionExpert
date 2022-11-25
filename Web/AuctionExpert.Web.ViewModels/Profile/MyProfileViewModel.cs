@@ -1,6 +1,7 @@
 ﻿namespace AuctionExpert.Web.ViewModels.Profile
 {
     using System.Collections.Generic;
+
     using AuctionExpert.Web.ViewModels.Auction;
 
     public class MyProfileViewModel
@@ -21,5 +22,7 @@
         public int AuctionsWon { get; set; }
 
         public IEnumerable<MyAuctionsViewModel> MyAuctions { get; set; }
+
+        public UpdateProfileViewModel UpdateProfileInput { get; set; }
     }
 }
