@@ -30,6 +30,9 @@
         public TypeSale AuctionType { get; set; }
 
         [Required]
+        public int StepAmount { get; set; }
+
+        [Required]
         public int Duration { get; set; }
 
         [Required]

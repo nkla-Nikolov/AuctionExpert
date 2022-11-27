@@ -31,6 +31,8 @@
     <link rel="stylesheet" href="~/assets/css/magnific-popup.css">
     <link rel="stylesheet" href="~/assets/css/odometer.css">
     <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/lib/toastr/toastr.min.css"/>
+    
 </head>
 <body>
     <div class="preloader">
@@ -43,6 +45,7 @@
     </div>
 
     <header class="header-area style-1">
+        <partial name="_UserMessages" />
         <div class="header-logo" style="background:none">
         </div>
         <div class="main-menu">
@@ -232,6 +235,7 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+    <script src="~/lib/toastr/toastr.min.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
 
     <script src="~/assets/js/jquery-3.6.0.min.js"></script>

@@ -45,6 +45,7 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="toastr" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,5 +58,14 @@
     <ProjectReference Include="..\..\Services\AuctionExpert.Services\AuctionExpert.Services.csproj" />
     <ProjectReference Include="..\AuctionExpert.Web.Infrastructure\AuctionExpert.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\AuctionExpert.Web.ViewModels\AuctionExpert.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\lib\toastr\toastr.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\lib\toastr\toastr.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

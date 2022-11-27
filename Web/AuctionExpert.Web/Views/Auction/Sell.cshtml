@@ -24,7 +24,7 @@
                         <div class="col-md-12">
                             <div class="form-inner">
                                 <label asp-for="Description">Description *</label>
-                                <input asp-for="Description" class="form-control" placeholder="Description">
+                                <textarea rows="5" asp-for="Description" class="form-control" placeholder="Description"></textarea>
                             </div>
                         </div>
 
@@ -83,6 +83,13 @@
                             <div class="form-inner">
                                 <label asp-for="Duration">Duration *</label>
                                 <input asp-for="Duration" class="form-control" placeholder="Enter duration in days " />
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-inner">
+                                <label asp-for="StepAmount">Step *</label>
+                                <input asp-for="StepAmount" class="form-control" placeholder="Enter step">
                             </div>
                         </div>
 

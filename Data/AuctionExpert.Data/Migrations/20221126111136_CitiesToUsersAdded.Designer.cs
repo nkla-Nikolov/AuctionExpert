@@ -4,6 +4,7 @@ using AuctionExpert.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuctionExpert.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221126111136_CitiesToUsersAdded")]
+    partial class CitiesToUsersAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,7 +234,7 @@ namespace AuctionExpert.Data.Migrations
 
                     b.HasIndex("SubCategoryId");
 
-                    b.ToTable("Auctions", (string)null);
+                    b.ToTable("Auctions");
                 });
 
             modelBuilder.Entity("AuctionExpert.Data.Models.Bid", b =>
@@ -276,7 +278,7 @@ namespace AuctionExpert.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Bids", (string)null);
+                    b.ToTable("Bids");
                 });
 
             modelBuilder.Entity("AuctionExpert.Data.Models.Category", b =>
@@ -307,7 +309,7 @@ namespace AuctionExpert.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("AuctionExpert.Data.Models.City", b =>
@@ -343,7 +345,7 @@ namespace AuctionExpert.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Cities", (string)null);
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("AuctionExpert.Data.Models.Country", b =>
@@ -374,7 +376,7 @@ namespace AuctionExpert.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Countries", (string)null);
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("AuctionExpert.Data.Models.Image", b =>
@@ -406,7 +408,7 @@ namespace AuctionExpert.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Images", (string)null);
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("AuctionExpert.Data.Models.Review", b =>
@@ -448,7 +450,7 @@ namespace AuctionExpert.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("AuctionExpert.Data.Models.Setting", b =>
@@ -481,7 +483,7 @@ namespace AuctionExpert.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Settings", (string)null);
+                    b.ToTable("Settings");
                 });
 
             modelBuilder.Entity("AuctionExpert.Data.Models.SubCategory", b =>
@@ -517,7 +519,7 @@ namespace AuctionExpert.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("SubCategories", (string)null);
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -56,8 +56,7 @@
                     <div class="bid-form">
                         <div class="form-title">
                             <h5>Bid Now</h5>
-                            @*TODO: MINIMUM BID STEP PRICE HAS TO BE CHOSEN BY THE OWNER OF THE AUCTION*@
-                            <p>Bid Amount : Minimum Bid $@(Model.BiddingPrice + 1)</p>
+                            <p>Bid Amount : Minimum Bid $@(Model.BiddingPrice + Model.StepAmount)</p>
                         </div>
                         <form method="post" asp-controller="Auction" asp-action="PlaceBid" asp-route-Id="@Model.Id">
                             <div class="form-inner gap-2">

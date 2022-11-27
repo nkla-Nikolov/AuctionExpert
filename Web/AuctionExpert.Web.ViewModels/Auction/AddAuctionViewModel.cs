@@ -40,6 +40,10 @@
         public TypeSale Type { get; set; }
 
         [Required]
+        [Range(1, 1000)]
+        public int StepAmount { get; set; }
+
+        [Required]
         public int StartPrice { get; set; }
 
         [Required]

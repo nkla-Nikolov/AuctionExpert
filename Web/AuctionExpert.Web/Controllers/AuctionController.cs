@@ -3,7 +3,7 @@
     using System;
     using System.Security.Claims;
     using System.Threading.Tasks;
-
+    using AuctionExpert.Common;
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Data;
     using AuctionExpert.Web.ViewModels.Auction;
@@ -78,8 +78,7 @@
             }
             catch (Exception)
             {
-                // TODO: Appropriate exception handling!
-                throw;
+                this.TempData[GlobalConstants.MessageConstants.ErrorMessage] = "Something went wrong!";
             }
 
             return this.RedirectToAction(nameof(this.Details), new { auctionId = model.Id });

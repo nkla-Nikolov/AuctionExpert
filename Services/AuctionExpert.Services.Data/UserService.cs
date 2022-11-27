@@ -1,5 +1,6 @@
 ﻿namespace AuctionExpert.Services.Data
 {
+    using System;
     using System.Threading.Tasks;
 
     using AuctionExpert.Data.Common.Repositories;
@@ -34,19 +35,19 @@
                 user.LastName = model.UpdateProfileInput.LastName;
             }
 
-            if (model.UpdateProfileInput.Email != null)
+            if (model.UpdateProfileInput.OldPassword != null && model.UpdateProfileInput.Password != null)
             {
-                user.Email = model.UpdateProfileInput.Email;
-            }
+                var result = await this.userManager.ChangePasswordAsync(user, model.UpdateProfileInput.OldPassword, model.UpdateProfileInput.Password);
 
-            if (model.UpdateProfileInput.Password != null)
-            {
-                //TODO : Change pass
+                if (!result.Succeeded)
+                {
+                    throw new InvalidOperationException();
+                }
             }
 
             if (model.UpdateProfileInput.CityId != null)
             {
-                user.Country.ci
+                user.CityId = model.UpdateProfileInput.CityId;
             }
 
             this.userRepository.Update(user);

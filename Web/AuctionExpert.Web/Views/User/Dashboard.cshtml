@@ -35,9 +35,6 @@
                     <button class="nav-link nav-btn-style mx-auto mb-20" id="v-pills-order-tab" data-bs-toggle="pill" data-bs-target="#v-pills-order" type="button" role="tab" aria-controls="v-pills-order" aria-selected="true">
                         My Auctions
                     </button>
-                    <button class="nav-link nav-btn-style mx-auto" id="v-pills-purchase-tab" data-bs-toggle="pill" data-bs-target="#v-pills-purchase" type="button" role="tab" aria-controls="v-pills-purchase" aria-selected="true">
-                        My Purchases
-                    </button>
                     <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })" method="post">
                         <button class="nav-link nav-btn-style mx-auto" type="submit" role="tab">Logout</button>
                     </form>
@@ -68,7 +65,7 @@
                                         </div>
                                         <div class="body">
                                             <div class="counter-item">
-                                                <h2>@Model.MyAuctions.Where(x => x.Status == "Active").Count()</h2>
+                                                <h2>@Model.MyAuctions.Where(x => x.Status.ToString() == "Active").Count()</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -77,24 +74,11 @@
                                 <div class="col-md-6 col-sm-6">
                                     <div class="dashboard-card hover-border1 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".4s">
                                         <div class="header">
-                                            <h5>Participated In Auctions</h5>
+                                            <h5>Total Bids Count</h5>
                                         </div>
                                         <div class="body">
                                             <div class="counter-item">
-                                                <h2>@Model.ParticipatedInAuctionsCount</h2>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="dashboard-card hover-border1 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".6s">
-                                        <div class="header">
-                                            <h5>Auctions Won</h5>
-                                        </div>
-                                        <div class="body">
-                                            <div class="counter-item">
-                                                <h2>@Model.AuctionsWon</h2>
+                                                <h2>@Model.TotalBidsCount</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -111,7 +95,9 @@
                                 </div>
                                 <div class="content">
                                     <h3>@Model.FirstName @Model.LastName</h3>
-                                    <p class="para">@Model.Username</p>
+                                    <p class="para">Username: @Model.Username</p>
+                                    <p class="para">Email: @Model.Email</p>
+                                    <p class="para">City: @(Model.CityName == null ? "Please select a city" : Model.CityName)</p>
                                 </div>
                             </div>
                             <div class="form-wrapper">
@@ -119,29 +105,22 @@
                                     <div class="row">
                                         <div class="col-xl-6 col-lg-12 col-md-6">
                                             <div class="form-inner">
-                                                <label asp-for="@Model.UpdateProfileInput.FirstName">Frist Name *</label>
-                                                <input asp-for="@Model.UpdateProfileInput.FirstName" type="text" placeholder="Your first name">
+                                                <label asp-for="@Model.UpdateProfileInput.FirstName">Frist Name</label>
+                                                <input asp-for="@Model.UpdateProfileInput.FirstName" type="text" placeholder="Your First Name">
                                                 <span asp-validation-for="@Model.UpdateProfileInput.FirstName" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-xl-6 col-lg-12 col-md-6">
                                             <div class="form-inner">
-                                                <label asp-for="@Model.UpdateProfileInput.LastName">Last Name *</label>
-                                                <input asp-for="@Model.UpdateProfileInput.LastName" type="text" placeholder="Your last name">
+                                                <label asp-for="@Model.UpdateProfileInput.LastName">Last Name</label>
+                                                <input asp-for="@Model.UpdateProfileInput.LastName" type="text" placeholder="Your Last Name">
                                                 <span asp-validation-for="@Model.UpdateProfileInput.LastName" class="text-danger"></span>
                                             </div>
                                         </div>
-                                        <div class="col-xl-6 col-lg-12 col-md-6">
-                                            <div class="form-inner">
-                                                <label asp-for="@Model.UpdateProfileInput.Email">Email</label>
-                                                <input asp-for="@Model.UpdateProfileInput.Email" type="text" placeholder="Your Email">
-                                                <span asp-validation-for="@Model.UpdateProfileInput.Email" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-6 col-lg-12 col-md-6">
+                                        <div class="col-12">
                                             <div class="form-inner">
                                                 <label asp-for="@Model.UpdateProfileInput.Cities">City</label>
-                                                <select id="city">
+                                                <select asp-for="@Model.UpdateProfileInput.CityId">
                                                     @foreach (var city in Model.UpdateProfileInput.Cities)
                                                     {
                                                         <option value="@city.Id">@city.Name</option>
@@ -151,23 +130,31 @@
                                         </div>
                                         <div class="col-12">
                                             <div class="form-inner">
-                                                <label asp-for="@Model.UpdateProfileInput.Password">Password *</label>
-                                                <input asp-for="@Model.UpdateProfileInput.Password" type="password" name="password" id="password" placeholder="Create A Password" />
+                                                <label asp-for="@Model.UpdateProfileInput.OldPassword">Old Password</label>
+                                                <input asp-for="@Model.UpdateProfileInput.OldPassword" id="password" placeholder="Enter your old password" />
+                                                <i class="bi bi-eye-slash" id="togglePassword"></i>
+                                                <span asp-validation-for="@Model.UpdateProfileInput.OldPassword" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-inner">
+                                                <label asp-for="@Model.UpdateProfileInput.Password">Password</label>
+                                                <input asp-for="@Model.UpdateProfileInput.Password" type="password" id="password" placeholder="Create A Password" />
                                                 <i class="bi bi-eye-slash" id="togglePassword"></i>
                                                 <span asp-validation-for="@Model.UpdateProfileInput.Password" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-inner mb-0">
-                                                <label asp-for="@Model.UpdateProfileInput.ConfirmPassword">Confirm Password *</label>
-                                                <input asp-for="@Model.UpdateProfileInput.ConfirmPassword" type="password" name="password" id="password2" placeholder="Create A Password" />
+                                                <label asp-for="@Model.UpdateProfileInput.ConfirmPassword">Confirm Password</label>
+                                                <input asp-for="@Model.UpdateProfileInput.ConfirmPassword" type="password" id="password2" placeholder="Create A Password" />
                                                 <i class="bi bi-eye-slash" id="togglePassword2"></i>
                                                 <span asp-validation-for="@Model.UpdateProfileInput.ConfirmPassword" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="button-group">
-                                                <button asp-controller="User" asp-action="UpdateProfile" type="submit" class="eg-btn profile-btn">Update Profile</button>
+                                                <button asp-controller="User" asp-action="Dashboard" type="submit" class="eg-btn profile-btn">Update Profile</button>
                                                 <button class="eg-btn cancel-btn">Cancel</button>
                                             </div>
                                         </div>
@@ -210,7 +197,7 @@
                                             <td data-label="Image"><img alt="image" src="@auction.ImageUrl" class="img-fluid"></td>
                                             <td data-label="Initial Price">$@auction.StartPrice</td>
                                             <td data-label="Highest Bid">$@auction.HighestBid</td>
-                                            <td data-label="Type">@auction.Type</td>
+                                            <td data-label="Type">@auction.AuctionType</td>
                                             <td data-label="Expires At">@auction.ClosesIn</td>
 
                                             @if (auction.Status == "Active")
@@ -247,81 +234,6 @@
                                     </li>
                                     <li class="page-item active" aria-current="page"><a class="page-link" href="#">01</a></li>
                                     <li class="page-item">
-                                        <a class="page-link" href="#">02</a>
-                                    </li>
-                                    <li class="page-item"><a class="page-link" href="#">03</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">Next</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="v-pills-purchase" role="tabpanel"
-                         aria-labelledby="v-pills-purchase-tab">
-                        <!-- table title-->
-                        <div class="table-title-area">
-                            <h3>My Purchases</h3>
-                            <select id="order-category">
-                                <option value="01">Show: Last 05 Order</option>
-                                <option value="02">Show: Last 03 Order</option>
-                                <option value="03">Show: Last 15 Order</option>
-                                <option value="04">Show: Last 20 Order</option>
-                            </select>
-                        </div>
-
-                        <!-- table -->
-                        <div class="table-wrapper">
-                            <table class="eg-table order-table table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Bidding ID</th>
-                                        <th>Bid Amount(USD)</th>
-                                        <th>Image</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td data-label="Title">Auction Title 01</td>
-                                        <td data-label="Bidding ID">Bidding_HvO253gT</td>
-                                        <td data-label="Bid Amount(USD)">1222.8955</td>
-                                        <td data-label="Image"><img alt="image" src="assets/images/bg/order1.png" class="img-fluid"></td>
-                                        <td data-label="Status" class="text-green">Successfully</td>
-                                        <td data-label="Action"><button class="eg-btn action-btn green"><img alt="image" src="assets/images/icons/aiction-icon.svg"></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="Title">Auction Title 02</td>
-                                        <td data-label="Bidding ID">Bidding_HvO253gT</td>
-                                        <td data-label="Bid Amount(USD)">1222.8955</td>
-                                        <td data-label="Image"><img alt="image" src="assets/images/bg/order2.png"></td>
-                                        <td data-label="Status" class="text-green">Successfully</td>
-                                        <td data-label="Action"><button class="eg-btn action-btn green"><img alt="image" src="assets/images/icons/aiction-icon.svg"></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="Title">Auction Title 03</td>
-                                        <td data-label="Bidding ID">Bidding_HvO253gT</td>
-                                        <td data-label="Bid Amount(USD)">1222.8955</td>
-                                        <td data-label="Image"><img alt="image" src="assets/images/bg/order3.png"></td>
-                                        <td data-label="Status" class="text-green">Cancel</td>
-                                        <td data-label="Action"><button class="eg-btn action-btn green"><img alt="image" src="assets/images/icons/aiction-icon.svg"></button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- pagination area -->
-                        <div class="table-pagination">
-                            <p>Showing 10 to 20 of 1 entries</p>
-                            <nav class="pagination-wrap">
-                                <ul class="pagination style-two d-flex justify-content-center gap-md-3 gap-2">
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" tabindex="-1">Prev</a>
-                                    </li>
-                                    <li class="page-item"><a class="page-link" href="#">01</a></li>
-                                    <li class="page-item active" aria-current="page">
                                         <a class="page-link" href="#">02</a>
                                     </li>
                                     <li class="page-item"><a class="page-link" href="#">03</a></li>

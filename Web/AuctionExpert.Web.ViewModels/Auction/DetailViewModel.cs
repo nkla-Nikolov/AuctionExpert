@@ -20,6 +20,8 @@
 
         public decimal BiddingPrice { get; set; }
 
+        public int StepAmount { get; set; }
+
         public int? CurrentBid { get; set; }
 
         public IEnumerable<DetailsImageViewModel> Images { get; set; }

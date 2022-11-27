@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using AuctionExpert.Data.Common.Enumerations;
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Mapping;
@@ -37,6 +38,7 @@
                 AuctionType = model.Type,
                 CountryId = user.CountryId,
                 Duration = model.Duration,
+                StepAmount = model.StepAmount,
                 ClosesIn = DateTime.UtcNow.AddDays(model.Duration),
                 Description = model.Description,
                 OwnerId = user.Id,
@@ -77,6 +79,7 @@
                 {
                     Id = x.Id,
                     Title = x.Title,
+                    StepAmount = x.StepAmount,
                     Description = x.Description,
                     BiddingPrice = x.Bids.Count == 0 ? x.StartPrice : x.Bids.OrderByDescending(x => x.MoneyPlaced).First().MoneyPlaced,
                     Bidders = x.Bids
@@ -119,12 +122,12 @@
                 throw new ArgumentNullException(InvalidInputValueForBid);
             }
 
-            if (bids.Any() && currentBid <= bids[0].MoneyPlaced)
+            if (bids.Any() && currentBid < bids[0].MoneyPlaced + auction.StepAmount)
             {
                 throw new InvalidOperationException(InputBidIsLessThanLastOne);
             }
 
-            if (!bids.Any() && currentBid <= auction.StartPrice)
+            if (!bids.Any() && currentBid < auction.StartPrice + auction.StepAmount)
             {
                 throw new InvalidOperationException(InputBidIsLessThanAuctionStartPrice);
             }

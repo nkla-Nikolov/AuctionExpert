@@ -19,7 +19,7 @@
 
         public DateTime ClosesIn { get; set; }
 
-        public string Type { get; set; }
+        public string AuctionType { get; set; }
 
         public string Status { get; set; }
 
@@ -29,9 +29,9 @@
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(x => x.Images.First().UrlPath))
                 .ForMember(dest => dest.HighestBid, opt => opt.MapFrom(x => x.Bids.Count == 0 ?
                 x.StartPrice : x.Bids.OrderByDescending(x => x.MoneyPlaced).First().MoneyPlaced))
-                .ForMember(dest => dest.Type, opt => opt.MapFrom(x => x.AuctionType.ToString()
+                .ForMember(dest => dest.AuctionType, opt => opt.MapFrom(x => x.AuctionType.ToString()
                 .StartsWith("Fixed") ? "Fixed Price Auction" : "Standard Auction"))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(x => x.IsDeleted == true ? "Finished" : "Active"));
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(x => x.IsDeleted ? "Finished" : "Active"));
         }
     }
 }

@@ -41,6 +41,15 @@
             public const string AgeMaxMessage = "You should be dead!";
         }
 
+        public class MessageConstants
+        {
+            public const string ErrorMessage = "ErrorMessage";
+
+            public const string WarningMessage = "WarningMessage";
+
+            public const string SuccessMessage = "SuccessMessage";
+        }
+
         public class AuctionConstraintsAndMessages
         {
             public const int TitleMinLenght = 10;
@@ -61,7 +70,7 @@
 
             public const string InputBidIsLessThanLastOne = "You cannot place bid that is less than the last one!";
 
-            public const string InputBidIsLessThanAuctionStartPrice = "Your bid should be higher than the auction's start price!";
+            public const string InputBidIsLessThanAuctionStartPrice = "Your bid should be higher than the auction's minimum step!";
         }
 
         public class FilePaths

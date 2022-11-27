@@ -1,10 +1,11 @@
 ﻿namespace AuctionExpert.Services.Data
 {
     using System.Linq;
-
+    using System.Threading.Tasks;
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Mapping;
+    using Microsoft.EntityFrameworkCore;
 
     public class CityService : ICityService
     {
@@ -21,6 +22,15 @@
                 .AllAsNoTracking()
                 .Where(x => x.CountryId == countryId)
                 .To<T>();
+        }
+
+        public async Task<T> GetCityById<T>(int? cityId)
+        {
+            return await this.cityRepository
+                .AllAsNoTracking()
+                .Where(x => x.Id == cityId)
+                .To<T>()
+                .FirstOrDefaultAsync();
         }
     }
 }
