@@ -41,15 +41,6 @@
             public const string AgeMaxMessage = "You should be dead!";
         }
 
-        public class MessageConstants
-        {
-            public const string ErrorMessage = "ErrorMessage";
-
-            public const string WarningMessage = "WarningMessage";
-
-            public const string SuccessMessage = "SuccessMessage";
-        }
-
         public class AuctionConstraintsAndMessages
         {
             public const int TitleMinLenght = 10;

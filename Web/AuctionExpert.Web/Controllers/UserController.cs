@@ -13,7 +13,6 @@
     using AuctionExpert.Web.ViewModels.Profile;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
-    using static AuctionExpert.Common.GlobalConstants;
 
     public class UserController : BaseController
     {
@@ -86,7 +85,7 @@
             }
             catch (InvalidOperationException)
             {
-                this.TempData[MessageConstants.ErrorMessage] = "Something went wrong";
+                //TODO: display error
             }
 
             return this.RedirectToAction(nameof(this.Dashboard));
