@@ -20,7 +20,7 @@
 
         Task<T> GetAuctionById<T>(int auctionId);
 
-        Task PlaceBidAsync(int? currentBid, string userId, int auctionId);
+        Task PlaceBidAsync(int? currentBid, string userId, Auction auction);
 
         IQueryable<T> GetAllAuctionsByCategoryId<T>(int categoryId);
     }

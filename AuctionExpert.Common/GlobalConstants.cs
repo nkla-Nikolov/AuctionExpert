@@ -38,7 +38,7 @@
 
             public const string AgeMinMessage = "You cannot register until you are 18 years old!";
 
-            public const string AgeMaxMessage = "You should be dead!";
+            public const string AgeMaxMessage = "Invalid age!";
         }
 
         public class AuctionConstraintsAndMessages
@@ -55,13 +55,7 @@
 
             public const string LengthMessage = "The {0} must be at least {2} and maximum {1} characters long!";
 
-            public const string AuctionDoesNotExist = "The auction you are looking for does not exist!";
-
-            public const string InvalidInputValueForBid = "The value you entered is invalid!";
-
-            public const string InputBidIsLessThanLastOne = "You cannot place bid that is less than the last one!";
-
-            public const string InputBidIsLessThanAuctionStartPrice = "Your bid should be higher than the auction's minimum step!";
+            public const string InvalidInputBidValue = "You cannot place bid that is less than the minimum!";
         }
 
         public class FilePaths

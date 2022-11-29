@@ -4,13 +4,12 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using AuctionExpert.Data.Common.Enumerations;
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Mapping;
     using AuctionExpert.Web.ViewModels.Auction;
-    using AuctionExpert.Web.ViewModels.Bid;
     using AuctionExpert.Web.ViewModels.Image;
+    using AuctionExpert.Web.ViewModels.Review;
     using Microsoft.EntityFrameworkCore;
 
     using static AuctionExpert.Common.GlobalConstants.AuctionConstraintsAndMessages;
@@ -82,6 +81,15 @@
                     StepAmount = x.StepAmount,
                     Description = x.Description,
                     BiddingPrice = x.Bids.Count == 0 ? x.StartPrice : x.Bids.OrderByDescending(x => x.MoneyPlaced).First().MoneyPlaced,
+                    Comments = x.Reviews
+                    .ToList()
+                    .Select(c => new CommentViewModel()
+                    {
+                        AuthorFirstName = c.User.FirstName,
+                        AuthorLastName = c.User.LastName,
+                        Content = c.Comment,
+                        DatePlaced = c.DatePlaced,
+                    }),
                     Bidders = x.Bids
                     .ToList()
                     .Select(b => new BidderViewModel()
@@ -99,37 +107,22 @@
                 })
                 .FirstOrDefaultAsync();
 
-            if (auction == null)
-            {
-                throw new ArgumentNullException(AuctionDoesNotExist);
-            }
-
             return auction;
         }
 
-        public async Task PlaceBidAsync(int? currentBid, string userId, int auctionId)
+        public async Task PlaceBidAsync(int? currentBid, string userId, Auction auction)
         {
-            var auction = await this.GetAuctionById<Auction>(auctionId);
-            var bids = await this.bidService.GetAllBidsByAuctionId<BidListModel>(auctionId).ToListAsync();
-
-            if (auction == null)
-            {
-                throw new ArgumentNullException(AuctionDoesNotExist);
-            }
+            var lastBid = await this.bidService.HighestBidByAuctionId(auction.Id);
 
             if (currentBid == null)
             {
-                throw new ArgumentNullException(InvalidInputValueForBid);
+                throw new InvalidOperationException("You cannot enter decimal bids!");
             }
 
-            if (bids.Any() && currentBid < bids[0].MoneyPlaced + auction.StepAmount)
+            if (currentBid < auction.StartPrice + auction.StepAmount ||
+                currentBid < lastBid + auction.StepAmount)
             {
-                throw new InvalidOperationException(InputBidIsLessThanLastOne);
-            }
-
-            if (!bids.Any() && currentBid < auction.StartPrice + auction.StepAmount)
-            {
-                throw new InvalidOperationException(InputBidIsLessThanAuctionStartPrice);
+                throw new InvalidOperationException(InvalidInputBidValue);
             }
 
             auction.Bids.Add(new Bid()
@@ -165,7 +158,7 @@
 
             if (auction == null)
             {
-                throw new NullReferenceException(AuctionDoesNotExist);
+                throw new NullReferenceException();
             }
 
             this.auctionRepository.Delete(auction);

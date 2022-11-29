@@ -3,12 +3,10 @@
     using System.Diagnostics;
     using System.Threading.Tasks;
 
-    using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Data;
     using AuctionExpert.Web.ViewModels;
     using AuctionExpert.Web.ViewModels.Auction;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 

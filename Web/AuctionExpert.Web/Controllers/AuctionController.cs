@@ -12,21 +12,22 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
-    using static AuctionExpert.Common.GlobalConstants.AuctionConstraintsAndMessages;
-
     public class AuctionController : BaseController
     {
         private readonly ICategoryService categoryService;
         private readonly IAuctionService auctionService;
+        private readonly IReviewService reviewService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public AuctionController(
             ICategoryService categoryService,
             IAuctionService auctionService,
+            IReviewService reviewService,
             UserManager<ApplicationUser> userManager)
         {
             this.categoryService = categoryService;
             this.auctionService = auctionService;
+            this.reviewService = reviewService;
             this.userManager = userManager;
         }
 
@@ -61,27 +62,38 @@
 
             if (auction == null)
             {
-                throw new NullReferenceException(AuctionDoesNotExist);
+                this.Response.StatusCode = 404;
+                return this.View("NotFound404");
             }
 
             return this.View(auction);
         }
 
         [HttpPost]
-        public async Task<IActionResult> PlaceBid(DetailViewModel model)
+        public async Task<IActionResult> Details(DetailViewModel model)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var auction = await this.auctionService.GetAuctionById<Auction>(model.Id);
+
+            if (auction == null)
+            {
+                this.Response.StatusCode = 404;
+                return this.View("NotFound404");
+            }
 
             try
             {
-                await this.auctionService.PlaceBidAsync(model.CurrentBid, userId, model.Id);
+                await this.auctionService.PlaceBidAsync(model.CurrentBid, userId, auction);
             }
-            catch (Exception)
+            catch (InvalidOperationException ex)
             {
-                //TODO : Dsiplay error
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                model = await this.auctionService.GetDetailAuctionModelByIdAsync(auction.Id);
+
+                return this.View(model);
             }
 
-            return this.RedirectToAction(nameof(this.Details), new { auctionId = model.Id });
+            return this.RedirectToAction(nameof(this.Details), new { auctionId = auction.Id });
         }
 
         [HttpGet]
@@ -99,12 +111,23 @@
             {
                 await this.auctionService.DeteleAsync(auctionId);
             }
-            catch (Exception)
+            catch (NullReferenceException)
             {
-                throw;
+                this.Response.StatusCode = 404;
+                return this.View("NotFound404");
             }
 
             return this.RedirectToAction("Dashboard", "User");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Comment(int auctionId, DetailViewModel model)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await this.reviewService.CommentOnAuction(auctionId, model.Comment, userId);
+
+            return this.RedirectToAction(nameof(this.Details), new { auctionId = auctionId });
         }
     }
 }

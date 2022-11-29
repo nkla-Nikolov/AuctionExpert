@@ -34,6 +34,12 @@
         }
 
         [HttpGet]
+        public IActionResult Index()
+        {
+            return this.View();
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Dashboard()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -58,7 +58,8 @@
                             <h5>Bid Now</h5>
                             <p>Bid Amount : Minimum Bid $@(Model.BiddingPrice + Model.StepAmount)</p>
                         </div>
-                        <form method="post" asp-controller="Auction" asp-action="PlaceBid" asp-route-Id="@Model.Id">
+                        <form method="post" asp-controller="Auction" asp-action="Details" asp-route-Id="@Model.Id">
+                            <div asp-validation-summary="All" class="text-danger"></div>
                             <div class="form-inner gap-2">
                                 <input asp-for="CurrentBid" type="number" class="form-control" placeholder="Place your bid here..." />
                                 <button class="eg-btn btn--primary btn--sm" type="submit">Place Bid</button>
@@ -77,10 +78,6 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link details-tab-btn" id="pills-bid-tab" data-bs-toggle="pill" data-bs-target="#pills-bid" type="button" role="tab" aria-controls="pills-bid" aria-selected="false">Biding History</button>
                     </li>
-                    @*TODO: OTHER AUCTIONS SECTION SELECTED BY RANDOM*@
-                    @*<li class="nav-item" role="presentation">
-                    <button class="nav-link details-tab-btn" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Other Auction</button>
-                    </li>*@
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active wow fadeInUp" data-wow-duration="1.5s" data-wow-delay=".2s" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
@@ -138,151 +135,70 @@
                             }
                         </div>
                     </div>
-                    @*<div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-                    <div class="row d-flex justify-content-center g-4">
-                    <div class="col-lg-6 col-md-4 col-sm-10">
-                    <div class="eg-card auction-card1">
-                    <div class="auction-img">
-                    <img alt="image" src="assets/images/bg/live-auc1.png">
-                    <div class="auction-timer">
-                    <div class="countdown" id="timer1">
-                    <h4>
-                    <span id="hours1">05</span>H : <span id="minutes1">52</span>M : <span id="seconds1">32</span>S
-                    </h4>
-                    </div>
-                    </div>
-                    <div class="author-area">
-                    <div class="author-emo">
-                    <img alt="image" src="assets/images/icons/smile-emo.svg">
-                    </div>
-                    <div class="author-name">
-                    <span>by </span>
-                    </div>
-                    </div>
-                    </div>
-                    <div class="auction-content">
-                    <h4><a href="auction-details.html">Brand New royal Enfield 250 CC For Sale</a></h4>
-                    <p>Bidding Price : <span>$85.9</span> </p>
-                    <div class="auction-card-bttm">
-                    <a href="auction-details.html" class="eg-btn btn--primary btn--sm">Place a Bid</a>
-                    <div class="share-area">
-                    <ul class="social-icons d-flex">
-                    <li><a href="https://www.facebook.com/"><i class="bx bxl-facebook"></i></a></li>
-                    <li><a href="https://www.twitter.com/"><i class="bx bxl-twitter"></i></a></li>
-                    <li><a href="https://www.pinterest.com/"><i class="bx bxl-pinterest"></i></a></li>
-                    <li><a href="https://www.instagram.com/"><i class="bx bxl-instagram"></i></a></li>
-                    </ul>
-                    <div>
-                    <a href="#" class="share-btn"><i class='bx bxs-share-alt'></i></a>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    <div class="col-lg-6 col-md-4 col-sm-10">
-                    <div class="eg-card auction-card1 wow fadeInDown">
-                    <div class="auction-img">
-                    <img alt="image" src="assets/images/bg/live-auc2.png">
-                    <div class="auction-timer">
-                    <div class="countdown" id="timer2">
-                    <h4>
-                    <span id="hours2">05</span>H : <span id="minutes2">52</span>M : <span id="seconds2">32</span>S
-                    </h4>
-                    </div>
-                    </div>
-                    <div class="author-area">
-                    <div class="author-emo">
-                    <img alt="image" src="assets/images/icons/smile-emo.svg">
-                    </div>
-                    <div class="author-name">
-                    <span>by </span>
-                    </div>
-                    </div>
-                    </div>
-                    <div class="auction-content">
-                    <h4><a href="auction-details.html">Wedding Special Exclusive Cupple Ring (S2022)</a></h4>
-                    <p>Bidding Price : <span>$85.9</span> </p>
-                    <div class="auction-card-bttm">
-                    <a href="auction-details.html" class="eg-btn btn--primary btn--sm">Place a Bid</a>
-                    <div class="share-area">
-                    <ul class="social-icons d-flex">
-                    <li><a href="https://www.facebook.com/"><i class="bx bxl-facebook"></i></a></li>
-                    <li><a href="https://www.twitter.com/"><i class="bx bxl-twitter"></i></a></li>
-                    <li><a href="https://www.pinterest.com/"><i class="bx bxl-pinterest"></i></a></li>
-                    <li><a href="https://www.instagram.com/"><i class="bx bxl-instagram"></i></a></li>
-                    </ul>
-                    <div>
-                    <a href="#" class="share-btn"><i class='bx bxs-share-alt'></i></a>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    </div>*@
                 </div>
             </div>
-            @* <div class="col-lg-4">
-            <div class="blog-sidebar">
-            <div class="sidebar-banner wow fadeInUp" data-wow-duration="1.5s" data-wow-delay="1s">
-            <div class="banner-content">
-            <span>CARS</span>
-            <h3>Toyota AIGID A Clasis Cars Sale</h3>
-            <a href="auction-details.html" class="eg-btn btn--primary card--btn">Details</a>
-            </div>
-            </div>
-            </div>
-
-            </div>*@
         </div>
     </div>
 </div>
 
-<!--<div class="about-us-counter pt-120 pb-120">
+<div class="blog-details-section pt-120 pb-120">
+    <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-top">
+    <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-bottom">
     <div class="container">
-        <div class="row g-4 d-flex justify-content-center">
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-10 col-10">
-                <div class="counter-single text-center d-flex flex-row hover-border1  wow fadeInDown"  data-wow-duration="1.5s" data-wow-delay=".2s">
-                    <div class="counter-icon"> <img alt="image" src="assets/images/icons/employee.svg"> </div>
-                    <div class="coundown d-flex flex-column">
-                        <h3 class="odometer" data-odometer-final="5400">&nbsp;</h3>
-                        <p>Happy Customer</p>
+        <div class="row gy-5">
+            <div class="col-lg-8">
+                <div class="blog-details-single">
+                    @if (Model.Comments.Count() > 0)
+                    {
+                        <div class="blog-comment">
+                            <div class="blog-widget-title">
+                                <h4>Comments (@Model.Comments.Count())</h4>
+                                <span></span>
+                            </div>
+                            <ul class="comment-list mb-50">
+                                @foreach (var comment in Model.Comments)
+                                {
+                                    <li>
+                                        <div class="comment-box">
+                                            <div class="comment-header d-flex justify-content-between align-items-center">
+                                                <div class="author d-flex flex-wrap">
+                                                    @*<img alt="image" src="~/assets/images/blog/comment1.png">*@
+                                                    <h5><a href="#">@comment.AuthorFirstName @comment.AuthorLastName</a></h5><span class="commnt-date"> @comment.DatePlaced.ToLocalTime()</span>
+                                                </div>
+                                                @*<a href="#" class="commnt-reply"><i class="bi bi-reply"></i></a>*@
+                                            </div>
+                                            <div class="comment-body">
+                                                <p class="para">@comment.Content</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    <div class="comment-form">
+                        <div class="blog-widget-title style2">
+                            <h4>Leave A Comment</h4>
+                            <span></span>
+                        </div>
+                        <form method="post" asp-controller="Auction" asp-action="Comment" asp-route-auctionId="@Model.Id">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-inner">
+                                        <textarea asp-for="Comment" placeholder="Write Message :" rows="12"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="eg-btn btn--primary btn--md form--btn">Submit Now</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-10 col-10">
-              <div class="counter-single text-center d-flex flex-row hover-border1  wow fadeInDown"  data-wow-duration="1.5s" data-wow-delay=".4s">
-                  <div class="counter-icon"> <img alt="image" src="assets/images/icons/review.svg"> </div>
-                  <div class="coundown d-flex flex-column">
-                      <h3 class="odometer" data-odometer-final="1250">&nbsp;</h3>
-                      <p>Good Reviews</p>
-                  </div>
-              </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-10 col-10">
-              <div class="counter-single text-center d-flex flex-row hover-border1  wow fadeInDown"  data-wow-duration="1.5s" data-wow-delay=".4s">
-                  <div class="counter-icon"> <img alt="image" src="assets/images/icons/smily.svg"> </div>
-                  <div class="coundown d-flex flex-column">
-                      <h3 class="odometer" data-odometer-final="4250">&nbsp;</h3>
-                      <p>Winner Customer</p>
-                  </div>
-              </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-10 col-10">
-              <div class="counter-single text-center d-flex flex-row hover-border1  wow fadeInDown"  data-wow-duration="1.5s" data-wow-delay=".8s">
-                  <div class="counter-icon"> <img alt="image" src="assets/images/icons/comment.svg"> </div>
-                  <div class="coundown d-flex flex-column">
-                      <h3 class="odometer" data-odometer-final="500">&nbsp;</h3>
-                      <p>New Comments</p>
-                  </div>
-              </div>
-            </div>
         </div>
     </div>
-</div>-->
-
+</div>
 
 <script>
     function LoadBigImage(id) {
