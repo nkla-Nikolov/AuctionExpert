@@ -5,7 +5,9 @@
     using System.Threading.Tasks;
 
     using AuctionExpert.Data.Models;
-    using AuctionExpert.Services.Data;
+    using AuctionExpert.Services.Data.Auction;
+    using AuctionExpert.Services.Data.Category;
+    using AuctionExpert.Services.Data.Review;
     using AuctionExpert.Web.ViewModels.Auction;
     using AuctionExpert.Web.ViewModels.Category;
     using Microsoft.AspNetCore.Identity;
@@ -99,7 +101,15 @@
         [HttpGet]
         public async Task<IActionResult> Browse(int categoryId)
         {
-            var auctions = await this.auctionService.GetAllAuctionsByCategoryId<HomeAuctionViewModel>(categoryId).ToListAsync();
+            if (!await this.categoryService.Exist(categoryId))
+            {
+                this.Response.StatusCode = 404;
+                return this.View("NotFound404");
+            }
+
+            var auctions = await this.auctionService
+                .GetAllAuctionsByCategoryId<HomeAuctionViewModel>(categoryId)
+                .ToListAsync();
 
             return this.View(auctions);
         }
@@ -109,9 +119,9 @@
         {
             try
             {
-                await this.auctionService.DeteleAsync(auctionId);
+                await this.auctionService.DeleteAsync(auctionId);
             }
-            catch (NullReferenceException)
+            catch (ArgumentNullException)
             {
                 this.Response.StatusCode = 404;
                 return this.View("NotFound404");
@@ -125,7 +135,15 @@
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            await this.reviewService.CommentOnAuction(auctionId, model.Comment, userId);
+            try
+            {
+                await this.reviewService.CommentOnAuction(auctionId, model.Comment, userId);
+            }
+            catch (ArgumentNullException)
+            {
+                this.Response.StatusCode = 404;
+                return this.View("NotFound404");
+            }
 
             return this.RedirectToAction(nameof(this.Details), new { auctionId = auctionId });
         }

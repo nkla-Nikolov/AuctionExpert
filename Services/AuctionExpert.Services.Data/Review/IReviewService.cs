@@ -1,4 +1,4 @@
-﻿namespace AuctionExpert.Services.Data
+﻿namespace AuctionExpert.Services.Data.Review
 {
     using System.Linq;
     using System.Threading.Tasks;

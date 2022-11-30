@@ -1,4 +1,4 @@
-﻿namespace AuctionExpert.Services.Data
+﻿namespace AuctionExpert.Services.Data.SubCategory
 {
     using System.Linq;
 
@@ -17,12 +17,12 @@
 
         public IQueryable<T> GetAllSubCategories<T>()
         {
-            return this.subCategoryRepository.AllAsNoTracking().To<T>();
+            return subCategoryRepository.AllAsNoTracking().To<T>();
         }
 
         public IQueryable<T> GetAllByCategoryId<T>(int categoryId)
         {
-            return this.subCategoryRepository
+            return subCategoryRepository
                 .AllAsNoTracking()
                 .Where(x => x.CategoryId == categoryId)
                 .To<T>();

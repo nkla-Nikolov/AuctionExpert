@@ -1,4 +1,4 @@
-﻿namespace AuctionExpert.Services.Data
+﻿namespace AuctionExpert.Services.Data.Country
 {
     using System.Linq;
 
@@ -17,7 +17,7 @@
 
         public IQueryable<T> GetAllCountries<T>()
         {
-            return this.countryRepository
+            return countryRepository
                 .AllAsNoTracking()
                 .To<T>();
         }

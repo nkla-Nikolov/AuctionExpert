@@ -1,4 +1,4 @@
-﻿namespace AuctionExpert.Services.Data
+﻿namespace AuctionExpert.Services.Data.User
 {
     using System.Threading.Tasks;
 

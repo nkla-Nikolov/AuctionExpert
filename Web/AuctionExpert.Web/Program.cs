@@ -10,7 +10,16 @@ namespace AuctionExpert.Web
     using AuctionExpert.Data.Models;
     using AuctionExpert.Data.Repositories;
     using AuctionExpert.Data.Seeding;
-    using AuctionExpert.Services.Data;
+    using AuctionExpert.Services.Data.Auction;
+    using AuctionExpert.Services.Data.Bid;
+    using AuctionExpert.Services.Data.Category;
+    using AuctionExpert.Services.Data.City;
+    using AuctionExpert.Services.Data.Country;
+    using AuctionExpert.Services.Data.Image;
+    using AuctionExpert.Services.Data.Review;
+    using AuctionExpert.Services.Data.Settings;
+    using AuctionExpert.Services.Data.SubCategory;
+    using AuctionExpert.Services.Data.User;
     using AuctionExpert.Services.Mapping;
     using AuctionExpert.Services.Messaging;
     using AuctionExpert.Web.ViewModels;

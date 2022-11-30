@@ -2,8 +2,7 @@
 {
     using System.Diagnostics;
     using System.Threading.Tasks;
-
-    using AuctionExpert.Services.Data;
+    using AuctionExpert.Services.Data.Auction;
     using AuctionExpert.Web.ViewModels;
     using AuctionExpert.Web.ViewModels.Auction;
     using Microsoft.AspNetCore.Authorization;

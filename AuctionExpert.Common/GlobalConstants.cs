@@ -55,7 +55,9 @@
 
             public const string LengthMessage = "The {0} must be at least {2} and maximum {1} characters long!";
 
-            public const string InvalidInputBidValue = "You cannot place bid that is less than the minimum!";
+            public const string LowerInputBid = "You cannot place bid that is less than the minimum!";
+
+            public const string InvalidInputBidValue = "You cannot enter decimal bids!";
         }
 
         public class FilePaths

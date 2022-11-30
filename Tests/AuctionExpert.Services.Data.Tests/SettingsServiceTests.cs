@@ -8,6 +8,7 @@
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
     using AuctionExpert.Data.Repositories;
+    using AuctionExpert.Services.Data.Settings;
     using Microsoft.EntityFrameworkCore;
     using Moq;
     using Xunit;

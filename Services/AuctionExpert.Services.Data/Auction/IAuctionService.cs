@@ -1,4 +1,4 @@
-﻿namespace AuctionExpert.Services.Data
+﻿namespace AuctionExpert.Services.Data.Auction
 {
     using System.Linq;
     using System.Threading.Tasks;
@@ -10,7 +10,7 @@
     {
         Task CreateAsync(AddAuctionViewModel model, ApplicationUser user);
 
-        Task DeteleAsync(int auctionId);
+        Task DeleteAsync(int auctionId);
 
         IQueryable<T> GetAllAuctions<T>();
 

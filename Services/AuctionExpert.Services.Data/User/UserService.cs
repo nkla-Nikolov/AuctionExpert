@@ -1,4 +1,4 @@
-﻿namespace AuctionExpert.Services.Data
+﻿namespace AuctionExpert.Services.Data.User
 {
     using System;
     using System.Threading.Tasks;
@@ -23,7 +23,7 @@
 
         public async Task UpdateProfile(MyProfileViewModel model, string userId)
         {
-            var user = await this.userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByIdAsync(userId);
 
             if (model.UpdateProfileInput.FirstName != null)
             {
@@ -37,7 +37,7 @@
 
             if (model.UpdateProfileInput.OldPassword != null && model.UpdateProfileInput.Password != null)
             {
-                var result = await this.userManager.ChangePasswordAsync(user, model.UpdateProfileInput.OldPassword, model.UpdateProfileInput.Password);
+                var result = await userManager.ChangePasswordAsync(user, model.UpdateProfileInput.OldPassword, model.UpdateProfileInput.Password);
 
                 if (!result.Succeeded)
                 {
@@ -50,8 +50,8 @@
                 user.CityId = model.UpdateProfileInput.CityId;
             }
 
-            this.userRepository.Update(user);
-            await this.userRepository.SaveChangesAsync();
+            userRepository.Update(user);
+            await userRepository.SaveChangesAsync();
         }
     }
 }

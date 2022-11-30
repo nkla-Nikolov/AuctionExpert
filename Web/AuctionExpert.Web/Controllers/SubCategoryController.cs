@@ -1,8 +1,7 @@
 ﻿namespace AuctionExpert.Web.Controllers
 {
     using System.Collections.Generic;
-
-    using AuctionExpert.Services.Data;
+    using AuctionExpert.Services.Data.SubCategory;
     using AuctionExpert.Web.ViewModels.SubCategory;
     using Microsoft.AspNetCore.Mvc;
 

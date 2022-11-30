@@ -14,7 +14,7 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
 
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
-    using AuctionExpert.Services.Data;
+    using AuctionExpert.Services.Data.Country;
     using AuctionExpert.Web.ViewModels.Country;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;

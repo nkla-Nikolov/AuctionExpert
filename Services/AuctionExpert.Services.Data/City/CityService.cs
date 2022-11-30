@@ -1,4 +1,4 @@
-﻿namespace AuctionExpert.Services.Data
+﻿namespace AuctionExpert.Services.Data.City
 {
     using System.Linq;
     using System.Threading.Tasks;
@@ -18,7 +18,7 @@
 
         public IQueryable<T> GetAllCitiesByCountryId<T>(int countryId)
         {
-            return this.cityRepository
+            return cityRepository
                 .AllAsNoTracking()
                 .Where(x => x.CountryId == countryId)
                 .To<T>();
@@ -26,7 +26,7 @@
 
         public async Task<T> GetCityById<T>(int? cityId)
         {
-            return await this.cityRepository
+            return await cityRepository
                 .AllAsNoTracking()
                 .Where(x => x.Id == cityId)
                 .To<T>()

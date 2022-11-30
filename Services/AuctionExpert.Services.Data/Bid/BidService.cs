@@ -1,8 +1,8 @@
-﻿namespace AuctionExpert.Services.Data
+﻿namespace AuctionExpert.Services.Data.Bid
 {
-    using System;
     using System.Linq;
     using System.Threading.Tasks;
+
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Mapping;
@@ -19,16 +19,16 @@
 
         public IQueryable<T> GetAllBidsByAuctionId<T>(int auctionId)
         {
-            return this.bidRepository
+            return bidRepository
                 .AllAsNoTracking()
                 .Where(x => x.AuctionId == auctionId)
                 .OrderByDescending(x => x.MoneyPlaced)
                 .To<T>();
         }
 
-        public async Task<decimal> HighestBidByAuctionId(int auctionId)
+        public async Task<decimal> GetLastHighestBid(int auctionId)
         {
-            return await this.bidRepository
+            return await bidRepository
                 .AllAsNoTracking()
                 .Where(x => x.AuctionId == auctionId)
                 .OrderByDescending(x => x.MoneyPlaced)

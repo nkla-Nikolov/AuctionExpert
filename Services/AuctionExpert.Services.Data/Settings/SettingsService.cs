@@ -1,4 +1,4 @@
-﻿namespace AuctionExpert.Services.Data
+﻿namespace AuctionExpert.Services.Data.Settings
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -18,12 +18,12 @@
 
         public int GetCount()
         {
-            return this.settingsRepository.AllAsNoTracking().Count();
+            return settingsRepository.AllAsNoTracking().Count();
         }
 
         public IEnumerable<T> GetAll<T>()
         {
-            return this.settingsRepository.All().To<T>().ToList();
+            return settingsRepository.All().To<T>().ToList();
         }
     }
 }

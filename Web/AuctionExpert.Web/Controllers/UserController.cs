@@ -7,7 +7,9 @@
 
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
-    using AuctionExpert.Services.Data;
+    using AuctionExpert.Services.Data.Auction;
+    using AuctionExpert.Services.Data.City;
+    using AuctionExpert.Services.Data.User;
     using AuctionExpert.Web.ViewModels.Auction;
     using AuctionExpert.Web.ViewModels.City;
     using AuctionExpert.Web.ViewModels.Profile;
