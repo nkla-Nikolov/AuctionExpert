@@ -7,6 +7,10 @@
     {
         Task CommentOnAuction(int auctionId, string comment, string userId);
 
-        IQueryable<T> GetAllCommentsOnAuction<T>(int auctionId);
+        Task CommentOnUser(string userId, string reviewerId, string comment);
+
+        IQueryable<T> GetAllReviewsOnAuction<T>(int auctionId);
+
+        IQueryable<T> GetAllReviewsOnUser<T>(string userId);
     }
 }

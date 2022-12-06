@@ -14,6 +14,8 @@
 
         IQueryable<T> GetAllAuctions<T>();
 
+        IQueryable<T> GetAllAuctionsByCountryId<T>(int countryId);
+
         Task<DetailViewModel> GetDetailAuctionModelByIdAsync(int auctionId);
 
         IQueryable<T> GetAuctionsByOwnerId<T>(string ownerId);

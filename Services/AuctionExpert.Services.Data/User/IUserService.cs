@@ -2,7 +2,6 @@
 {
     using System.Threading.Tasks;
 
-    using AuctionExpert.Data.Models;
     using AuctionExpert.Web.ViewModels.Profile;
 
     public interface IUserService

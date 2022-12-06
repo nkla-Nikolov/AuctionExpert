@@ -8,6 +8,8 @@
 
     public class BidderViewModel : IMapFrom<Bid>, IHaveCustomMappings
     {
+        public string BidderId { get; set; }
+
         public string ProfileImageUrl { get; set; }
 
         public string Username { get; set; }

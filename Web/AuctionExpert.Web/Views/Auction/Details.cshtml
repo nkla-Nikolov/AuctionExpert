@@ -1,4 +1,5 @@
-﻿@using AuctionExpert.Web.ViewModels.Auction;
+﻿@using AuctionExpert.Data.Common.Enumerations;
+@using AuctionExpert.Web.ViewModels.Auction;
 @model DetailViewModel
 
 @{
@@ -43,7 +44,6 @@
             <div class="col-xl-6 col-lg-5">
                 <div class="product-details-right  wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
                     <h3>@Model.Title</h3>
-                    @*SHORT DESCRIPTION*@
                     @if (Model.Description.Length > 20)
                     {
                         <p class="para">@Model.Description.Substring(0, 20)...</p>
@@ -53,19 +53,26 @@
                         <p class="para">@Model.Description</p>
                     }
                     <h4>Bidding Price: <span>$@Model.BiddingPrice</span></h4>
-                    <div class="bid-form">
-                        <div class="form-title">
-                            <h5>Bid Now</h5>
-                            <p>Bid Amount : Minimum Bid $@(Model.BiddingPrice + Model.StepAmount)</p>
-                        </div>
-                        <form method="post" asp-controller="Auction" asp-action="Details" asp-route-Id="@Model.Id">
-                            <div asp-validation-summary="All" class="text-danger"></div>
-                            <div class="form-inner gap-2">
-                                <input asp-for="CurrentBid" type="number" class="form-control" placeholder="Place your bid here..." />
-                                <button class="eg-btn btn--primary btn--sm" type="submit">Place Bid</button>
+                    <br />
+                    <h5>Category: @Model.CategoryName</h5>
+                    <h5>Sub Category: @Model.SubCategoryName</h5>
+                    <h5>Condition: @Model.Condition.ToString()</h5>
+                    @if (Model.AuctionType == TypeSale.StandartAuction)
+                    {
+                        <div class="bid-form">
+                            <div class="form-title">
+                                <h4>Bid Now</h4>
+                                <p>Bid Amount : Minimum Bid $@(Model.BiddingPrice + Model.StepAmount)</p>
                             </div>
-                        </form>
-                    </div>
+                            <form method="post" asp-controller="Auction" asp-action="Details" asp-route-Id="@Model.Id">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="form-inner gap-2">
+                                    <input asp-for="CurrentBid" type="number" class="form-control" placeholder="Place your bid here..." />
+                                    <button class="eg-btn btn--primary btn--sm" type="submit">Place Bid</button>
+                                </div>
+                            </form>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -75,9 +82,12 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active details-tab-btn" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Description</button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link details-tab-btn" id="pills-bid-tab" data-bs-toggle="pill" data-bs-target="#pills-bid" type="button" role="tab" aria-controls="pills-bid" aria-selected="false">Biding History</button>
-                    </li>
+                    @if (Model.AuctionType == TypeSale.StandartAuction)
+                    {
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link details-tab-btn" id="pills-bid-tab" data-bs-toggle="pill" data-bs-target="#pills-bid" type="button" role="tab" aria-controls="pills-bid" aria-selected="false">Biding History</button>
+                        </li>
+                    }
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active wow fadeInUp" data-wow-duration="1.5s" data-wow-delay=".2s" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
@@ -85,56 +95,59 @@
                             <p class="para">@Model.Description</p>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="pills-bid" role="tabpanel" aria-labelledby="pills-bid-tab">
-                        <div class="bid-list-area">
-                            @if (!Model.Bidders.Any())
-                            {
-                                <h5 class="text-center">Place the first bid to start the war.</h5>
-                            }
-                            else
-                            {
-                                <ul class="bid-list">
-                                    @foreach (var bidder in Model.Bidders.OrderByDescending(x => x.MoneyPlaced))
-                                    {
-                                        <li>
-                                            <div class="row d-flex align-items-center">
-                                                <div class="col-7">
-                                                    <div class="bidder-area">
-                                                        @if (bidder.ProfileImageUrl != null)
-                                                        {
-                                                            <div class="bidder-img">
-                                                                <img alt="image" src="@bidder.ProfileImageUrl">
+                    @if (Model.AuctionType == TypeSale.StandartAuction)
+                    {
+                        <div class="tab-pane fade" id="pills-bid" role="tabpanel" aria-labelledby="pills-bid-tab">
+                            <div class="bid-list-area">
+                                @if (!Model.Bidders.Any())
+                                {
+                                    <h5 class="text-center">Place the first bid to start the war.</h5>
+                                }
+                                else
+                                {
+                                    <ul class="bid-list">
+                                        @foreach (var bidder in Model.Bidders.OrderByDescending(x => x.MoneyPlaced))
+                                        {
+                                            <li>
+                                                <div class="row d-flex align-items-center">
+                                                    <div class="col-7">
+                                                        <div class="bidder-area">
+                                                            @if (bidder.ProfileImageUrl != null)
+                                                            {
+                                                                <div class="bidder-img">
+                                                                    <img alt="image" src="@bidder.ProfileImageUrl">
+                                                                </div>
+                                                            }
+                                                            <div class="bidder-content">
+                                                                <h6><a asp-controller="User" asp-action="SellerProfile" asp-route-userId="@bidder.BidderId">@bidder.Username</a></h6>
+                                                                <p>@bidder.MoneyPlaced lv.</p>
                                                             </div>
-                                                        }
-                                                        <div class="bidder-content">
-                                                            <h6>@bidder.Username</h6>
-                                                            <p>@bidder.MoneyPlaced lv.</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-5 text-end">
+                                                        <div class="bid-time">
+                                                            @if (bidder.TimePlaced.TotalMinutes < 60)
+                                                            {
+                                                                <p>@bidder.TimePlaced.Minutes Minutes Ago.</p>
+                                                            }
+                                                            else if (bidder.TimePlaced.TotalMinutes >= 60 && bidder.TimePlaced.TotalMinutes < 1440)
+                                                            {
+                                                                <p>@bidder.TimePlaced.Hours Hours Ago.</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p>@bidder.TimePlaced.Days Days Ago.</p>
+                                                            }
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-5 text-end">
-                                                    <div class="bid-time">
-                                                        @if (bidder.TimePlaced.TotalMinutes < 60)
-                                                        {
-                                                            <p>@bidder.TimePlaced.Minutes Minutes Ago.</p>
-                                                        }
-                                                        else if (bidder.TimePlaced.TotalMinutes >= 60 && bidder.TimePlaced.TotalMinutes < 1440)
-                                                        {
-                                                            <p>@bidder.TimePlaced.Hours Hours Ago.</p>
-                                                        }
-                                                        else
-                                                        {
-                                                            <p>@bidder.TimePlaced.Days Days Ago.</p>
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    }
-                                </ul>
-                            }
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>
@@ -163,12 +176,12 @@
                                             <div class="comment-header d-flex justify-content-between align-items-center">
                                                 <div class="author d-flex flex-wrap">
                                                     @*<img alt="image" src="~/assets/images/blog/comment1.png">*@
-                                                    <h5><a href="#">@comment.AuthorFirstName @comment.AuthorLastName</a></h5><span class="commnt-date"> @comment.DatePlaced.ToLocalTime()</span>
+                                                    <h5><a asp-controller="User" asp-action="SellerProfile" asp-route-userId="@comment.ReviewerId">@comment.ReviewerFirstName @comment.ReviewerLastName</a></h5><span class="commnt-date"> @comment.DatePlaced.ToLocalTime()</span>
                                                 </div>
                                                 @*<a href="#" class="commnt-reply"><i class="bi bi-reply"></i></a>*@
                                             </div>
                                             <div class="comment-body">
-                                                <p class="para">@comment.Content</p>
+                                                <p class="para">@comment.Comment</p>
                                             </div>
                                         </div>
                                     </li>
@@ -185,7 +198,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-inner">
-                                        <textarea asp-for="Comment" placeholder="Write Message :" rows="12"></textarea>
+                                        <textarea asp-for="Comment" placeholder="Write Message :" rows="10"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-12">

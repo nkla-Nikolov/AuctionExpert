@@ -13,23 +13,73 @@
     {
         private readonly IDeletableEntityRepository<Auction> auctionRepository;
         private readonly IDeletableEntityRepository<Review> reviewRepository;
+        private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
 
         public ReviewService(
             IDeletableEntityRepository<Auction> auctionRepository,
-            IDeletableEntityRepository<Review> reviewRepository)
+            IDeletableEntityRepository<Review> reviewRepository,
+            IDeletableEntityRepository<ApplicationUser> userRepository)
         {
             this.auctionRepository = auctionRepository;
             this.reviewRepository = reviewRepository;
+            this.userRepository = userRepository;
         }
 
-        public async Task CommentOnAuction(int auctionId, string comment, string userId)
+        public IQueryable<T> GetAllReviewsOnAuction<T>(int auctionId)
         {
-            var auction = await auctionRepository
+            return this.reviewRepository
+                .AllAsNoTracking()
+                .Where(x => x.AuctionId == auctionId)
+                .To<T>();
+        }
+
+        public IQueryable<T> GetAllReviewsOnUser<T>(string userId)
+        {
+            return this.reviewRepository
+                .AllAsNoTracking()
+                .Where(x => x.UserId == userId)
+                .To<T>();
+        }
+
+        public async Task CommentOnUser(string userId, string reviewerId, string comment)
+        {
+            var user = await this.userRepository
+                .AllAsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == userId);
+
+            var reviewer = await this.userRepository
+                .AllAsNoTracking()
+                .AnyAsync(x => x.Id == reviewerId);
+
+            if (user == null || reviewer == false)
+            {
+                throw new NullReferenceException();
+            }
+
+            user.Reviews.Add(new Review()
+            {
+                DatePlaced = DateTime.UtcNow,
+                Comment = comment,
+                ReviewerId = reviewerId,
+                UserId = userId,
+            });
+
+            this.userRepository.Update(user);
+            await this.userRepository.SaveChangesAsync();
+        }
+
+        public async Task CommentOnAuction(int auctionId, string comment, string reviewerId)
+        {
+            var auction = await this.auctionRepository
                 .AllAsNoTracking()
                 .Where(x => x.Id == auctionId)
                 .FirstOrDefaultAsync();
 
-            if (auction == null)
+            var reviewer = await this.userRepository
+                .AllAsNoTracking()
+                .AnyAsync(x => x.Id == reviewerId);
+
+            if (auction == null || reviewer == false)
             {
                 throw new NullReferenceException();
             }
@@ -38,19 +88,12 @@
             {
                 DatePlaced = DateTime.UtcNow,
                 Comment = comment,
-                UserId = userId,
+                ReviewerId = reviewerId,
+                AuctionId = auctionId,
             });
 
-            auctionRepository.Update(auction);
-            await auctionRepository.SaveChangesAsync();
-        }
-
-        public IQueryable<T> GetAllCommentsOnAuction<T>(int auctionId)
-        {
-            return reviewRepository
-                .AllAsNoTracking()
-                .Where(x => x.AuctionId == auctionId)
-                .To<T>();
+            this.auctionRepository.Update(auction);
+            await this.auctionRepository.SaveChangesAsync();
         }
     }
 }

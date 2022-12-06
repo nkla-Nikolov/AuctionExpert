@@ -38,14 +38,14 @@
 
         public IQueryable<T> GetAllAuctions<T>()
         {
-            return auctionRepository
+            return this.auctionRepository
                 .AllAsNoTracking()
                 .To<T>();
         }
 
         public async Task<T> GetAuctionById<T>(int auctionId)
         {
-            return await auctionRepository
+            return await this.auctionRepository
                 .AllAsNoTracking()
                 .Where(x => x.Id == auctionId)
                 .To<T>()
@@ -54,7 +54,7 @@
 
         public IQueryable<T> GetAuctionsByOwnerId<T>(string ownerId)
         {
-            return auctionRepository
+            return this.auctionRepository
                 .AllAsNoTrackingWithDeleted()
                 .Where(x => x.OwnerId == ownerId)
                 .To<T>();
@@ -62,32 +62,41 @@
 
         public IQueryable<T> GetAllAuctionsByCategoryId<T>(int categoryId)
         {
-            return auctionRepository
+            return this.auctionRepository
                 .AllAsNoTracking()
                 .Where(x => x.SubCategory.CategoryId == categoryId)
                 .To<T>();
         }
 
+        public IQueryable<T> GetAllAuctionsByCountryId<T>(int countryId)
+        {
+            return this.auctionRepository
+                .AllAsNoTracking()
+                .Where(x => x.CountryId == countryId)
+                .To<T>();
+        }
+
         public async Task DeleteAsync(int auctionId)
         {
-            var auction = await GetAuctionById<Auction>(auctionId);
+            var auction = await this.GetAuctionById<Auction>(auctionId);
 
             if (auction == null)
             {
                 throw new ArgumentNullException();
             }
 
-            auctionRepository.Delete(auction);
-            await auctionRepository.SaveChangesAsync();
+            this.auctionRepository.Delete(auction);
+            await this.auctionRepository.SaveChangesAsync();
         }
 
         public async Task CreateAsync(AddAuctionViewModel model, ApplicationUser user)
         {
             var auction = new Auction()
             {
-                AuctionType = model.Type,
+                AuctionType = model.AuctionType,
                 CountryId = user.CountryId,
                 Duration = model.Duration,
+                Condition = model.Condition,
                 StepAmount = model.StepAmount,
                 ClosesIn = DateTime.UtcNow.AddDays(model.Duration),
                 Description = model.Description,
@@ -97,51 +106,56 @@
                 Title = model.Title,
             };
 
-            var images = await imageService.UploadImages(model.Images);
+            var images = await this.imageService.UploadImages(model.Images);
             auction.Images = images.ToList();
 
-            await auctionRepository.AddAsync(auction);
-            await auctionRepository.SaveChangesAsync();
+            await this.auctionRepository.AddAsync(auction);
+            await this.auctionRepository.SaveChangesAsync();
         }
 
         public async Task<DetailViewModel> GetDetailAuctionModelByIdAsync(int auctionId)
         {
-            var highestBid = await bidService
+            var highestBid = await this.bidService
                 .GetLastHighestBid(auctionId);
 
-            var comments = await reviewService
-                .GetAllCommentsOnAuction<CommentViewModel>(auctionId)
+            var comments = await this.reviewService
+                .GetAllReviewsOnAuction<ReviewViewModel>(auctionId)
                 .OrderByDescending(x => x.DatePlaced)
                 .ToListAsync();
 
-            var bidders = await bidService
+            var bidders = await this.bidService
                 .GetAllBidsByAuctionId<BidderViewModel>(auctionId)
                 .ToListAsync();
 
-            var images = await imageService
+            var images = await this.imageService
                 .GetAllImages<DetailsImageViewModel>(auctionId)
                 .ToListAsync();
 
-            return await auctionRepository
+            return await this.auctionRepository
                 .AllAsNoTracking()
                 .Where(x => x.Id == auctionId)
                 .Select(x => new DetailViewModel()
                 {
                     Id = x.Id,
                     Title = x.Title,
+                    CategoryName = x.SubCategory.Category.Name,
+                    SubCategoryName = x.SubCategory.Name,
+                    Condition = x.Condition.ToString(),
                     StepAmount = x.StepAmount,
                     Description = x.Description,
+                    IsClosed = x.ClosesIn < DateTime.UtcNow,
                     BiddingPrice = x.Bids.Count == 0 ? x.StartPrice : highestBid,
                     Comments = comments,
                     Bidders = bidders,
                     Images = images,
+                    AuctionType = x.AuctionType,
                 })
                 .FirstOrDefaultAsync();
         }
 
         public async Task PlaceBidAsync(int? currentBid, string userId, Auction auction)
         {
-            var lastBid = await bidService.GetLastHighestBid(auction.Id);
+            var lastBid = await this.bidService.GetLastHighestBid(auction.Id);
 
             if (currentBid == null)
             {
@@ -161,8 +175,8 @@
                 TimePlaced = DateTime.UtcNow,
             });
 
-            auctionRepository.Update(auction);
-            await auctionRepository.SaveChangesAsync();
+            this.auctionRepository.Update(auction);
+            await this.auctionRepository.SaveChangesAsync();
         }
     }
 }

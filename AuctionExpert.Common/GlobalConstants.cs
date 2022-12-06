@@ -60,6 +60,19 @@
             public const string InvalidInputBidValue = "You cannot enter decimal bids!";
         }
 
+        public class ReviewMessagesAndConstraints
+        {
+            public const int AuctionCommentMinLength = 3;
+
+            public const int AuctionCommentMaxLength = 1000;
+
+            public const int UserCommentMinLength = 2;
+
+            public const int UserCommentMaxLength = 200;
+
+            public const string CommentLengthConstraint = "The {0} must be at least {2} and maximum {1} characters long!";
+        }
+
         public class FilePaths
         {
             public const string DirectoryUp = "..";

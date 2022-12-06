@@ -1,0 +1,61 @@
+﻿@using AuctionExpert.Data.Common.Enumerations;
+@using AuctionExpert.Web.ViewModels.Auction;
+@model IEnumerable<HomeAuctionViewModel>
+
+@{
+    int i = 0;
+}
+
+@foreach (var auction in Model)
+{
+    <div class="col-lg-4 col-md-6 col-sm-10 ">
+        <div data-wow-duration="1.5s" data-wow-delay="0.2s" class="eg-card auction-card1 wow animate fadeInDown">
+            <div class="auction-img">
+                <img alt="image" src=@auction.MainImage>
+                <div class="auction-timer">
+                    <div class="countdown" id="timer@(i)" data-auctionId="@auction.Id" data-endDate="@auction.ClosesIn.ToLocalTime()">
+                        <h4><span id="days@(i)"></span>D : <span id="hours@(i)"></span>H : <span id="minutes@(i)"></span>M : <span id="seconds@(i)"></span>S</h4>
+                    </div>
+                </div>
+                <div class="author-area">
+                    <div class="author-emo">
+                        <img alt="image" src="~/assets/images/icons/smile-emo.svg">
+                    </div>
+                    <div class="author-name">
+                        <span>by @auction.OwnerName</span>
+                    </div>
+                </div>
+            </div>
+            <div class="auction-content">
+                <h4><a asp-controller="Auction" asp-action="Details" asp-route-auctionId="@auction.Id">@auction.Title</a></h4>
+                <p>Bidding Price : <span><span>$@auction.LastBid</span></span></p>
+                <p>Category : <a asp-controller="Auction" asp-action="Browse" asp-route-categoryId="@auction.CategoryId"><span><span>@auction.CategoryName</span></span></a></p>
+                @if (this.User.Identity.IsAuthenticated)
+                {
+                    <div class="auction-card-bttm">
+                        @if (auction.AuctionType == TypeSale.FixedPriceAuction)
+                        {
+                            <a asp-controller="Auction" asp-action="Details" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary btn--sm">Details</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Auction" asp-action="Details" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary btn--sm">Place a Bid</a>
+                        }
+                        <div class="share-area">
+                            <ul class="social-icons d-flex">
+                                <li><a href="https://www.facebook.com/"><i class="bx bxl-facebook"></i></a></li>
+                                <li><a href="https://www.twitter.com/"><i class="bx bxl-twitter"></i></a></li>
+                                <li><a href="https://www.pinterest.com/"><i class="bx bxl-pinterest"></i></a></li>
+                                <li><a href="https://www.instagram.com/"><i class="bx bxl-instagram"></i></a></li>
+                            </ul>
+                            <div>
+                                <div class="share-btn"><i class='bx bxs-share-alt'></i></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    i++;
+}

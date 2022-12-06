@@ -31,6 +31,9 @@
         public TypeSale AuctionType { get; set; }
 
         [Required]
+        public ConditionType Condition { get; set; }
+
+        [Required]
         public int StepAmount { get; set; }
 
         [Required]

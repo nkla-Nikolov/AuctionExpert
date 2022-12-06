@@ -10,6 +10,7 @@
     using AuctionExpert.Services.Data.Review;
     using AuctionExpert.Web.ViewModels.Auction;
     using AuctionExpert.Web.ViewModels.Category;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -99,6 +100,7 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Browse(int categoryId)
         {
             if (!await this.categoryService.Exist(categoryId))

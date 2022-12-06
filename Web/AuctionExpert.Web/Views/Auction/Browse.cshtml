@@ -1,8 +1,8 @@
 ﻿@using AuctionExpert.Web.ViewModels.Auction;
-@model List<HomeAuctionViewModel>
+@model IEnumerable<HomeAuctionViewModel>
 
 @{
-    if (Model.Count == 0)
+    if (Model.Count() == 0)
     {
         this.ViewData["Title"] = "Browse Auctions";
     }
@@ -10,7 +10,6 @@
     {
         this.ViewData["Title"] = $"{Model.First().CategoryName}";
     }
-    int i = 0;
 }
 
 <div class="inner-banner">
@@ -31,7 +30,7 @@
     <div class="row d-flex justify-content-center">
         <div class="col-sm-12 col-md-10 col-lg-8 col-xl-6">
             <div class="section-title1">
-                <h2>@(Model.Count == 0 ? "There are no auctions in this category yet!" : Model.First().CategoryName)</h2>
+                <h2>@(Model.Count() == 0 ? "There are no auctions in this category yet!" : Model.First().CategoryName)</h2>
                 <p class="mb-0">
                     Explore on the world's best & largest Bidding marketplace with our beautiful Bidding
                     products. We want to be a part of your smile, success and future growth.
@@ -41,70 +40,27 @@
     </div>
     <div class="container">
         <div class="row gy-4 mb-60 d-flex justify-content-center">
-            @foreach (var auction in Model)
-            {
-                <div class="col-lg-4 col-md-6 col-sm-10 ">
-                    <div data-wow-duration="1.5s" data-wow-delay="0.2s" class="eg-card auction-card1 wow animate fadeInDown">
-                        <div class="auction-img">
-                            <img alt="image" src=@auction.MainImage>
-                            <div class="auction-timer">
-                                <div class="countdown" id="timer@(i)" data-endDate="@auction.ClosesIn.ToLocalTime()">
-                                    <h4><span id="days@(i)"></span>D : <span id="hours@(i)"></span>H : <span id="minutes@(i)"></span>M : <span id="seconds@(i)"></span>S</h4>
-                                </div>
-                            </div>
-                            <div class="author-area">
-                                <div class="author-emo">
-                                    <img alt="image" src="~/assets/images/icons/smile-emo.svg">
-                                </div>
-                                <div class="author-name">
-                                    <span>by @auction.OwnerName</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="auction-content">
-                            <h4><a asp-controller="Auction" asp-action="Details" asp-route-auctionId="@auction.Id">@auction.Title</a></h4>
-                            <p>Bidding Price : <span><span>$@auction.LastBid</span></span></p>
-                            <p>Category : <span><span>@auction.CategoryName</span></span></p>
-                            <p>Sub Category : <span><span>@auction.SubCategoryName</span></span></p>
-                            @if (this.User.Identity.IsAuthenticated)
-                            {
-                                <div class="auction-card-bttm">
-                                    <a asp-controller="Auction" asp-action="Details" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary btn--sm">Place a Bid</a>
-                                    <div class="share-area">
-                                        <ul class="social-icons d-flex">
-                                            <li><a href="https://www.facebook.com/"><i class="bx bxl-facebook"></i></a></li>
-                                            <li><a href="https://www.twitter.com/"><i class="bx bxl-twitter"></i></a></li>
-                                            <li><a href="https://www.pinterest.com/"><i class="bx bxl-pinterest"></i></a></li>
-                                            <li><a href="https://www.instagram.com/"><i class="bx bxl-instagram"></i></a></li>
-                                        </ul>
-                                        <div>
-                                            <div class="share-btn"><i class='bx bxs-share-alt'></i></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>
-                i++;
-            }
+            <partial name="_AuctionPartial" />
         </div>
-        <div class="row">
-            <nav class="pagination-wrap">
-                <ul class="pagination d-flex justify-content-center gap-md-3 gap-2">
-                    <li class="page-item">
-                        <a class="page-link" href="#" tabindex="-1">Prev</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">01</a></li>
-                    <li class="page-item active" aria-current="page">
-                        <a class="page-link" href="#">02</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">03</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+        @if (Model.Count() > 9)
+        {
+            <div class="row">
+                <nav class="pagination-wrap">
+                    <ul class="pagination d-flex justify-content-center gap-md-3 gap-2">
+                        <li class="page-item">
+                            <a class="page-link" href="#" tabindex="-1">Prev</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="#">02</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        }
     </div>
 </div>

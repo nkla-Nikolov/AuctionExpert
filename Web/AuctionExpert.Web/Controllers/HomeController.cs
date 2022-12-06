@@ -1,7 +1,11 @@
 ﻿namespace AuctionExpert.Web.Controllers
 {
+    using System;
     using System.Diagnostics;
+    using System.Linq;
     using System.Threading.Tasks;
+
+    using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Data.Auction;
     using AuctionExpert.Web.ViewModels;
     using AuctionExpert.Web.ViewModels.Auction;
@@ -23,9 +27,18 @@
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var auctions = await this.auctionService.GetAllAuctions<HomeAuctionViewModel>().ToListAsync();
+            var auctions = await this.auctionService.GetAllAuctions<HomeAuctionViewModel>()
+                .Take(6)
+                .ToListAsync();
 
             return this.View(auctions);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult How()
+        {
+            return this.View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

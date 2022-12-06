@@ -37,13 +37,14 @@
         public ConditionType Condition { get; set; }
 
         [Required]
-        public TypeSale Type { get; set; }
+        public TypeSale AuctionType { get; set; }
 
         [Required]
         [Range(1, 1000)]
         public int StepAmount { get; set; }
 
         [Required]
+        [Range(1, int.MaxValue)]
         public int StartPrice { get; set; }
 
         [Required]

@@ -17,6 +17,25 @@ function getTimers() {
     return timerElements;
 }
 
+function deleteAuction(id) {
+    fetch(`/api/ApiAuction/?id=${id}`, {
+        method: 'DELETE'
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Something went wrong')
+            }
+        })
+        .then(() => {
+            if (window.location.href.endsWith(id)) {
+                window.location.href = 'https://localhost:44319/';
+            }
+            else {
+                window.location.reload()
+            }
+        });
+}
+
 function countDown() {
 
     let timers = getTimers();
@@ -53,6 +72,13 @@ function countDown() {
         }
         if (seconds < "10") {
             seconds = "0" + seconds;
+        }
+
+        //TODO: send email when time gets in last 5 min
+        //TODO: add 3 minutes to auction end time if a bid is placed last 5 mins
+        if (days < 1 && hours < 1 && minutes < 6) {
+            let id = document.querySelector(`#timer${i}`).getAttribute('data-auctionId');
+            deleteAuction(id);
         }
 
         document.querySelector(`#days${i}`).textContent = days;

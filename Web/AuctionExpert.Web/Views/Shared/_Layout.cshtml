@@ -17,7 +17,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/assets/css/register-page.css">
     <link rel="icon" href="~/assets/images/bg/sm-logo.png" type="image/gif" sizes="20x20">
     <link rel="stylesheet" href="~/assets/css/animate.css">
@@ -60,9 +60,6 @@
                 <li class="menu-item">
                     <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
-                <li class="menu-item">
-                    <a asp-area="" asp-controller="Auction" asp-action="Sell">Sell</a>
-                </li>
                 <li class="menu-item-has-children">
                     <a asp-controller="Auction" asp-action="Browse">Categories</a><i class='bx bx-plus dropdown-icon'></i>
                     <ul class="submenu">
@@ -76,11 +73,17 @@
                     <a asp-area="" asp-controller="Home" asp-action="About">About Us</a>
                 </li>
                 <li>
-                    <a asp-area="" asp-controller="Home" asp-action="HowWorks">How It Works</a>
+                    <a asp-area="" asp-controller="Home" asp-action="How">How It Works</a>
                 </li>
-                <li>
-                    <a href="contact.html">Contact</a>
-                </li>
+                @if (this.User.Identity.IsAuthenticated)
+                {
+                    <li class="menu-item">
+                        <a asp-area="" asp-controller="Auction" asp-action="Sell">Sell</a>
+                    </li>
+                    <li>
+                        <a href="contact.html">Contact</a>
+                    </li>
+                }
             </ul>
             <div class="d-lg-none d-block">
                 <form class="mobile-menu-form">
@@ -124,13 +127,13 @@
                         <div class="footer-item">
                             @*<a href="index.html"><img src="~/assets/images/bg/FOOTER LOGO SOON" alt=""></a>*@
                             <p>
-                                Lorem ipsum dolor sit amet consecte tur adipisicing elit, sed do eiusmod tempor
-                                incididunt ut labore.
+                                Enter your email adress so we can send you weekly bulletin with recommended auctions.
+                                We hope this will help you to find items you are looking for.
                             </p>
                             <form>
                                 <div class="input-with-btn d-flex jusify-content-start align-items-strech">
                                     <input type="text" placeholder="Enter your email">
-                                    <button type="submit"><img src="~/assets/images/icons/send-icon.svg" alt=""></button>
+                                    <button type="submit"><img src="~/assets/images/icons/send-icon.svg"></button>
                                 </div>
                             </form>
                         </div>
@@ -139,11 +142,9 @@
                         <div class="footer-item">
                             <h5>Navigation</h5>
                             <ul class="footer-list">
-                                <li><a href="live-auction.html">All Product</a></li>
-                                <li><a href="how-works.html">How It Works</a></li>
-                                <li><a href="login.html">My Account</a></li>
-                                <li><a href="about.html">About Company</a></li>
-                                <li><a href="blog.html">Our News Feed</a></li>
+                                <li><a asp-controller="Home" asp-action="How">How It Works</a></li>
+                                <li><a asp-controller="User" asp-action="Dashboard">My Account</a></li>
+                                <li><a asp-controller="Home" asp-action="About">About Company</a></li>
                             </ul>
                         </div>
                     </div>
@@ -151,64 +152,9 @@
                         <div class="footer-item">
                             <h5>Help & FAQs</h5>
                             <ul class="footer-list">
-                                <li><a href="product.html">Help Center</a></li>
-                                <li><a href="faq.html">Customer FAQs</a></li>
-                                <li><a href="login.html">Terms and Conditions</a></li>
-                                <li><a href="about.html">Security Information</a></li>
-                                <li><a href="blog.html">Merchant Add Policy</a></li>
+                                <li><a asp-controller="Home" asp-action="Help">Customer FAQs</a></li>
                             </ul>
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="footer-item">
-                            <h5>Latest Feed</h5>
-                            <ul class="recent-feed-list">
-                                <li class="single-feed">
-                                    <div class="feed-img">
-                                        <a href="blog-details.html">
-                                            <img src="~/assets/images/blog/recent-feed1.png"
-                                                 alt="">
-                                        </a>
-                                    </div>
-                                    <div class="feed-content">
-                                        <span>January 31, 2022</span>
-                                        <h6>
-                                            <a href="blog-details.html">Grant Distributions Conti nu to Incr Ease.</a>
-                                        </h6>
-                                    </div>
-                                </li>
-                                <li class="single-feed">
-                                    <div class="feed-img">
-                                        <a href="blog-details.html">
-                                            <img src="~/assets/images/blog/recent-feed2.png"
-                                                 alt="">
-                                        </a>
-                                    </div>
-                                    <div class="feed-content">
-                                        <span>February 21, 2022</span>
-                                        <h6><a href="blog-details.html">Seminar for Children to Learn About.</a></h6>
-                                    </div>
-                                </li>
-                                <li class="single-feed">
-                                    <div class="feed-img">
-                                        <a href="blog-details.html">
-                                            <img src="~/assets/images/blog/recent-feed3.png"
-                                                 alt="">
-                                        </a>
-                                    </div>
-                                    <div class="feed-content">
-                                        <span>March 22, 2022</span>
-                                        <h6>
-                                            <a href="blog-details.html">
-                                                Education and teacher for all African
-                                                Children.
-                                            </a>
-                                        </h6>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -235,7 +181,7 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
-    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script src="~/assets/js/jquery-3.6.0.min.js"></script>
     <script src="~/assets/js/jquery-ui.js"></script>

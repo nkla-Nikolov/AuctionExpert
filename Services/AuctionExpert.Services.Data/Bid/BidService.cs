@@ -19,7 +19,7 @@
 
         public IQueryable<T> GetAllBidsByAuctionId<T>(int auctionId)
         {
-            return bidRepository
+            return this.bidRepository
                 .AllAsNoTracking()
                 .Where(x => x.AuctionId == auctionId)
                 .OrderByDescending(x => x.MoneyPlaced)
@@ -28,7 +28,7 @@
 
         public async Task<decimal> GetLastHighestBid(int auctionId)
         {
-            return await bidRepository
+            return await this.bidRepository
                 .AllAsNoTracking()
                 .Where(x => x.AuctionId == auctionId)
                 .OrderByDescending(x => x.MoneyPlaced)
