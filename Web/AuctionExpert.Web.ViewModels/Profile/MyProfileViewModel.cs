@@ -19,6 +19,8 @@
 
         public string CityName { get; set; }
 
+        public string ProfileImageUrl { get; set; }
+
         public string Username { get; set; }
 
         public int TotalBidsCount { get; set; }

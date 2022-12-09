@@ -1,7 +1,7 @@
 ﻿@using AuctionExpert.Web.ViewModels.Administration.User;
 @model IEnumerable<UsersListViewModel>
 @{
-    this.ViewData["Title"] = "User Administration";
+    this.ViewData["Title"] = "Users Administration";
 }
 
 <div class="container">
@@ -25,7 +25,16 @@
                         @foreach (var user in Model)
                         {
                             <tr>
-                                <td data-label="Image"><img alt="image" src="@user.ProfileImageUrl" class="img-fluid"></td>
+                                <td data-label="Image">
+                                    @if (user.ProfileImageUrl != null)
+                                    {
+                                        <img alt="image" src="@user.ProfileImageUrl" class="img-fluid">
+                                    }
+                                    else
+                                    {
+                                        <img alt="image" src="~/assets/images/bg/NoProfilePicture.png" class="img-fluid">
+                                    }
+                                </td>
                                 <td data-label="Username">@user.Username</td>
                                 <td data-label="Email">@user.Email</td>
                                 <td data-label="Join Date">@user.CreatedOn.ToLocalTime().ToShortDateString()</td>
@@ -37,7 +46,7 @@
                                         <form method="post">
                                             <button asp-area="Administration"
                                             asp-controller="User"
-                                            asp-action="RemoveRole"
+                                            asp-action="RemoveFromRole"
                                             asp-route-userId="@user.Id" class="eg-btn action-btn text-danger">
                                                 Remove Admin
                                             </button>
@@ -50,7 +59,7 @@
                                         <form method="post">
                                             <button asp-area="Administration"
                                             asp-controller="User"
-                                            asp-action="AddRole"
+                                            asp-action="AddToRole"
                                             asp-route-userId="@user.Id" class="eg-btn action-btn text-success">
                                                 Make Admin
                                             </button>

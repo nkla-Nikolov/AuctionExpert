@@ -22,7 +22,8 @@
         {
             configuration.CreateMap<Bid, BidderViewModel>()
                 .ForMember(dest => dest.Username, opt => opt.MapFrom(x => x.Bidder.UserName))
-                .ForMember(dest => dest.TimePlaced, opt => opt.MapFrom(x => DateTime.UtcNow - x.TimePlaced));
+                .ForMember(dest => dest.TimePlaced, opt => opt.MapFrom(x => DateTime.UtcNow - x.TimePlaced))
+                .ForMember(dest => dest.ProfileImageUrl, opt => opt.MapFrom(x => x.Bidder.ProfileImageUrl));
         }
     }
 }

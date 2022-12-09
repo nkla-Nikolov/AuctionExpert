@@ -12,5 +12,7 @@
         Task<IEnumerable<Image>> UploadImages(IFormFileCollection images);
 
         IQueryable<T> GetAllImages<T>(int auctionId);
+
+        Task<string> UploadProfileImage(IFormFile image);
     }
 }

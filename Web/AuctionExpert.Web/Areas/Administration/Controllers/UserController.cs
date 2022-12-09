@@ -6,7 +6,6 @@
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Data.User;
     using AuctionExpert.Web.ViewModels.Administration.User;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
@@ -15,14 +14,10 @@
     public class UserController : AdministrationController
     {
         private readonly IUserService userService;
-        private readonly SignInManager<ApplicationUser> signInManager;
 
-        public UserController(
-            IUserService userService,
-            SignInManager<ApplicationUser> signInManager)
+        public UserController(IUserService userService)
         {
             this.userService = userService;
-            this.signInManager = signInManager;
         }
 
         [HttpGet]
@@ -36,7 +31,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveRole(string userId)
+        public async Task<IActionResult> RemoveFromRole(string userId)
         {
             ApplicationUser user = null;
             try
@@ -49,17 +44,15 @@
                 return this.View("NotFound404");
             }
 
-            await this.signInManager.RefreshSignInAsync(user);
-
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddRole(string userId)
+        public async Task<IActionResult> AddToRole(string userId)
         {
             try
             {
-                await this.userService.RemoveUserFromRole(userId, AdministratorRoleName);
+                await this.userService.AddUserToRole(userId, AdministratorRoleName);
             }
             catch (ArgumentNullException)
             {

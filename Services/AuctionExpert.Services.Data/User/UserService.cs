@@ -6,6 +6,7 @@
 
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
+    using AuctionExpert.Services.Data.Image;
     using AuctionExpert.Services.Mapping;
     using AuctionExpert.Web.ViewModels.Profile;
     using Microsoft.AspNetCore.Identity;
@@ -15,15 +16,18 @@
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<ApplicationRole> roleManager;
+        private readonly IImageService imageService;
 
         public UserService(
             IDeletableEntityRepository<ApplicationUser> userRepository,
             UserManager<ApplicationUser> userManager,
-            RoleManager<ApplicationRole> roleManager)
+            RoleManager<ApplicationRole> roleManager,
+            IImageService imageService)
         {
             this.userRepository = userRepository;
             this.userManager = userManager;
             this.roleManager = roleManager;
+            this.imageService = imageService;
         }
 
         public IQueryable<T> GetAllUsers<T>()
@@ -88,6 +92,17 @@
             if (model.UpdateProfileInput.CityId != null)
             {
                 user.CityId = model.UpdateProfileInput.CityId;
+            }
+
+            if (model.UpdateProfileInput.Image != null)
+            {
+                var imageUrl = await this.imageService.UploadProfileImage(model.UpdateProfileInput.Image);
+                user.ProfileImageUrl = imageUrl;
+            }
+
+            if (model.UpdateProfileInput.PhoneNumber != null)
+            {
+                user.PhoneNumber = model.UpdateProfileInput.PhoneNumber;
             }
 
             this.userRepository.Update(user);

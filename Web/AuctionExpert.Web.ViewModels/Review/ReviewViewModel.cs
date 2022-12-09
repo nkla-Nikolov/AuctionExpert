@@ -22,12 +22,15 @@
 
         public string ReviewerLastName { get; set; }
 
+        public string ReviewerProfileImage { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Review, ReviewViewModel>()
                 .ForMember(dest => dest.ReviewerId, opt => opt.MapFrom(x => x.ReviewerId))
                 .ForMember(dest => dest.ReviewerFirstName, opt => opt.MapFrom(x => x.Reviewer.FirstName))
-                .ForMember(dest => dest.ReviewerLastName, opt => opt.MapFrom(x => x.Reviewer.LastName));
+                .ForMember(dest => dest.ReviewerLastName, opt => opt.MapFrom(x => x.Reviewer.LastName))
+                .ForMember(dest => dest.ReviewerProfileImage, opt => opt.MapFrom(x => x.Reviewer.ProfileImageUrl));
         }
     }
 }

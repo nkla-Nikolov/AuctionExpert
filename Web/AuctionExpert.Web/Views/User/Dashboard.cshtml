@@ -89,9 +89,15 @@
                     <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                         <div class="dashboard-profile">
                             <div class="owner">
-                                @*TODO: CHECK FOR IMAGE*@
                                 <div class="image">
-                                    <img alt="image" src="~/assets/images/bg/pro-pic.png">
+                                    @if (Model.ProfileImageUrl != null)
+                                    {
+                                        <img alt="image" src="@Model.ProfileImageUrl">
+                                    }
+                                    else
+                                    {
+                                        <img alt="image" src="~/assets/images/bg/NoProfilePicture.png">
+                                    }
                                 </div>
                                 <div class="content">
                                     <h3>@Model.FirstName @Model.LastName</h3>
@@ -101,7 +107,7 @@
                                 </div>
                             </div>
                             <div class="form-wrapper">
-                                <form method="post">
+                                <form method="post" enctype="multipart/form-data">
                                     <div class="row">
                                         <div class="col-xl-6 col-lg-12 col-md-6">
                                             <div class="form-inner">
@@ -126,6 +132,12 @@
                                                         <option value="@city.Id">@city.Name</option>
                                                     }
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-inner">
+                                                <label asp-for="@Model.UpdateProfileInput.Image">Upload Profile Image</label>
+                                                <input asp-for="@Model.UpdateProfileInput.Image"/>
                                             </div>
                                         </div>
                                         <div class="col-12">

@@ -4,6 +4,7 @@
     using System.ComponentModel.DataAnnotations;
 
     using AuctionExpert.Web.ViewModels.City;
+    using Microsoft.AspNetCore.Http;
 
     using static AuctionExpert.Common.GlobalConstants.RegisterConstraintsAndMessages;
 
@@ -13,6 +14,10 @@
         {
             this.Cities = new HashSet<CityListModel>();
         }
+
+        public string PhoneNumber { get; set; }
+
+        public IFormFile Image { get; set; }
 
         [StringLength(FirstNameMaxLenth, ErrorMessage = RangeMessage, MinimumLength = FirstNameMinLength)]
         public string FirstName { get; set; }

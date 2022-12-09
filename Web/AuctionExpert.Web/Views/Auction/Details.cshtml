@@ -115,7 +115,13 @@
                                                             @if (bidder.ProfileImageUrl != null)
                                                             {
                                                                 <div class="bidder-img">
-                                                                    <img alt="image" src="@bidder.ProfileImageUrl">
+                                                                    <img alt="image" style="width:50px" src="@bidder.ProfileImageUrl">
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="bidder-img">
+                                                                    <img alt="image" style="width:50px" src="~/assets/images/bg/NoProfilePicture.png">
                                                                 </div>
                                                             }
                                                             <div class="bidder-content">
@@ -175,10 +181,16 @@
                                         <div class="comment-box">
                                             <div class="comment-header d-flex justify-content-between align-items-center">
                                                 <div class="author d-flex flex-wrap">
-                                                    @*<img alt="image" src="~/assets/images/blog/comment1.png">*@
+                                                    @if (comment.ReviewerProfileImage != null)
+                                                    {
+                                                        <img alt="image" style="width:50px" src="@comment.ReviewerProfileImage">
+                                                    }
+                                                    else
+                                                    {
+                                                        <img alt="image" style="width:50px" src="~/assets/images/bg/NoProfilePicture.png">
+                                                    }
                                                     <h5><a asp-controller="User" asp-action="SellerProfile" asp-route-userId="@comment.ReviewerId">@comment.ReviewerFirstName @comment.ReviewerLastName</a></h5><span class="commnt-date"> @comment.DatePlaced.ToLocalTime()</span>
                                                 </div>
-                                                @*<a href="#" class="commnt-reply"><i class="bi bi-reply"></i></a>*@
                                             </div>
                                             <div class="comment-body">
                                                 <p class="para">@comment.Comment</p>

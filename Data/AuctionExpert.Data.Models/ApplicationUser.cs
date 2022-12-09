@@ -40,6 +40,8 @@
         [Required]
         public string LastName { get; set; }
 
+        public string ProfileImageUrl { get; set; }
+
         [Required]
         public int CountryId { get; set; }
 

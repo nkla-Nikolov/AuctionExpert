@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="~/assets/css/magnific-popup.css">
     <link rel="stylesheet" href="~/assets/css/odometer.css">
     <link rel="stylesheet" href="~/assets/css/style.css">
-    
+
 </head>
 <body>
     <div class="preloader">
@@ -61,7 +61,7 @@
                     <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
                 <li class="menu-item-has-children">
-                    <a asp-controller="Auction" asp-action="Browse">Categories</a><i class='bx bx-plus dropdown-icon'></i>
+                    <a>Categories</a><i class='bx bx-plus dropdown-icon'></i>
                     <ul class="submenu">
                         @foreach (var category in categories)
                         {
@@ -86,8 +86,11 @@
                 }
                 @if (this.User.IsInRole("Administrator"))
                 {
-                    <li>
-                        <a asp-area="Administration" asp-controller="User" asp-action="Index">Admin Dashboard</a>
+                    <li class="menu-item-has-children">
+                        <a>Admin Dashboard</a><i class='bx bx-plus dropdown-icon'></i>
+                        <ul class="submenu">
+                            <li><a asp-area="Administration" asp-controller="User" asp-action="Index">Users Administration</a></li>
+                        </ul>
                     </li>
                 }
             </ul>

@@ -59,5 +59,22 @@
 
             return imageList;
         }
+
+        public async Task<string> UploadProfileImage(IFormFile image)
+        {
+            ImageUploadResult result;
+
+            using (var stream = image.OpenReadStream())
+            {
+                var parameters = new ImageUploadParams()
+                {
+                    File = new FileDescription(image.FileName, stream),
+                };
+
+                result = await this.cloudinary.UploadAsync(parameters);
+            }
+
+            return result.Url.ToString();
+        }
     }
 }

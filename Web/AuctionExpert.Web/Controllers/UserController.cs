@@ -52,6 +52,16 @@
                 .Include(x => x.City)
                 .FirstOrDefaultAsync();
 
+            var cities = await this.cityService
+                    .GetAllCitiesByCountryId<CityListModel>(user.CountryId)
+                    .OrderBy(x => x.Name)
+                    .ToListAsync();
+
+            var myAuctions = await this.auctionService
+                .GetAuctionsByOwnerId<MyAuctionsViewModel>(user.Id)
+                .OrderBy(x => x.Status)
+                .ToListAsync();
+
             var bids = await this.auctionService
                 .GetAllAuctions<Auction>()
                 .ToListAsync();
@@ -68,18 +78,13 @@
                 LastName = user.LastName,
                 CityName = user.City?.Name,
                 Username = user.UserName,
+                ProfileImageUrl = user.ProfileImageUrl,
                 Email = user.Email,
                 UpdateProfileInput = new UpdateProfileViewModel()
                 {
-                    Cities = await this.cityService
-                    .GetAllCitiesByCountryId<CityListModel>(user.CountryId)
-                    .OrderBy(x => x.Name)
-                    .ToListAsync(),
+                    Cities = cities,
                 },
-                MyAuctions = await this.auctionService
-                .GetAuctionsByOwnerId<MyAuctionsViewModel>(user.Id)
-                .OrderBy(x => x.Status)
-                .ToListAsync(),
+                MyAuctions = myAuctions,
             };
 
             return this.View(model);
