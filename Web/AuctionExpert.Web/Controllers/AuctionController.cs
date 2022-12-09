@@ -129,7 +129,7 @@
                 return this.View("NotFound404");
             }
 
-            return this.RedirectToAction("Dashboard", "User");
+            return this.RedirectToAction("Index", "Home");
         }
 
         [HttpPost]

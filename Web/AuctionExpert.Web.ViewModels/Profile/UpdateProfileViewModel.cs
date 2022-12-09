@@ -20,9 +20,6 @@
         [StringLength(LastNameMaxLenth, ErrorMessage = RangeMessage, MinimumLength = LastNameMinLenth)]
         public string LastName { get; set; }
 
-        [EmailAddress]
-        public string Email { get; set; }
-
         [StringLength(PasswordMaxLength, ErrorMessage = RangeMessage, MinimumLength = PasswordMinLength)]
         [DataType(DataType.Password)]
         public string OldPassword { get; set; }

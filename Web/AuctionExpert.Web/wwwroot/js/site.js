@@ -62,23 +62,11 @@ function countDown() {
         let minutes = Math.floor((difference % hour) / minute)
         let seconds = Math.floor((difference % minute) / second)
 
-        if (days < "10") {
-            days = "0" + days;
-        }
-        if (hours < "10") {
-            hours = "0" + hours;
-        }
-        if (minutes < "10") {
-            minutes = "0" + minutes;
-        }
-        if (seconds < "10") {
-            seconds = "0" + seconds;
-        }
-
         //TODO: send email when time gets in last 5 min
         //TODO: add 3 minutes to auction end time if a bid is placed last 5 mins
         if (days < 1 && hours < 1 && minutes < 6) {
             let id = document.querySelector(`#timer${i}`).getAttribute('data-auctionId');
+            console.log(id);
             deleteAuction(id);
         }
 

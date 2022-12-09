@@ -1,25 +1,64 @@
 ﻿namespace AuctionExpert.Services.Data.User
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
+    using AuctionExpert.Services.Mapping;
     using AuctionExpert.Web.ViewModels.Profile;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
 
     public class UserService : IUserService
     {
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
 
         public UserService(
             IDeletableEntityRepository<ApplicationUser> userRepository,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            RoleManager<ApplicationRole> roleManager)
         {
             this.userRepository = userRepository;
             this.userManager = userManager;
+            this.roleManager = roleManager;
+        }
+
+        public IQueryable<T> GetAllUsers<T>()
+        {
+            return this.userRepository
+                .AllAsNoTracking()
+                .To<T>();
+        }
+
+        public async Task AddUserToRole(string userId, string roleName)
+        {
+            var user = await this.userManager.FindByIdAsync(userId);
+            var roleExists = await this.roleManager.RoleExistsAsync(roleName);
+
+            if (user == null || roleExists == false)
+            {
+                throw new ArgumentNullException();
+            }
+
+            await this.userManager.AddToRoleAsync(user, roleName);
+        }
+
+        public async Task<ApplicationUser> RemoveUserFromRole(string userId, string roleName)
+        {
+            var user = await this.userManager.FindByIdAsync(userId);
+            var roleExists = await this.roleManager.RoleExistsAsync(roleName);
+
+            if (user == null || roleExists == false)
+            {
+                throw new ArgumentNullException();
+            }
+
+            await this.userManager.RemoveFromRoleAsync(user, roleName);
+
+            return user;
         }
 
         public async Task UpdateProfile(MyProfileViewModel model, string userId)

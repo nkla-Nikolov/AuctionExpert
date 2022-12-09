@@ -1,0 +1,87 @@
+﻿@using AuctionExpert.Web.ViewModels.Administration.User;
+@model IEnumerable<UsersListViewModel>
+@{
+    this.ViewData["Title"] = "User Administration";
+}
+
+<div class="container">
+    <div class="row g-4">
+        <div class="col g-3">
+            <h2 class="text-center pt-80">@this.ViewData["Title"]</h2>
+            <div class="table-wrapper">
+                <table class="eg-table order-table table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Join Date</th>
+                            <th>Auctions Count</th>
+                            <th>Profile</th>
+                            <th>Manage Roles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td data-label="Image"><img alt="image" src="@user.ProfileImageUrl" class="img-fluid"></td>
+                                <td data-label="Username">@user.Username</td>
+                                <td data-label="Email">@user.Email</td>
+                                <td data-label="Join Date">@user.CreatedOn.ToLocalTime().ToShortDateString()</td>
+                                <td data-label="Auctions Count">@user.AuctionsCount</td>
+                                <td data-label="Profile"><a asp-area="" asp-controller="User" asp-action="SellerProfile" asp-route-userId="@user.Id">Profile page</a></td>
+                                @if (user.IsAdmin)
+                                {
+                                    <td data-label="Manage Roles">
+                                        <form method="post">
+                                            <button asp-area="Administration"
+                                            asp-controller="User"
+                                            asp-action="RemoveRole"
+                                            asp-route-userId="@user.Id" class="eg-btn action-btn text-danger">
+                                                Remove Admin
+                                            </button>
+                                        </form>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td data-label="Manage Roles">
+                                        <form method="post">
+                                            <button asp-area="Administration"
+                                            asp-controller="User"
+                                            asp-action="AddRole"
+                                            asp-route-userId="@user.Id" class="eg-btn action-btn text-success">
+                                                Make Admin
+                                            </button>
+                                        </form>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- pagination area -->
+            @*<div class="table-pagination">
+            <p>Showing 10 to 20 of 1 entries</p>
+            <nav class="pagination-wrap">
+            <ul class="pagination style-two d-flex justify-content-center gap-md-3 gap-2">
+            <li class="page-item">
+            <a class="page-link" href="#" tabindex="-1">Prev</a>
+            </li>
+            <li class="page-item active" aria-current="page"><a class="page-link" href="#">01</a></li>
+            <li class="page-item">
+            <a class="page-link" href="#">02</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">03</a></li>
+            <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+            </li>
+            </ul>
+            </nav>
+            </div>*@
+        </div>
+    </div>
+</div>

@@ -24,7 +24,7 @@
                         <img alt="image" src="~/assets/images/icons/smile-emo.svg">
                     </div>
                     <div class="author-name">
-                        <span>by @auction.OwnerName</span>
+                        <span>by <a asp-controller="User" asp-action="SellerProfile" asp-route-userId="@auction.OwnerId">@auction.OwnerName</a></span>
                     </div>
                 </div>
             </div>
@@ -34,19 +34,18 @@
                 <p>Category : <a asp-controller="Auction" asp-action="Browse" asp-route-categoryId="@auction.CategoryId"><span><span>@auction.CategoryName</span></span></a></p>
                 @if (this.User.Identity.IsAuthenticated)
                 {
+                    @if (auction.OwnerId == userId)
+                    {
+                        <button asp-controller="Auction" asp-action="Edit" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary2 btn--sm">Edit</button>
+                        <form method="post" style="display: inline-block;">
+                            <button type="submit" asp-controller="Auction" asp-action="Delete" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary2 btn--sm">Delete</button>
+                        </form>
+                    }
                     <div class="auction-card-bttm">
-                        @if (auction.AuctionType == TypeSale.FixedPriceAuction)
-                        {
-                            if (auction.OwnerId == userId)
-                            {
-                                <a asp-controller="Auction" asp-action="Edit" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary2 btn--sm">Edit</a>
-                            }
-                            <a asp-controller="Auction" asp-action="Details" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary btn--sm">Details</a>
-                        }
-                        else
-                        {
-                            <a asp-controller="Auction" asp-action="Details" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary btn--sm">Place a Bid</a>
-                        }
+                        <a asp-controller="Auction" asp-action="Details" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary btn--sm">
+                            @(auction.AuctionType == TypeSale.StandartAuction ? "Place a Bid" : "Details")
+                        </a>
+
                         <div class="share-area">
                             <ul class="social-icons d-flex">
                                 <li><a href="https://www.facebook.com/"><i class="bx bxl-facebook"></i></a></li>
