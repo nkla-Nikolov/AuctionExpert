@@ -102,6 +102,7 @@
                 Description = model.Description,
                 OwnerId = user.Id,
                 StartPrice = model.StartPrice,
+                CategoryId = model.CategoryId,
                 SubCategoryId = model.SubCateogoryId,
                 Title = model.Title,
             };
@@ -138,12 +139,11 @@
                 {
                     Id = x.Id,
                     Title = x.Title,
-                    CategoryName = x.SubCategory.Category.Name,
+                    CategoryName = x.Category.Name,
                     SubCategoryName = x.SubCategory.Name,
                     Condition = x.Condition.ToString(),
                     StepAmount = x.StepAmount,
                     Description = x.Description,
-                    IsClosed = x.ClosesIn < DateTime.UtcNow,
                     BiddingPrice = x.Bids.Count == 0 ? x.StartPrice : highestBid,
                     Comments = comments,
                     Bidders = bidders,
@@ -174,6 +174,33 @@
                 MoneyPlaced = (decimal)currentBid,
                 TimePlaced = DateTime.UtcNow,
             });
+
+            this.auctionRepository.Update(auction);
+            await this.auctionRepository.SaveChangesAsync();
+        }
+
+        public async Task EditAuction(int auctionId, EditAuctionInputModel model)
+        {
+            var auction = await this.auctionRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.Id == auctionId);
+
+            if (auction == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            var images = await this.imageService.UploadImages(model.Images);
+
+            auction.AuctionType = model.AuctionType;
+            auction.Condition = model.Condition;
+            auction.Description = model.Description;
+            auction.StartPrice = model.StartPrice;
+            auction.StepAmount = model.StepAmount;
+            auction.CategoryId = model.CategoryId;
+            auction.SubCategoryId = model.SubCateogoryId;
+            auction.Title = model.Title;
+            auction.Images = images.ToList();
 
             this.auctionRepository.Update(auction);
             await this.auctionRepository.SaveChangesAsync();

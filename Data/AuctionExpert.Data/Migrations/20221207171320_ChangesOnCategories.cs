@@ -1,26 +1,20 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace AuctionExpert.Data.Migrations
 {
-    public partial class MadeChangesOnReview : Migration
+    public partial class ChangesOnCategories : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUsers_Cities_CityId",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropForeignKey(
                 name: "FK_Reviews_AspNetUsers_UserId",
                 table: "Reviews");
 
-            migrationBuilder.RenameColumn(
-                name: "Status",
-                table: "Auctions",
-                newName: "Condition");
+            migrationBuilder.DropForeignKey(
+                name: "FK_Reviews_Auctions_AuctionId",
+                table: "Reviews");
 
             migrationBuilder.AlterColumn<string>(
                 name: "UserId",
@@ -40,19 +34,13 @@ namespace AuctionExpert.Data.Migrations
                 oldType: "nvarchar(max)",
                 oldNullable: true);
 
-            migrationBuilder.AddColumn<int>(
+            migrationBuilder.AlterColumn<int>(
                 name: "AuctionId",
                 table: "Reviews",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "DatePlaced",
-                table: "Reviews",
-                type: "datetime2",
-                nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "int");
 
             migrationBuilder.AddColumn<string>(
                 name: "ReviewerId",
@@ -69,6 +57,20 @@ namespace AuctionExpert.Data.Migrations
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)",
                 oldNullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "CategoryId",
+                table: "Auctions",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "Condition",
+                table: "Auctions",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.AlterColumn<string>(
                 name: "LastName",
@@ -90,30 +92,23 @@ namespace AuctionExpert.Data.Migrations
                 oldType: "nvarchar(max)",
                 oldNullable: true);
 
-            migrationBuilder.AlterColumn<int>(
-                name: "CityId",
-                table: "AspNetUsers",
-                type: "int",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "int");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reviews_AuctionId",
-                table: "Reviews",
-                column: "AuctionId");
-
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_ReviewerId",
                 table: "Reviews",
                 column: "ReviewerId");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_Auctions_CategoryId",
+                table: "Auctions",
+                column: "CategoryId");
+
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_Cities_CityId",
-                table: "AspNetUsers",
-                column: "CityId",
-                principalTable: "Cities",
-                principalColumn: "Id");
+                name: "FK_Auctions_Categories_CategoryId",
+                table: "Auctions",
+                column: "CategoryId",
+                principalTable: "Categories",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Reviews_AspNetUsers_ReviewerId",
@@ -134,15 +129,14 @@ namespace AuctionExpert.Data.Migrations
                 table: "Reviews",
                 column: "AuctionId",
                 principalTable: "Auctions",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                principalColumn: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUsers_Cities_CityId",
-                table: "AspNetUsers");
+                name: "FK_Auctions_Categories_CategoryId",
+                table: "Auctions");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Reviews_AspNetUsers_ReviewerId",
@@ -157,29 +151,24 @@ namespace AuctionExpert.Data.Migrations
                 table: "Reviews");
 
             migrationBuilder.DropIndex(
-                name: "IX_Reviews_AuctionId",
-                table: "Reviews");
-
-            migrationBuilder.DropIndex(
                 name: "IX_Reviews_ReviewerId",
                 table: "Reviews");
 
-            migrationBuilder.DropColumn(
-                name: "AuctionId",
-                table: "Reviews");
-
-            migrationBuilder.DropColumn(
-                name: "DatePlaced",
-                table: "Reviews");
+            migrationBuilder.DropIndex(
+                name: "IX_Auctions_CategoryId",
+                table: "Auctions");
 
             migrationBuilder.DropColumn(
                 name: "ReviewerId",
                 table: "Reviews");
 
-            migrationBuilder.RenameColumn(
+            migrationBuilder.DropColumn(
+                name: "CategoryId",
+                table: "Auctions");
+
+            migrationBuilder.DropColumn(
                 name: "Condition",
-                table: "Auctions",
-                newName: "Status");
+                table: "Auctions");
 
             migrationBuilder.AlterColumn<string>(
                 name: "UserId",
@@ -198,6 +187,16 @@ namespace AuctionExpert.Data.Migrations
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "AuctionId",
+                table: "Reviews",
+                type: "int",
+                nullable: false,
+                defaultValue: 0,
+                oldClrType: typeof(int),
+                oldType: "int",
+                oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "UrlPath",
@@ -223,29 +222,19 @@ namespace AuctionExpert.Data.Migrations
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)");
 
-            migrationBuilder.AlterColumn<int>(
-                name: "CityId",
-                table: "AspNetUsers",
-                type: "int",
-                nullable: false,
-                defaultValue: 0,
-                oldClrType: typeof(int),
-                oldType: "int",
-                oldNullable: true);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_Cities_CityId",
-                table: "AspNetUsers",
-                column: "CityId",
-                principalTable: "Cities",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
             migrationBuilder.AddForeignKey(
                 name: "FK_Reviews_AspNetUsers_UserId",
                 table: "Reviews",
                 column: "UserId",
                 principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Reviews_Auctions_AuctionId",
+                table: "Reviews",
+                column: "AuctionId",
+                principalTable: "Auctions",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
         }

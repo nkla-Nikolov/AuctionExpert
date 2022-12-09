@@ -57,6 +57,11 @@
         public virtual Country Country { get; set; }
 
         [Required]
+        public int CategoryId { get; set; }
+
+        public virtual Category Category { get; set; }
+
+        [Required]
         public int SubCategoryId { get; set; }
 
         public virtual SubCategory SubCategory { get; set; }

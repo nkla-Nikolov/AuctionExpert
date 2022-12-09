@@ -3,6 +3,7 @@
 
 // Write your JavaScript code.
 
+//Home Page timer
 function getTimers() {
     let index = 0;
     let timerElements = [];
@@ -89,3 +90,46 @@ function countDown() {
 }
 
 setInterval(countDown, 1000);
+
+
+//Loading Subcategories
+function getSubCategories() {
+    let selected = document.querySelectorAll("div .list")[0];
+    let categoryId = Number.parseInt(selected.querySelector('.selected').getAttribute("data-value"));
+    let ul = document.querySelectorAll("div .list")[1];
+
+    if (!Number.isInteger(categoryId) || categoryId == 0) {
+        ul.parentElement.parentElement.parentElement.style.display = 'none';
+        return;
+    }
+
+    fetch(`/api/SubCategory/?id=${categoryId}`, {
+        method: 'get'
+    })
+        .then(response => response.json())
+        .then(subCategories => {
+
+            ul.parentElement.parentElement.parentElement.style.display = 'block';
+
+            for (let i = 0; i < subCategories.length; i++) {
+
+                let liElement = document.createElement("li");
+                liElement.classList.add("option");
+                liElement.setAttribute("data-value", subCategories[i].id)
+                liElement.textContent = subCategories[i].name
+                ul.appendChild(liElement)
+            }
+        })
+
+    ul.innerHTML = '';
+    document.querySelectorAll('.current')[1].textContent = '';
+}
+
+function getSubCategoryId() {
+    let selected = document.querySelectorAll("div .list")[1];
+    let subCategoryId = Number.parseInt(selected.querySelector('.selected').getAttribute("data-value"));
+
+    let optionElement = selected.parentElement.parentElement.getElementsByTagName('option')[0];
+    optionElement.setAttribute('value', subCategoryId);
+    optionElement.classList.add('selected');
+}

@@ -1,9 +1,11 @@
 ﻿@using AuctionExpert.Data.Common.Enumerations;
 @using AuctionExpert.Web.ViewModels.Auction;
+@using System.Security.Claims;
 @model IEnumerable<HomeAuctionViewModel>
 
 @{
     int i = 0;
+    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
 @foreach (var auction in Model)
@@ -35,6 +37,10 @@
                     <div class="auction-card-bttm">
                         @if (auction.AuctionType == TypeSale.FixedPriceAuction)
                         {
+                            if (auction.OwnerId == userId)
+                            {
+                                <a asp-controller="Auction" asp-action="Edit" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary2 btn--sm">Edit</a>
+                            }
                             <a asp-controller="Auction" asp-action="Details" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary btn--sm">Details</a>
                         }
                         else

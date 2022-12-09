@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+
     using AuctionExpert.Data.Common.Enumerations;
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Mapping;
@@ -18,6 +19,8 @@
         public int Views { get; set; }
 
         public string OwnerName { get; set; }
+
+        public string OwnerId { get; set; }
 
         public TypeSale AuctionType { get; set; }
 

@@ -174,6 +174,9 @@ namespace AuctionExpert.Data.Migrations
                     b.Property<int>("AuctionType")
                         .HasColumnType("int");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("ClosesIn")
                         .HasColumnType("datetime2");
 
@@ -225,6 +228,8 @@ namespace AuctionExpert.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("CountryId");
 
@@ -661,6 +666,12 @@ namespace AuctionExpert.Data.Migrations
 
             modelBuilder.Entity("AuctionExpert.Data.Models.Auction", b =>
                 {
+                    b.HasOne("AuctionExpert.Data.Models.Category", "Category")
+                        .WithMany("Auctions")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("AuctionExpert.Data.Models.Country", "Country")
                         .WithMany("Auctions")
                         .HasForeignKey("CountryId")
@@ -678,6 +689,8 @@ namespace AuctionExpert.Data.Migrations
                         .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("Country");
 
@@ -836,6 +849,8 @@ namespace AuctionExpert.Data.Migrations
 
             modelBuilder.Entity("AuctionExpert.Data.Models.Category", b =>
                 {
+                    b.Navigation("Auctions");
+
                     b.Navigation("SubCategories");
                 });
 

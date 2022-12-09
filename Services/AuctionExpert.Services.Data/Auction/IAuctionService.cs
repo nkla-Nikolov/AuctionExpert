@@ -12,17 +12,19 @@
 
         Task DeleteAsync(int auctionId);
 
+        Task<T> GetAuctionById<T>(int auctionId);
+
+        Task PlaceBidAsync(int? currentBid, string userId, Auction auction);
+
+        Task<DetailViewModel> GetDetailAuctionModelByIdAsync(int auctionId);
+
+        Task EditAuction(int auctionId, EditAuctionInputModel model);
+
         IQueryable<T> GetAllAuctions<T>();
 
         IQueryable<T> GetAllAuctionsByCountryId<T>(int countryId);
 
-        Task<DetailViewModel> GetDetailAuctionModelByIdAsync(int auctionId);
-
         IQueryable<T> GetAuctionsByOwnerId<T>(string ownerId);
-
-        Task<T> GetAuctionById<T>(int auctionId);
-
-        Task PlaceBidAsync(int? currentBid, string userId, Auction auction);
 
         IQueryable<T> GetAllAuctionsByCategoryId<T>(int categoryId);
     }

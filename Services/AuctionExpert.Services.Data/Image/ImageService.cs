@@ -26,7 +26,7 @@
 
         public IQueryable<T> GetAllImages<T>(int auctionId)
         {
-            return imageRepository
+            return this.imageRepository
                 .AllAsNoTracking()
                 .Where(x => x.AuctionId == auctionId)
                 .To<T>();
@@ -46,7 +46,7 @@
                         Transformation = new Transformation().Width(444).Height(352),
                     };
 
-                    var result = await cloudinary.UploadAsync(parameters);
+                    var result = await this.cloudinary.UploadAsync(parameters);
 
                     var image = new Image()
                     {

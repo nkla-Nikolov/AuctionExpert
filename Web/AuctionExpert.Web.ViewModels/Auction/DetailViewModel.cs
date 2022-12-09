@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
     using AuctionExpert.Data.Common.Enumerations;
     using AuctionExpert.Web.ViewModels.Image;
     using AuctionExpert.Web.ViewModels.Review;
@@ -30,8 +31,6 @@
         public string SubCategoryName { get; set; }
 
         public string Condition { get; set; }
-
-        public bool IsClosed { get; set; }
 
         public int StepAmount { get; set; }
 

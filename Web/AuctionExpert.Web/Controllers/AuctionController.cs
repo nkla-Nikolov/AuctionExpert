@@ -147,7 +147,67 @@
                 return this.View("NotFound404");
             }
 
-            return this.RedirectToAction(nameof(this.Details), new { auctionId = auctionId });
+            return this.RedirectToAction(nameof(this.Details), new { auctionId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int auctionId)
+        {
+            var auction = await this.auctionService.GetAuctionById<Auction>(auctionId);
+
+            if (auction == null)
+            {
+                this.Response.StatusCode = 404;
+                return this.View("NotFound404");
+            }
+
+            var categories = await this.categoryService
+                .GetAllCategories<CategoryListModel>()
+                .ToListAsync();
+
+            var model = new EditAuctionInputModel()
+            {
+                Id = auction.Id,
+                AuctionType = auction.AuctionType,
+                Categories = categories,
+                Condition = auction.Condition,
+                Description = auction.Description,
+                StartPrice = (int)auction.StartPrice,
+                StepAmount = auction.StepAmount,
+                Title = auction.Title,
+                SubCateogoryId = auction.SubCategoryId,
+            };
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int auctionId, EditAuctionInputModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                this.ModelState.AddModelError(string.Empty, string.Empty);
+
+                model.Id = auctionId;
+                model.Categories = await this.categoryService
+                    .GetAllCategories<CategoryListModel>()
+                    .ToListAsync();
+
+                return this.View(model);
+            }
+
+            try
+            {
+                await this.auctionService.EditAuction(auctionId, model);
+            }
+            catch (NullReferenceException)
+            {
+                this.Response.StatusCode = 404;
+                return this.View("NotFound404");
+            }
+
+            return this.RedirectToAction(nameof(this.Details), new { auctionId });
         }
     }
 }
