@@ -1,10 +1,13 @@
 ﻿namespace AuctionExpert.Services.Data.Country
 {
+    using System;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Mapping;
+    using Microsoft.EntityFrameworkCore;
 
     public class CountryService : ICountryService
     {
@@ -17,9 +20,48 @@
 
         public IQueryable<T> GetAllCountries<T>()
         {
-            return countryRepository
+            return this.countryRepository
                 .AllAsNoTracking()
                 .To<T>();
+        }
+
+        public async Task<T> GetCountryById<T>(int id)
+        {
+            return await this.countryRepository
+                .AllAsNoTracking()
+                .Where(x => x.Id == id)
+                .To<T>()
+                .FirstOrDefaultAsync();
+        }
+
+        public IQueryable<T> GetAllCountriesPaginated<T>(int page, int itemsPerPage = 50)
+        {
+            return this.countryRepository
+                .AllAsNoTracking()
+                .OrderBy(x => x.Id)
+                .Skip((page - 1) * itemsPerPage)
+                .Take(itemsPerPage)
+                .To<T>();
+        }
+
+        public int GetCount()
+        {
+            return this.countryRepository
+                .AllAsNoTracking()
+                .Count();
+        }
+
+        public async Task DeleteCountry(int id)
+        {
+            var country = await this.GetCountryById<Country>(id);
+
+            if (country == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            this.countryRepository.Delete(country);
+            await this.countryRepository.SaveChangesAsync();
         }
     }
 }

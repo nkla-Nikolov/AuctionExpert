@@ -3,7 +3,6 @@
     using System;
     using System.Threading.Tasks;
 
-    using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Data.User;
     using AuctionExpert.Web.ViewModels.Administration.User;
     using Microsoft.AspNetCore.Mvc;
@@ -11,21 +10,31 @@
 
     using static AuctionExpert.Common.GlobalConstants;
 
-    public class UserController : AdministrationController
+    public class UsersController : AdministrationController
     {
         private readonly IUserService userService;
 
-        public UserController(IUserService userService)
+        public UsersController(IUserService userService)
         {
             this.userService = userService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> All(int id = 1)
         {
-            var model = await this.userService
-                .GetAllUsers<UsersListViewModel>()
+            const int itemsPerPage = 50;
+
+            var users = await this.userService
+                .GetAllUsersPaginated<UsersListViewModel>(id, itemsPerPage)
                 .ToListAsync();
+
+            var model = new PaginatedUsersListModel()
+            {
+                PageNumber = id,
+                ItemsPerPage = itemsPerPage,
+                ItemsCount = this.userService.GetCount(),
+                Users = users,
+            };
 
             return this.View(model);
         }
@@ -33,10 +42,9 @@
         [HttpPost]
         public async Task<IActionResult> RemoveFromRole(string userId)
         {
-            ApplicationUser user = null;
             try
             {
-                user = await this.userService.RemoveUserFromRole(userId, AdministratorRoleName);
+                await this.userService.RemoveUserFromRole(userId, AdministratorRoleName);
             }
             catch (ArgumentNullException)
             {
@@ -44,7 +52,7 @@
                 return this.View("NotFound404");
             }
 
-            return this.RedirectToAction(nameof(this.Index));
+            return this.RedirectToAction(nameof(this.All));
         }
 
         [HttpPost]
@@ -60,7 +68,7 @@
                 return this.View("NotFound404");
             }
 
-            return this.RedirectToAction(nameof(this.Index));
+            return this.RedirectToAction(nameof(this.All));
         }
     }
 }

@@ -58,4 +58,10 @@
     <ProjectReference Include="..\AuctionExpert.Web.Infrastructure\AuctionExpert.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\AuctionExpert.Web.ViewModels\AuctionExpert.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Administration\Views\Countries\All.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

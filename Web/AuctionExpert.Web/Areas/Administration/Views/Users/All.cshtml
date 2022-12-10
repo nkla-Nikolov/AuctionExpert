@@ -1,5 +1,5 @@
 ﻿@using AuctionExpert.Web.ViewModels.Administration.User;
-@model IEnumerable<UsersListViewModel>
+@model PaginatedUsersListModel
 @{
     this.ViewData["Title"] = "Users Administration";
 }
@@ -22,7 +22,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var user in Model)
+                        @foreach (var user in Model.Users)
                         {
                             <tr>
                                 <td data-label="Image">
@@ -45,7 +45,7 @@
                                     <td data-label="Manage Roles">
                                         <form method="post">
                                             <button asp-area="Administration"
-                                            asp-controller="User"
+                                            asp-controller="Users"
                                             asp-action="RemoveFromRole"
                                             asp-route-userId="@user.Id" class="eg-btn action-btn text-danger">
                                                 Remove Admin
@@ -58,7 +58,7 @@
                                     <td data-label="Manage Roles">
                                         <form method="post">
                                             <button asp-area="Administration"
-                                            asp-controller="User"
+                                            asp-controller="Users"
                                             asp-action="AddToRole"
                                             asp-route-userId="@user.Id" class="eg-btn action-btn text-success">
                                                 Make Admin
@@ -71,26 +71,7 @@
                     </tbody>
                 </table>
             </div>
-
-            <!-- pagination area -->
-            @*<div class="table-pagination">
-            <p>Showing 10 to 20 of 1 entries</p>
-            <nav class="pagination-wrap">
-            <ul class="pagination style-two d-flex justify-content-center gap-md-3 gap-2">
-            <li class="page-item">
-            <a class="page-link" href="#" tabindex="-1">Prev</a>
-            </li>
-            <li class="page-item active" aria-current="page"><a class="page-link" href="#">01</a></li>
-            <li class="page-item">
-            <a class="page-link" href="#">02</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">03</a></li>
-            <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-            </li>
-            </ul>
-            </nav>
-            </div>*@
+            <partial name="_PagingPartial" model="@Model"/>
         </div>
     </div>
 </div>

@@ -37,6 +37,23 @@
                 .To<T>();
         }
 
+        public IQueryable<T> GetAllUsersPaginated<T>(int page, int itemsPerPage = 50)
+        {
+            return this.userRepository
+                .AllAsNoTracking()
+                .OrderByDescending(x => x.Id)
+                .Skip((page - 1) * itemsPerPage)
+                .Take(itemsPerPage)
+                .To<T>();
+        }
+
+        public int GetCount()
+        {
+            return this.userRepository
+                .AllAsNoTracking()
+                .Count();
+        }
+
         public async Task AddUserToRole(string userId, string roleName)
         {
             var user = await this.userManager.FindByIdAsync(userId);
@@ -50,7 +67,7 @@
             await this.userManager.AddToRoleAsync(user, roleName);
         }
 
-        public async Task<ApplicationUser> RemoveUserFromRole(string userId, string roleName)
+        public async Task RemoveUserFromRole(string userId, string roleName)
         {
             var user = await this.userManager.FindByIdAsync(userId);
             var roleExists = await this.roleManager.RoleExistsAsync(roleName);
@@ -61,8 +78,6 @@
             }
 
             await this.userManager.RemoveFromRoleAsync(user, roleName);
-
-            return user;
         }
 
         public async Task UpdateProfile(MyProfileViewModel model, string userId)

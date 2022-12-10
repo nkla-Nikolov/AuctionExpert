@@ -65,7 +65,7 @@
                     <ul class="submenu">
                         @foreach (var category in categories)
                         {
-                            <li><a asp-controller="Auction" asp-action="Browse" asp-route-categoryId="@category.Id">@category.Name</a></li>
+                            <li><a asp-area="" asp-controller="Auction" asp-action="Browse" asp-route-categoryId="@category.Id">@category.Name</a></li>
                         }
                     </ul>
                 </li>
@@ -89,7 +89,8 @@
                     <li class="menu-item-has-children">
                         <a>Admin Dashboard</a><i class='bx bx-plus dropdown-icon'></i>
                         <ul class="submenu">
-                            <li><a asp-area="Administration" asp-controller="User" asp-action="Index">Users Administration</a></li>
+                            <li><a asp-area="Administration" asp-controller="Users" asp-action="All">Users Administration</a></li>
+                            <li><a asp-area="Administration" asp-controller="Countries" asp-action="All">Countries Administration</a></li>
                         </ul>
                     </li>
                 }
