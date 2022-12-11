@@ -8,6 +8,14 @@
     <div class="row g-4">
         <div class="col g-3">
             <h2 class="text-center pt-80">@this.ViewData["Title"]</h2>
+            <form method="post">
+                <div class="input-group mb-3">
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <input asp-for="@Model.CountryName" class="form-control" placeholder="Enter country name" />
+                    <span asp-validation-for="@Model.CountryName" class="text-danger"></span>
+                    <button asp-area="Administration" asp-controller="Countries" asp-action="Add" class="btn btn-success" id="button-addon2">Add Country</button>
+                </div>
+            </form>
             <div class="table-wrapper">
                 <table class="eg-table order-table table mb-0">
                     <thead>
@@ -51,7 +59,7 @@
                     </tbody>
                 </table>
             </div>
-            <partial name="_PagingPartial" model="@Model"/>
+            <partial name="_PagingPartial" model="@Model" />
         </div>
     </div>
 </div>

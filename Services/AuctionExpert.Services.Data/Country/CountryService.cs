@@ -63,5 +63,16 @@
             this.countryRepository.Delete(country);
             await this.countryRepository.SaveChangesAsync();
         }
+
+        public async Task AddCountry(string name)
+        {
+            var country = new Country()
+            {
+                Name = name,
+            };
+
+            await this.countryRepository.AddAsync(country);
+            await this.countryRepository.SaveChangesAsync();
+        }
     }
 }

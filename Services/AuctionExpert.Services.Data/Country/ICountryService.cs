@@ -13,6 +13,8 @@
 
         Task DeleteCountry(int id);
 
+        Task AddCountry(string name);
+
         int GetCount();
     }
 }
