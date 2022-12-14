@@ -52,11 +52,13 @@
                 .FirstOrDefaultAsync();
         }
 
-        public IQueryable<T> GetAuctionsByOwnerId<T>(string ownerId)
+        public IQueryable<T> GetAuctionsByOwnerId<T>(int page, string ownerId, int itemsPerPage)
         {
             return this.auctionRepository
                 .AllAsNoTrackingWithDeleted()
                 .Where(x => x.OwnerId == ownerId)
+                .Skip((page - 1) * itemsPerPage)
+                .Take(itemsPerPage)
                 .To<T>();
         }
 
@@ -204,6 +206,22 @@
 
             this.auctionRepository.Update(auction);
             await this.auctionRepository.SaveChangesAsync();
+        }
+
+        public int MyAuctionsWithDeletedCount(string ownerId)
+        {
+            return this.auctionRepository
+                .AllAsNoTrackingWithDeleted()
+                .Where(x => x.OwnerId == ownerId)
+                .Count();
+        }
+
+        public int MyActiveAuctionsCount(string ownerId)
+        {
+            return this.auctionRepository
+                .AllAsNoTracking()
+                .Where(x => x.OwnerId == ownerId)
+                .Count();
         }
     }
 }

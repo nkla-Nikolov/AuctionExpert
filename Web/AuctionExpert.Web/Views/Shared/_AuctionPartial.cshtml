@@ -36,7 +36,7 @@
                 {
                     @if (auction.OwnerId == userId)
                     {
-                        <button asp-controller="Auction" asp-action="Edit" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary2 btn--sm">Edit</button>
+                        <a asp-controller="Auction" asp-action="Edit" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary2 btn--sm">Edit</a>
                         <form method="post" style="display: inline-block;">
                             <button type="submit" asp-controller="Auction" asp-action="Delete" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary2 btn--sm">Delete</button>
                         </form>

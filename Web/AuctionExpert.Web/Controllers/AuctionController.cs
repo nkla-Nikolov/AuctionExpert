@@ -84,17 +84,18 @@
                 return this.View("NotFound404");
             }
 
-            try
-            {
-                await this.auctionService.PlaceBidAsync(model.CurrentBid, userId, auction);
-            }
-            catch (InvalidOperationException ex)
-            {
-                this.ModelState.AddModelError(string.Empty, ex.Message);
-                model = await this.auctionService.GetDetailAuctionModelByIdAsync(auction.Id);
+            await this.auctionService.PlaceBidAsync(model.CurrentBid, userId, auction);
+            //try
+            //{
+            //    await this.auctionService.PlaceBidAsync(model.CurrentBid, userId, auction);
+            //}
+            //catch (InvalidOperationException ex)
+            //{
+            //    this.ModelState.AddModelError(string.Empty, ex.Message);
+            //    model = await this.auctionService.GetDetailAuctionModelByIdAsync(auction.Id);
 
-                return this.View(model);
-            }
+            //    return this.View(model);
+            //}
 
             return this.RedirectToAction(nameof(this.Details), new { auctionId = auction.Id });
         }

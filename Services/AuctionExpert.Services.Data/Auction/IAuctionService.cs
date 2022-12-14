@@ -24,8 +24,12 @@
 
         IQueryable<T> GetAllAuctionsByCountryId<T>(int countryId);
 
-        IQueryable<T> GetAuctionsByOwnerId<T>(string ownerId);
+        IQueryable<T> GetAuctionsByOwnerId<T>(int page, string ownerId, int itemsPerPage);
 
         IQueryable<T> GetAllAuctionsByCategoryId<T>(int categoryId);
+
+        int MyAuctionsWithDeletedCount(string ownerId);
+
+        int MyActiveAuctionsCount(string ownerId);
     }
 }

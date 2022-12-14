@@ -42,72 +42,61 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Dashboard()
+        public async Task<IActionResult> MyAuctions(int id = 1)
         {
+            int itemsPerPage = 5;
+
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var user = await this.userRepository
-                .AllAsNoTracking()
-                .Where(x => x.Id == userId)
-                .Include(x => x.City)
-                .FirstOrDefaultAsync();
-
-            var cities = await this.cityService
-                    .GetAllCitiesByCountryId<CityListModel>(user.CountryId)
-                    .OrderBy(x => x.Name)
-                    .ToListAsync();
-
             var myAuctions = await this.auctionService
-                .GetAuctionsByOwnerId<MyAuctionsViewModel>(user.Id)
+                .GetAuctionsByOwnerId<MyAuctionsViewModel>(id, userId, itemsPerPage)
                 .OrderBy(x => x.Status)
                 .ToListAsync();
 
-            var bids = await this.auctionService
-                .GetAllAuctions<Auction>()
-                .ToListAsync();
-
-            var bidsCount = bids
-                .SelectMany(x => x.Bids)
-                .Where(x => x.BidderId == userId)
-                .Count();
-
-            var model = new MyProfileViewModel()
+            var model = new MyAuctionsPaginatedViewModel()
             {
-                TotalBidsCount = bidsCount,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                CityName = user.City?.Name,
-                Username = user.UserName,
-                ProfileImageUrl = user.ProfileImageUrl,
-                Email = user.Email,
-                UpdateProfileInput = new UpdateProfileViewModel()
-                {
-                    Cities = cities,
-                },
-                MyAuctions = myAuctions,
+                ItemsCount = this.auctionService.MyAuctionsWithDeletedCount(userId),
+                ActiveAuctionsCount = this.auctionService.MyActiveAuctionsCount(userId),
+                PageNumber = id,
+                ItemsPerPage = itemsPerPage,
+                Auctions = myAuctions,
             };
 
             return this.View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> MyProfile()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var model = await this.GetMyModel(userId);
+
+            return this.View(model);
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Dashboard(MyProfileViewModel model)
+        public async Task<IActionResult> MyProfile(MyProfileViewModel model)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.View(model);
             }
 
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             try
             {
-                await this.userService.UpdateProfile(model, this.User.FindFirstValue(ClaimTypes.NameIdentifier));
+                await this.userService.UpdateProfile(model, userId);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
-                //TODO: display error
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                var viewModel = await this.GetMyModel(userId);
+                return this.View(viewModel);
             }
 
-            return this.RedirectToAction(nameof(this.Dashboard));
+            return this.RedirectToAction(nameof(this.MyProfile));
         }
 
         [HttpGet]
@@ -159,6 +148,36 @@
             }
 
             return this.RedirectToAction(nameof(this.SellerProfile), new { userId });
+        }
+
+        private async Task<MyProfileViewModel> GetMyModel(string userId)
+        {
+            var user = await this.userRepository
+                .AllAsNoTracking()
+                .Where(x => x.Id == userId)
+                .Include(x => x.City)
+                .FirstOrDefaultAsync();
+
+            var cities = await this.cityService
+                    .GetAllCitiesByCountryId<CityListModel>(user.CountryId)
+                    .OrderBy(x => x.Name)
+                    .ToListAsync();
+
+            var model = new MyProfileViewModel()
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                CityName = user.City?.Name,
+                Username = user.UserName,
+                ProfileImageUrl = user.ProfileImageUrl,
+                Email = user.Email,
+                UpdateProfileInput = new UpdateProfileViewModel()
+                {
+                    Cities = cities,
+                },
+            };
+
+            return model;
         }
     }
 }

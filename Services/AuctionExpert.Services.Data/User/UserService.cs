@@ -100,7 +100,7 @@
 
                 if (!result.Succeeded)
                 {
-                    throw new InvalidOperationException();
+                    throw new InvalidOperationException("Ivalid password! Please, try again.");
                 }
             }
 
