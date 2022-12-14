@@ -6,7 +6,7 @@
 
         public const string AdministratorRoleName = "Administrator";
 
-        public class RegisterConstraintsAndMessages
+        public class UserConstraintsAndMessages
         {
             public const int FirstNameMaxLenth = 20;
 
@@ -39,6 +39,8 @@
             public const string AgeMinMessage = "You cannot register until you are 18 years old!";
 
             public const string AgeMaxMessage = "Invalid age!";
+
+            public const string InvalidPhoneNumber = "The phone number you added is not valid";
         }
 
         public class AuctionConstraintsAndMessages

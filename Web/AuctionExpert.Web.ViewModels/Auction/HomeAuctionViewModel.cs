@@ -30,6 +30,8 @@
 
         public string SubCategoryName { get; set; }
 
+        public int ReviewsCount { get; set; }
+
         public decimal LastBid { get; set; }
 
         public DateTime ClosesIn { get; set; }

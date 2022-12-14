@@ -23,7 +23,7 @@
             const int itemsPerPage = 50;
 
             var countries = await this.countryService
-                .GetAllCountriesPaginated<AdminCountryListModel>(id, itemsPerPage)
+                .GetAllCountriesPaginated<CountryListModel>(id, itemsPerPage)
                 .ToListAsync();
 
             var model = new PaginatedCountryListModel()

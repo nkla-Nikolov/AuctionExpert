@@ -44,7 +44,7 @@
         public async Task CommentOnUser(string userId, string reviewerId, string comment)
         {
             var user = await this.userRepository
-                .AllAsNoTracking()
+                .All()
                 .FirstOrDefaultAsync(x => x.Id == userId);
 
             var reviewer = await this.userRepository
@@ -53,7 +53,7 @@
 
             if (user == null || reviewer == false)
             {
-                throw new NullReferenceException();
+                throw new ArgumentNullException();
             }
 
             user.Reviews.Add(new Review()
@@ -64,14 +64,13 @@
                 UserId = userId,
             });
 
-            this.userRepository.Update(user);
             await this.userRepository.SaveChangesAsync();
         }
 
         public async Task CommentOnAuction(int auctionId, string comment, string reviewerId)
         {
             var auction = await this.auctionRepository
-                .AllAsNoTracking()
+                .All()
                 .Where(x => x.Id == auctionId)
                 .FirstOrDefaultAsync();
 
@@ -92,7 +91,6 @@
                 AuctionId = auctionId,
             });
 
-            this.auctionRepository.Update(auction);
             await this.auctionRepository.SaveChangesAsync();
         }
     }

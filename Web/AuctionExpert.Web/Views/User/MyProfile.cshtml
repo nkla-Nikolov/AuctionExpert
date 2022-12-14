@@ -51,6 +51,7 @@
                             </div>
                             <div class="content">
                                 <h3>@Model.FirstName @Model.LastName</h3>
+                                <p class="para">Phone: @Model.PhoneNumber</p>
                                 <p class="para">Username: @Model.Username</p>
                                 <p class="para">Email: @Model.Email</p>
                                 <p class="para">City: @(Model.CityName == null ? "Please select a city" : Model.CityName)</p>
@@ -74,7 +75,14 @@
                                             <span asp-validation-for="@Model.UpdateProfileInput.LastName" class="text-danger"></span>
                                         </div>
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-xl-6 col-lg-12 col-md-6">
+                                        <div class="form-inner">
+                                            <label asp-for="@Model.UpdateProfileInput.PhoneNumber">Phone Number</label>
+                                            <input asp-for="@Model.UpdateProfileInput.PhoneNumber" type="text" placeholder="Your Phone Number">
+                                            <span asp-validation-for="@Model.UpdateProfileInput.PhoneNumber" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-12 col-md-6">
                                         <div class="form-inner">
                                             <label asp-for="@Model.UpdateProfileInput.Cities">City</label>
                                             <select asp-for="@Model.UpdateProfileInput.CityId">
@@ -117,8 +125,10 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="button-group">
-                                            <button asp-controller="User" asp-action="MyProfile" type="submit" class="eg-btn profile-btn">Update Profile</button>
-                                            <button class="eg-btn cancel-btn">Cancel</button>
+                                            <form asp-controller="User" asp-action="MyProfile" method="post">
+                                                <button type="submit" class="eg-btn profile-btn">Update Profile</button>
+                                            </form>
+                                            <a asp-controller="Home" asp-action="Index" class="eg-btn cancel-btn">Back to home</a>
                                         </div>
                                     </div>
                                 </div>

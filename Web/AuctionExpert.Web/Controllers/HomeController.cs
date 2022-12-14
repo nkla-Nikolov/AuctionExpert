@@ -28,6 +28,7 @@
         public async Task<IActionResult> Index()
         {
             var auctions = await this.auctionService.GetAllAuctions<HomeAuctionViewModel>()
+                .OrderByDescending(x => x.ReviewsCount)
                 .Take(6)
                 .ToListAsync();
 

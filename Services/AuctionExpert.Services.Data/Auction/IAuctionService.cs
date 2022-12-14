@@ -12,9 +12,9 @@
 
         Task DeleteAsync(int auctionId);
 
-        Task<T> GetAuctionById<T>(int auctionId);
+        Task<Auction> GetAuctionById(int auctionId);
 
-        Task PlaceBidAsync(int? currentBid, string userId, Auction auction);
+        Task PlaceBidAsync(int? currentBid, string userId, int auctionId);
 
         Task<DetailViewModel> GetDetailAuctionModelByIdAsync(int auctionId);
 
@@ -27,6 +27,10 @@
         IQueryable<T> GetAuctionsByOwnerId<T>(int page, string ownerId, int itemsPerPage);
 
         IQueryable<T> GetAllAuctionsByCategoryId<T>(int categoryId);
+
+        IQueryable<T> GetAllPaginatedAuctions<T>(int page, int itemsPerPage);
+
+        int AllAuctionsCount();
 
         int MyAuctionsWithDeletedCount(string ownerId);
 

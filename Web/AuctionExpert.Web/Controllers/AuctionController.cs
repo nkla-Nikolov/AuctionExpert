@@ -76,28 +76,25 @@
         public async Task<IActionResult> Details(DetailViewModel model)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var auction = await this.auctionService.GetAuctionById<Auction>(model.Id);
 
-            if (auction == null)
+            try
+            {
+                await this.auctionService.PlaceBidAsync(model.CurrentBid, userId, model.Id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                model = await this.auctionService.GetDetailAuctionModelByIdAsync(model.Id);
+
+                return this.View(model);
+            }
+            catch (ArgumentNullException)
             {
                 this.Response.StatusCode = 404;
                 return this.View("NotFound404");
             }
 
-            await this.auctionService.PlaceBidAsync(model.CurrentBid, userId, auction);
-            //try
-            //{
-            //    await this.auctionService.PlaceBidAsync(model.CurrentBid, userId, auction);
-            //}
-            //catch (InvalidOperationException ex)
-            //{
-            //    this.ModelState.AddModelError(string.Empty, ex.Message);
-            //    model = await this.auctionService.GetDetailAuctionModelByIdAsync(auction.Id);
-
-            //    return this.View(model);
-            //}
-
-            return this.RedirectToAction(nameof(this.Details), new { auctionId = auction.Id });
+            return this.RedirectToAction(nameof(this.Details), new { auctionId = model.Id });
         }
 
         [HttpGet]
@@ -154,7 +151,7 @@
         [HttpGet]
         public async Task<IActionResult> Edit(int auctionId)
         {
-            var auction = await this.auctionService.GetAuctionById<Auction>(auctionId);
+            var auction = await this.auctionService.GetAuctionById(auctionId);
 
             if (auction == null)
             {
@@ -183,7 +180,6 @@
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int auctionId, EditAuctionInputModel model)
         {
             if (!this.ModelState.IsValid)

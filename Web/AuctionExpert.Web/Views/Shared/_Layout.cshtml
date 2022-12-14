@@ -90,6 +90,7 @@
                         <a>Admin Dashboard</a><i class='bx bx-plus dropdown-icon'></i>
                         <ul class="submenu">
                             <li><a asp-area="Administration" asp-controller="Users" asp-action="All">Users Administration</a></li>
+                            <li><a asp-area="Administration" asp-controller="Auctions" asp-action="All">Auctions Administration</a></li>
                             <li><a asp-area="Administration" asp-controller="Countries" asp-action="All">Countries Administration</a></li>
                         </ul>
                     </li>
@@ -108,7 +109,7 @@
         {
             <div class="nav-right d-flex align-items-center">
                 <div class="eg-btn btn--primary header-btn">
-                    <a asp-area="" asp-controller="User" asp-action="Dashboard">Hello, @this.User.Identity.Name</a>
+                    <a asp-area="" asp-controller="User" asp-action="MyAuctions">Hello, @this.User.Identity.Name</a>
                 </div>
             </div>
         }
@@ -175,11 +176,11 @@
                     <div class="col-lg-6 d-flex justify-content-lg-end justify-content-center align-items-center flex-sm-nowrap flex-wrap">
                         <p class="d-sm-flex d-none">We Accepts:</p>
                         <ul class="footer-logo-list">
-                            <li><a href="#"><img src="~/assets/images/bg/footer-pay1.png" alt=""></a></li>
-                            <li><a href="#"><img src="~/assets/images/bg/footer-pay2.png" alt=""></a></li>
-                            <li><a href="#"><img src="~/assets/images/bg/footer-pay3.png" alt=""></a></li>
-                            <li><a href="#"><img src="~/assets/images/bg/footer-pay4.png" alt=""></a></li>
-                            <li><a href="#"><img src="~/assets/images/bg/footer-pay5.png" alt=""></a></li>
+                            <li><a><img src="~/assets/images/bg/footer-pay1.png" alt=""></a></li>
+                            <li><a><img src="~/assets/images/bg/footer-pay2.png" alt=""></a></li>
+                            <li><a><img src="~/assets/images/bg/footer-pay3.png" alt=""></a></li>
+                            <li><a><img src="~/assets/images/bg/footer-pay4.png" alt=""></a></li>
+                            <li><a><img src="~/assets/images/bg/footer-pay5.png" alt=""></a></li>
                         </ul>
                     </div>
                 </div>

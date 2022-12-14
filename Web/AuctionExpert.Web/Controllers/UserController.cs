@@ -125,7 +125,8 @@
                 Address = user.CityId == null ? $"{user.Country.Name}" : $"{user.City.Name}, {user.Country.Name}",
                 Email = user.Email,
                 FullName = $"{user.FirstName} {user.LastName}",
-                PhoneNumber = user.PhoneNumber,
+                PhoneNumber = user.PhoneNumber ?? "No Phone Number",
+                AvatarUrl = user.ProfileImageUrl,
                 Comments = comments,
             };
 
@@ -141,7 +142,7 @@
             {
                 await this.reviewService.CommentOnUser(userId, reviewerId, sellerProfile.Comment);
             }
-            catch (NullReferenceException)
+            catch (ArgumentNullException)
             {
                 this.Response.StatusCode = 404;
                 return this.View("NotFound404");
@@ -169,6 +170,7 @@
                 LastName = user.LastName,
                 CityName = user.City?.Name,
                 Username = user.UserName,
+                PhoneNumber = user.PhoneNumber ?? "No Phone added",
                 ProfileImageUrl = user.ProfileImageUrl,
                 Email = user.Email,
                 UpdateProfileInput = new UpdateProfileViewModel()

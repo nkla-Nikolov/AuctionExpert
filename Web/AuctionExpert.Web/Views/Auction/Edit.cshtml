@@ -1,6 +1,22 @@
 ﻿@using AuctionExpert.Web.ViewModels.Auction;
 @model EditAuctionInputModel
 
+@{
+    this.ViewData["Title"] = "Edit Auction";
+}
+
+<div class="inner-banner">
+    <div class="container">
+        <h2 class="inner-banner-title  wow fadeInLeft" data-wow-duration="1.5s" data-wow-delay=".4s">Edit Auction</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit Auction</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
 <div class="container">
     <div class="row d-flex justify-content-center">
         <div class="col-xl-6 col-lg-8 col-md-10">

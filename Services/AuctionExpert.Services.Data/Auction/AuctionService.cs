@@ -43,13 +43,11 @@
                 .To<T>();
         }
 
-        public async Task<T> GetAuctionById<T>(int auctionId)
+        public async Task<Auction> GetAuctionById(int auctionId)
         {
             return await this.auctionRepository
-                .AllAsNoTracking()
-                .Where(x => x.Id == auctionId)
-                .To<T>()
-                .FirstOrDefaultAsync();
+                .All()
+                .FirstOrDefaultAsync(x => x.Id == auctionId);
         }
 
         public IQueryable<T> GetAuctionsByOwnerId<T>(int page, string ownerId, int itemsPerPage)
@@ -78,9 +76,18 @@
                 .To<T>();
         }
 
+        public IQueryable<T> GetAllPaginatedAuctions<T>(int page, int itemsPerPage)
+        {
+            return this.auctionRepository
+                .AllAsNoTracking()
+                .Skip((page - 1) * itemsPerPage)
+                .Take(itemsPerPage)
+                .To<T>();
+        }
+
         public async Task DeleteAsync(int auctionId)
         {
-            var auction = await this.GetAuctionById<Auction>(auctionId);
+            var auction = await this.GetAuctionById(auctionId);
 
             if (auction == null)
             {
@@ -155,8 +162,15 @@
                 .FirstOrDefaultAsync();
         }
 
-        public async Task PlaceBidAsync(int? currentBid, string userId, Auction auction)
+        public async Task PlaceBidAsync(int? currentBid, string userId, int auctionId)
         {
+            var auction = await this.GetAuctionById(auctionId);
+
+            if (auction == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             var lastBid = await this.bidService.GetLastHighestBid(auction.Id);
 
             if (currentBid == null)
@@ -177,19 +191,16 @@
                 TimePlaced = DateTime.UtcNow,
             });
 
-            this.auctionRepository.Update(auction);
             await this.auctionRepository.SaveChangesAsync();
         }
 
         public async Task EditAuction(int auctionId, EditAuctionInputModel model)
         {
-            var auction = await this.auctionRepository
-                .All()
-                .FirstOrDefaultAsync(x => x.Id == auctionId);
+            var auction = await this.GetAuctionById(auctionId);
 
             if (auction == null)
             {
-                throw new NullReferenceException();
+                throw new ArgumentNullException();
             }
 
             var images = await this.imageService.UploadImages(model.Images);
@@ -204,7 +215,6 @@
             auction.Title = model.Title;
             auction.Images = images.ToList();
 
-            this.auctionRepository.Update(auction);
             await this.auctionRepository.SaveChangesAsync();
         }
 
@@ -221,6 +231,13 @@
             return this.auctionRepository
                 .AllAsNoTracking()
                 .Where(x => x.OwnerId == ownerId)
+                .Count();
+        }
+
+        public int AllAuctionsCount()
+        {
+            return this.auctionRepository
+                .AllAsNoTracking()
                 .Count();
         }
     }

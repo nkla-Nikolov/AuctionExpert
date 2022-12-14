@@ -24,7 +24,7 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.Logging;
 
-    using static AuctionExpert.Common.GlobalConstants.RegisterConstraintsAndMessages;
+    using static AuctionExpert.Common.GlobalConstants.UserConstraintsAndMessages;
 
     public class RegisterModel : PageModel
     {

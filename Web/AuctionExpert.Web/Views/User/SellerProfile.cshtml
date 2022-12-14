@@ -17,7 +17,7 @@
                     <div class="card-body text-center">
                         @if (Model.AvatarUrl == null)
                         {
-                            <img src="https://media.istockphoto.com/id/1016744004/vector/profile-placeholder-image-gray-silhouette-no-photo.jpg?s=612x612&w=0&k=20&c=mB6A9idhtEtsFXphs1WVwW_iPBt37S2kJp6VpPhFeoA="
+                            <img src="~/assets/images/bg/NoProfilePicture.png"
                              class="rounded-circle img-fluid" style="width: 150px;">
                         }
                         else
@@ -26,10 +26,10 @@
                         }
                         <h5 class="my-3">@Model.FullName</h5>
                         <p class="text-muted mb-4">@Model.Address</p>
-                        <div class="d-flex justify-content-center mb-2">
+                        @*<div class="d-flex justify-content-center mb-2">
                             <button type="button" class="btn btn-primary">Follow</button>
                             <button type="button" class="btn btn-outline-primary ms-1">Message</button>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
             </div>
@@ -103,8 +103,14 @@
                                 <div class="testimonial-single hover-border3 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
                                     <img alt="image" src="~/assets/images/icons/quote-green2.svg" class="quote-icon">
                                     <div class="testi-img">
-                                        @*TODO: USER PROFILE PICTURE*@
-                                        <img alt="image" src="~/assets/images/bg/testi1.png">
+                                        @if (review.ReviewerProfileImage != null)
+                                        {
+                                            <img alt="image" src="@review.ReviewerProfileImage">
+                                        }
+                                        else
+                                        {
+                                            <img alt="image" src="~/assets/images/bg/NoProfilePicture.png">
+                                        }
                                     </div>
                                     <div class="testi-content">
                                         <p class="para">
@@ -133,35 +139,37 @@
         </div>
     </div>
 </div>
-
-<div class="blog-details-section pt-120 pb-120">
-    <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-top">
-    <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-bottom">
-    <div class="container">
-        <div class="row gy-5">
-            <div class="col-lg-8">
-                <div class="blog-details-single">
-                    <div class="comment-form">
-                        <div class="blog-widget-title style2">
-                            <h4>Leave A Comment</h4>
-                            <span></span>
-                        </div>
-                        <form method="post" asp-controller="User" asp-action="SellerProfile" asp-route-userId="@Model.Id">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-inner">
-                                        <div asp-validation-summary="All"></div>
-                                        <textarea asp-for="Comment" placeholder="Write Message :" rows="10"></textarea>
+@if (this.User.Identity.IsAuthenticated)
+{
+    <div class="blog-details-section pt-120 pb-120">
+        <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-top">
+        <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-bottom">
+        <div class="container">
+            <div class="row gy-5">
+                <div class="col-lg-8">
+                    <div class="blog-details-single">
+                        <div class="comment-form">
+                            <div class="blog-widget-title style2">
+                                <h4>Leave A Comment</h4>
+                                <span></span>
+                            </div>
+                            <form method="post" asp-controller="User" asp-action="SellerProfile" asp-route-userId="@Model.Id">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-inner">
+                                            <div asp-validation-summary="All"></div>
+                                            <textarea asp-for="Comment" placeholder="Write Message :" rows="10"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="eg-btn btn--primary btn--md form--btn">Submit Now</button>
                                     </div>
                                 </div>
-                                <div class="col-12">
-                                    <button type="submit" class="eg-btn btn--primary btn--md form--btn">Submit Now</button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+}

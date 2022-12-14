@@ -6,7 +6,7 @@
     using AuctionExpert.Web.ViewModels.City;
     using Microsoft.AspNetCore.Http;
 
-    using static AuctionExpert.Common.GlobalConstants.RegisterConstraintsAndMessages;
+    using static AuctionExpert.Common.GlobalConstants.UserConstraintsAndMessages;
 
     public class UpdateProfileViewModel
     {
@@ -15,6 +15,7 @@
             this.Cities = new HashSet<CityListModel>();
         }
 
+        [Phone(ErrorMessage = InvalidPhoneNumber)]
         public string PhoneNumber { get; set; }
 
         public IFormFile Image { get; set; }
