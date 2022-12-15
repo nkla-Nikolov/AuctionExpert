@@ -6,11 +6,11 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using AuctionExpert.Common;
     using AuctionExpert.Data.Models;
     using Newtonsoft.Json;
 
-    using static AuctionExpert.Common.GlobalConstants;
-    using static AuctionExpert.Common.GlobalConstants.FilePaths;
+    using static AuctionExpert.Common.FilePaths;
 
     public class CountriesWithCitiesSeeder : ISeeder
     {
@@ -25,7 +25,7 @@
                 DirectoryUp,
                 DirectoryUp,
                 DirectoryUp,
-                SystemName,
+                GlobalConstants.SystemName,
                 DataFolder,
                 SystemNameData,
                 FilesFolder,

@@ -7,7 +7,7 @@
     using AuctionExpert.Web.ViewModels.Category;
     using Microsoft.AspNetCore.Http;
 
-    using static AuctionExpert.Common.GlobalConstants.AuctionConstraintsAndMessages;
+    using static AuctionExpert.Common.AuctionConstraintsAndMessages;
 
     public class EditAuctionInputModel
     {

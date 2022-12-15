@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 namespace AuctionExpert.Web.Areas.Identity.Pages.Account
 {
-    using System;
 #nullable disable
-
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
@@ -12,19 +11,18 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
+    using AuctionExpert.Common;
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Data.Country;
+    using AuctionExpert.Services.Messaging;
     using AuctionExpert.Web.ViewModels.Country;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.Logging;
-
-    using static AuctionExpert.Common.GlobalConstants.UserConstraintsAndMessages;
 
     public class RegisterModel : PageModel
     {
@@ -64,17 +62,26 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [StringLength(FirstNameMaxLenth, ErrorMessage = RangeMessage, MinimumLength = FirstNameMinLength)]
+            [StringLength(
+                UserConstraintsAndMessages.FirstNameMaxLenth,
+                ErrorMessage = UserConstraintsAndMessages.RangeMessage,
+                MinimumLength = UserConstraintsAndMessages.FirstNameMinLength)]
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
             [Required]
-            [StringLength(LastNameMaxLenth, ErrorMessage = RangeMessage, MinimumLength = LastNameMinLenth)]
+            [StringLength(
+                UserConstraintsAndMessages.LastNameMaxLenth,
+                ErrorMessage = UserConstraintsAndMessages.RangeMessage,
+                MinimumLength = UserConstraintsAndMessages.LastNameMinLenth)]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
             [Required]
-            [StringLength(UsernameMaxLength, ErrorMessage = RangeMessage, MinimumLength = UsernameMinLength)]
+            [StringLength(
+                UserConstraintsAndMessages.UsernameMaxLength,
+                ErrorMessage = UserConstraintsAndMessages.RangeMessage,
+                MinimumLength = UserConstraintsAndMessages.UsernameMinLength)]
             [Display(Name = "Username")]
             public string Username { get; set; }
 
@@ -84,19 +91,26 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [StringLength(PasswordMaxLength, ErrorMessage = RangeMessage, MinimumLength = PasswordMinLength)]
+            [StringLength(
+                UserConstraintsAndMessages.PasswordMaxLength,
+                ErrorMessage = UserConstraintsAndMessages.RangeMessage,
+                MinimumLength = UserConstraintsAndMessages.PasswordMinLength)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
             [Required]
-            [Compare(nameof(Password), ErrorMessage = PasswordDoesNotMatchMessage)]
+            [Compare(
+                nameof(Password),
+                ErrorMessage = UserConstraintsAndMessages.PasswordDoesNotMatchMessage)]
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             public string ConfirmPassword { get; set; }
 
             [Required]
-            [Range(AgeMinLength, AgeMaxLength)]
+            [Range(
+                UserConstraintsAndMessages.AgeMinLength,
+                UserConstraintsAndMessages.AgeMaxLength)]
             public int Age { get; set; }
 
             [Required]
@@ -117,60 +131,53 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
 
             if (this.ModelState.IsValid)
             {
-                bool emailExist = this.userRepository
-                    .AllAsNoTracking()
-                    .Any(x => x.NormalizedEmail == this.Input.Email.ToUpper());
-
-                if (emailExist)
+                var user = new ApplicationUser()
                 {
-                    this.ModelState.AddModelError(string.Empty, EmailTaken);
+                    FirstName = this.Input.FirstName,
+                    LastName = this.Input.LastName,
+                    UserName = this.Input.Username,
+                    CountryId = this.Input.CountryId,
+                    Email = this.Input.Email,
+                    Age = this.Input.Age,
+                };
+
+                var result = await this.userManager.CreateAsync(user, this.Input.Password);
+
+                if (result.Succeeded)
+                {
+                    this.logger.LogInformation("User created a new account with password.");
+
+                    var userId = await this.userManager.GetUserIdAsync(user);
+                    var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    var callbackUrl = this.Url.Page(
+                        "/Account/ConfirmEmail",
+                        pageHandler: null,
+                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                        protocol: this.Request.Scheme);
+
+                    await this.emailSender.SendEmailAsync(
+                        GlobalConstants.AppEmail,
+                        GlobalConstants.SystemName,
+                        this.Input.Email,
+                        "Confirm your email",
+                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                    if (this.userManager.Options.SignIn.RequireConfirmedAccount)
+                    {
+                        return this.RedirectToPage("RegisterConfirmation", new { email = this.Input.Email, returnUrl = returnUrl });
+                    }
+                    else
+                    {
+                        await this.signInManager.SignInAsync(user, isPersistent: false);
+                        return this.LocalRedirect(returnUrl);
+                    }
                 }
-                else
+
+                foreach (var error in result.Errors)
                 {
-                    var user = new ApplicationUser()
-                    {
-                        FirstName = this.Input.FirstName,
-                        LastName = this.Input.LastName,
-                        UserName = this.Input.Username,
-                        CountryId = this.Input.CountryId,
-                        Email = this.Input.Email,
-                        Age = this.Input.Age,
-                    };
-
-                    var result = await this.userManager.CreateAsync(user, this.Input.Password);
-
-                    if (result.Succeeded)
-                    {
-                        this.logger.LogInformation("User created a new account with password.");
-
-                        var userId = await this.userManager.GetUserIdAsync(user);
-                        var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
-
-                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                        var callbackUrl = this.Url.Page(
-                            "/Account/ConfirmEmail",
-                            pageHandler: null,
-                            values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                            protocol: this.Request.Scheme);
-
-                        await this.emailSender.SendEmailAsync(this.Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                        if (this.userManager.Options.SignIn.RequireConfirmedAccount)
-                        {
-                            return this.RedirectToPage("RegisterConfirmation", new { email = this.Input.Email, returnUrl = returnUrl });
-                        }
-                        else
-                        {
-                            await this.signInManager.SignInAsync(user, isPersistent: false);
-                            return this.LocalRedirect(returnUrl);
-                        }
-                    }
-
-                    foreach (var error in result.Errors)
-                    {
-                        this.ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    this.ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 

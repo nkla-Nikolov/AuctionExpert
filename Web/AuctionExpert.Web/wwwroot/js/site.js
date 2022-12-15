@@ -19,8 +19,13 @@ function getTimers() {
 }
 
 function deleteAuction(id) {
+    var antiForgeryToken = document.querySelector('#antiForgeryForm input').value;
+    console.log(antiForgeryToken)
     fetch(`/api/ApiAuction/?id=${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': antiForgeryToken
+        }
     })
         .then(response => {
             if (!response.ok) {
@@ -62,11 +67,9 @@ function countDown() {
         let minutes = Math.floor((difference % hour) / minute)
         let seconds = Math.floor((difference % minute) / second)
 
-        //TODO: send email when time gets in last 5 min
-        //TODO: add 3 minutes to auction end time if a bid is placed last 5 mins
-        if (days < 1 && hours < 1 && minutes < 6) {
+        if (days < 1 && hours < 24 && minutes < 59) {
             let id = document.querySelector(`#timer${i}`).getAttribute('data-auctionId');
-            console.log(id);
+
             deleteAuction(id);
         }
 

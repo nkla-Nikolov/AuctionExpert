@@ -15,7 +15,7 @@
     using AuctionExpert.Web.ViewModels.Review;
     using Microsoft.EntityFrameworkCore;
 
-    using static AuctionExpert.Common.GlobalConstants.AuctionConstraintsAndMessages;
+    using static AuctionExpert.Common.AuctionConstraintsAndMessages;
 
     public class AuctionService : IAuctionService
     {
@@ -184,6 +184,13 @@
                 currentBid < lastBid + auction.StepAmount)
             {
                 throw new InvalidOperationException(LowerInputBid);
+            }
+
+            var timeOffset = DateTime.UtcNow - auction.ClosesIn;
+
+            if (timeOffset.Minutes < 6)
+            {
+                auction.ClosesIn.AddMinutes(3);
             }
 
             auction.Bids.Add(new Bid()

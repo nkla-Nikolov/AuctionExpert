@@ -48,6 +48,7 @@ namespace AuctionExpert.Web
             var cloudinaryName = configuration.GetValue<string>("Cloudinary:CloudName");
             var apiKey = configuration.GetValue<string>("Cloudinary:ApiKey");
             var apiSecret = configuration.GetValue<string>("Cloudinary:ApiSecret");
+            var sendGridApiKey = configuration.GetValue<string>("SendGridApiKey");
 
             if (new[] { cloudinaryName, apiKey, apiSecret }.Any(string.IsNullOrWhiteSpace))
             {
@@ -77,6 +78,10 @@ namespace AuctionExpert.Web
                 }).AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "X-CSRF-TOKEN";
+            });
 
             services.AddSingleton(configuration);
             services.AddSingleton(cloudinary);
@@ -87,7 +92,7 @@ namespace AuctionExpert.Web
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
+            services.AddTransient<IEmailSender>(x => new SendGridEmailSender(sendGridApiKey));
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ICountryService, CountryService>();
             services.AddTransient<ICityService, CityService>();

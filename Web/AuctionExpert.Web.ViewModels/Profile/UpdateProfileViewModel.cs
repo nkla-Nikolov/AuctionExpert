@@ -6,7 +6,7 @@
     using AuctionExpert.Web.ViewModels.City;
     using Microsoft.AspNetCore.Http;
 
-    using static AuctionExpert.Common.GlobalConstants.UserConstraintsAndMessages;
+    using static AuctionExpert.Common.UserConstraintsAndMessages;
 
     public class UpdateProfileViewModel
     {

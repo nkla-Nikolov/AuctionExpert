@@ -21,7 +21,6 @@
         }
 
         [HttpDelete]
-        [IgnoreAntiforgeryToken]
         public async Task Delete(int id)
         {
             await this.auctionService.DeleteAsync(id);

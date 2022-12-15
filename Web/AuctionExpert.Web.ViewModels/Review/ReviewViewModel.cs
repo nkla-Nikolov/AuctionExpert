@@ -7,7 +7,7 @@
     using AuctionExpert.Services.Mapping;
     using AutoMapper;
 
-    using static AuctionExpert.Common.GlobalConstants.ReviewMessagesAndConstraints;
+    using static AuctionExpert.Common.ReviewMessagesAndConstraints;
 
     public class ReviewViewModel : IMapFrom<Review>, IHaveCustomMappings
     {
