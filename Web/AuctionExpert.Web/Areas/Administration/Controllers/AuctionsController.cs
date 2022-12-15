@@ -1,5 +1,6 @@
 ﻿namespace AuctionExpert.Web.Areas.Administration.Controllers
 {
+    using System;
     using System.Threading.Tasks;
 
     using AuctionExpert.Services.Data.Auction;
@@ -38,6 +39,16 @@
         [HttpPost]
         public async Task<IActionResult> Delete(int auctionId)
         {
+            try
+            {
+                await this.auctionService.DeleteAsync(auctionId);
+            }
+            catch (ArgumentNullException)
+            {
+                this.Response.StatusCode = 404;
+                return this.View("NotFound404");
+            }
+
             return this.RedirectToAction(nameof(this.All), new { id = 1 });
         }
     }

@@ -60,11 +60,13 @@
                 .To<T>();
         }
 
-        public IQueryable<T> GetAllAuctionsByCategoryId<T>(int categoryId)
+        public IQueryable<T> GetAllAuctionsByCategoryId<T>(int page, int itemsPerPage, int categoryId)
         {
             return this.auctionRepository
                 .AllAsNoTracking()
                 .Where(x => x.SubCategory.CategoryId == categoryId)
+                .Skip((page - 1) * itemsPerPage)
+                .Take(itemsPerPage)
                 .To<T>();
         }
 
@@ -238,6 +240,14 @@
         {
             return this.auctionRepository
                 .AllAsNoTracking()
+                .Count();
+        }
+
+        public int AllAuctionsInCategoryCount(int categoryId)
+        {
+            return this.auctionRepository
+                .AllAsNoTracking()
+                .Where(x => x.CategoryId == categoryId)
                 .Count();
         }
     }

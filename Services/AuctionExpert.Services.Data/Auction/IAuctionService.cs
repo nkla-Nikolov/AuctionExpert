@@ -26,11 +26,13 @@
 
         IQueryable<T> GetAuctionsByOwnerId<T>(int page, string ownerId, int itemsPerPage);
 
-        IQueryable<T> GetAllAuctionsByCategoryId<T>(int categoryId);
+        IQueryable<T> GetAllAuctionsByCategoryId<T>(int page, int itemsPerPage, int categoryId);
 
         IQueryable<T> GetAllPaginatedAuctions<T>(int page, int itemsPerPage);
 
         int AllAuctionsCount();
+
+        int AllAuctionsInCategoryCount(int categoryId);
 
         int MyAuctionsWithDeletedCount(string ownerId);
 

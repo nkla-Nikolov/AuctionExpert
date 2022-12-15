@@ -99,7 +99,7 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Browse(int categoryId)
+        public async Task<IActionResult> Browse(int categoryId, int id = 1)
         {
             if (!await this.categoryService.Exist(categoryId))
             {
@@ -107,11 +107,22 @@
                 return this.View("NotFound404");
             }
 
+            int itemsPerPage = 2;
+
             var auctions = await this.auctionService
-                .GetAllAuctionsByCategoryId<HomeAuctionViewModel>(categoryId)
+                .GetAllAuctionsByCategoryId<HomeAuctionViewModel>(id, itemsPerPage, categoryId)
                 .ToListAsync();
 
-            return this.View(auctions);
+            var model = new PaginatedHomeAuctionViewModel()
+            {
+                Auctions = auctions,
+                ItemsPerPage = itemsPerPage,
+                PageNumber = id,
+                CategoryId = categoryId,
+                ItemsCount = this.auctionService.AllAuctionsInCategoryCount(categoryId),
+            };
+
+            return this.View(model);
         }
 
         [HttpPost]
@@ -152,11 +163,17 @@
         public async Task<IActionResult> Edit(int auctionId)
         {
             var auction = await this.auctionService.GetAuctionById(auctionId);
+            var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (auction == null)
             {
                 this.Response.StatusCode = 404;
                 return this.View("NotFound404");
+            }
+
+            if (currentUserId != auction.OwnerId)
+            {
+                return this.Unauthorized();
             }
 
             var categories = await this.categoryService

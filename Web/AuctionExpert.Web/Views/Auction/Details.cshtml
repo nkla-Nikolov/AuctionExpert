@@ -44,9 +44,9 @@
             <div class="col-xl-6 col-lg-5">
                 <div class="product-details-right  wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
                     <h3>@Model.Title</h3>
-                    @if (Model.Description.Length > 20)
+                    @if (Model.Description.Length > 30)
                     {
-                        <p class="para">@Model.Description.Substring(0, 20)...</p>
+                        <p class="para">@Model.Description.Substring(0, 30)...</p>
                     }
                     else
                     {
@@ -169,7 +169,7 @@
                 <div class="blog-details-single">
                     @if (Model.Comments.Count() > 0)
                     {
-                        <div class="blog-comment">
+                        <div class="blog-comment pb-80">
                             <div class="blog-widget-title">
                                 <h4>Comments (@Model.Comments.Count())</h4>
                                 <span></span>
@@ -199,6 +199,35 @@
                                     </li>
                                 }
                             </ul>
+                        </div>
+                        <div class="table-pagination justify-content-center">
+                            <nav class="pagination-wrap">
+                                <ul class="pagination style-one d-flex gap-md-3 gap-2">
+                                    <li class="page-item @if(!Model.HasPreviousPage) { <text>disabled</text> }">
+                                            <a class="page-link" asp-action="All" asp-route-id="@Model.PreviousPageNumber">Prev</a>
+                                        </li>
+                                    @for (int i = Model.PageNumber - 2; i < Model.PageNumber; i++)
+                                    {
+                                        if (i > 0)
+                                        {
+                                            <a class="page-link" asp-action="All" asp-route-id="@i">@i</a>
+                                        }
+                                    }
+                                    <li class="page-item active" aria-current="page">
+                                        <a class="page-link">@Model.PageNumber</a>
+                                    </li>
+                                    @for (int i = Model.PageNumber + 1; i <= Model.PageNumber + 2; i++)
+                                    {
+                                        if (i <= Model.PagesCount)
+                                        {
+                                            <a class="page-link" asp-action="All" asp-route-id="@i">@i</a>
+                                        }
+                                    }
+                                    <li class="page-item @if(!Model.HasNextPage) { <text>disabled</text> }">
+                                            <a class="page-link" asp-action="All" asp-route-id="@Model.NextPageNumber">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
                     }
                     <div class="comment-form">

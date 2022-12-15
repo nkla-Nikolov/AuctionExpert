@@ -37,20 +37,17 @@
                                         <button asp-area="Administration"
                                             asp-controller="Auctions"
                                             asp-action="Delete"
-                                            asp-route-countryId="@auction.Id" class="eg-btn action-btn text-danger">
+                                            asp-route-auctionId="@auction.Id" class="eg-btn action-btn text-danger">
                                             Delete
                                         </button>
                                     </form>
                                 </td>
                                 <td data-label="Edit">
-                                    <form method="post">
-                                        <button asp-area="Administration"
-                                            asp-controller="Auctions"
-                                            asp-action="Edit"
-                                            asp-route-userId="@auction.Id" class="eg-btn action-btn text-warning">
-                                            Edit
-                                        </button>
-                                    </form>
+                                    <a asp-area="" 
+                                    asp-controller="Auction" 
+                                    asp-action="Edit"
+                                   asp-route-auctionId="@auction.Id" 
+                                   class="text-warning">Edit</a>
                                 </td>
                             </tr>
                         }
