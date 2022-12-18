@@ -64,7 +64,7 @@
         {
             return this.auctionRepository
                 .AllAsNoTracking()
-                .Where(x => x.SubCategory.CategoryId == categoryId)
+                .Where(x => x.CategoryId == categoryId)
                 .Skip((page - 1) * itemsPerPage)
                 .Take(itemsPerPage)
                 .To<T>();

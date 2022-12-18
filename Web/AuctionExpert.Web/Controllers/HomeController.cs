@@ -1,11 +1,9 @@
 ﻿namespace AuctionExpert.Web.Controllers
 {
-    using System;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
 
-    using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Data.Auction;
     using AuctionExpert.Web.ViewModels;
     using AuctionExpert.Web.ViewModels.Auction;
