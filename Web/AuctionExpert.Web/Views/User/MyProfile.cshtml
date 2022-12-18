@@ -1,0 +1,142 @@
+﻿@using AuctionExpert.Web.ViewModels.Profile;
+@model MyProfileViewModel
+
+@{
+    this.ViewData["Title"] = "My Profile";
+}
+
+<div class="inner-banner">
+    <div class="container">
+        <h2 class="inner-banner-title wow fadeInLeft" data-wow-duration="1.5s" data-wow-delay=".2s">My Profile</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">My Profile</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="dashboard-section pt-120 pb-120">
+    <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-top">
+    <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-bottom">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3">
+                <div class="nav flex-column nav-pills gap-4 wow fadeInUp" data-wow-duration="1.5s" data-wow-delay=".2s">
+                    <a asp-controller="User" asp-action="MyAuctions" class="nav-link nav-btn-style mx-auto mb-20">
+                        My Auctions
+                    </a>
+                    <a asp-controller="User" asp-action="MyProfile" class="nav-link nav-btn-style mx-auto mb-20">
+                        My Profile
+                    </a>
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })" method="post">
+                        <button class="nav-link nav-btn-style mx-auto" type="submit" role="tab">Logout</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="tab-content wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
+                    <div class="dashboard-profile">
+                        <div class="owner">
+                            <div class="image">
+                                @if (Model.ProfileImageUrl != null)
+                                {
+                                    <img alt="image" src="@Model.ProfileImageUrl">
+                                }
+                                else
+                                {
+                                    <img alt="image" src="~/assets/images/bg/NoProfilePicture.png">
+                                }
+                            </div>
+                            <div class="content">
+                                <h3>@Model.FirstName @Model.LastName</h3>
+                                <p class="para">Phone: @Model.PhoneNumber</p>
+                                <p class="para">Username: @Model.Username</p>
+                                <p class="para">Email: @Model.Email</p>
+                                <p class="para">City: @(Model.CityName == null ? "Please select a city" : Model.CityName)</p>
+                            </div>
+                        </div>
+                        <div class="form-wrapper">
+                            <form method="post" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="col-xl-6 col-lg-12 col-md-6">
+                                        <div class="form-inner">
+                                            <label asp-for="@Model.UpdateProfileInput.FirstName">Frist Name</label>
+                                            <input asp-for="@Model.UpdateProfileInput.FirstName" type="text" placeholder="Your First Name">
+                                            <span asp-validation-for="@Model.UpdateProfileInput.FirstName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-12 col-md-6">
+                                        <div class="form-inner">
+                                            <label asp-for="@Model.UpdateProfileInput.LastName">Last Name</label>
+                                            <input asp-for="@Model.UpdateProfileInput.LastName" type="text" placeholder="Your Last Name">
+                                            <span asp-validation-for="@Model.UpdateProfileInput.LastName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-12 col-md-6">
+                                        <div class="form-inner">
+                                            <label asp-for="@Model.UpdateProfileInput.PhoneNumber">Phone Number</label>
+                                            <input asp-for="@Model.UpdateProfileInput.PhoneNumber" type="text" placeholder="Your Phone Number">
+                                            <span asp-validation-for="@Model.UpdateProfileInput.PhoneNumber" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-12 col-md-6">
+                                        <div class="form-inner">
+                                            <label asp-for="@Model.UpdateProfileInput.Cities">City</label>
+                                            <select asp-for="@Model.UpdateProfileInput.CityId">
+                                                @foreach (var city in Model.UpdateProfileInput.Cities)
+                                                {
+                                                    <option value="@city.Id">@city.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-inner">
+                                            <label asp-for="@Model.UpdateProfileInput.Image">Upload Profile Image</label>
+                                            <input asp-for="@Model.UpdateProfileInput.Image" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-inner">
+                                            <label asp-for="@Model.UpdateProfileInput.OldPassword">Old Password</label>
+                                            <input asp-for="@Model.UpdateProfileInput.OldPassword" id="password" placeholder="Enter your old password" />
+                                            <i class="bi bi-eye-slash" id="togglePassword"></i>
+                                            <span asp-validation-for="@Model.UpdateProfileInput.OldPassword" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-inner">
+                                            <label asp-for="@Model.UpdateProfileInput.Password">Password</label>
+                                            <input asp-for="@Model.UpdateProfileInput.Password" type="password" id="password" placeholder="Create A Password" />
+                                            <i class="bi bi-eye-slash" id="togglePassword"></i>
+                                            <span asp-validation-for="@Model.UpdateProfileInput.Password" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-inner mb-0">
+                                            <label asp-for="@Model.UpdateProfileInput.ConfirmPassword">Confirm Password</label>
+                                            <input asp-for="@Model.UpdateProfileInput.ConfirmPassword" type="password" id="password2" placeholder="Create A Password" />
+                                            <i class="bi bi-eye-slash" id="togglePassword2"></i>
+                                            <span asp-validation-for="@Model.UpdateProfileInput.ConfirmPassword" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="button-group">
+                                            <form asp-controller="User" asp-action="MyProfile" method="post">
+                                                <button type="submit" class="eg-btn profile-btn">Update Profile</button>
+                                            </form>
+                                            <a asp-controller="Home" asp-action="Index" class="eg-btn cancel-btn">Back to home</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

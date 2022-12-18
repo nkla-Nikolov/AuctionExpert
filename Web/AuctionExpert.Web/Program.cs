@@ -10,7 +10,16 @@ namespace AuctionExpert.Web
     using AuctionExpert.Data.Models;
     using AuctionExpert.Data.Repositories;
     using AuctionExpert.Data.Seeding;
-    using AuctionExpert.Services.Data;
+    using AuctionExpert.Services.Data.Auction;
+    using AuctionExpert.Services.Data.Bid;
+    using AuctionExpert.Services.Data.Category;
+    using AuctionExpert.Services.Data.City;
+    using AuctionExpert.Services.Data.Country;
+    using AuctionExpert.Services.Data.Image;
+    using AuctionExpert.Services.Data.Review;
+    using AuctionExpert.Services.Data.Settings;
+    using AuctionExpert.Services.Data.SubCategory;
+    using AuctionExpert.Services.Data.User;
     using AuctionExpert.Services.Mapping;
     using AuctionExpert.Services.Messaging;
     using AuctionExpert.Web.ViewModels;
@@ -39,6 +48,7 @@ namespace AuctionExpert.Web
             var cloudinaryName = configuration.GetValue<string>("Cloudinary:CloudName");
             var apiKey = configuration.GetValue<string>("Cloudinary:ApiKey");
             var apiSecret = configuration.GetValue<string>("Cloudinary:ApiSecret");
+            var sendGridApiKey = configuration.GetValue<string>("SendGridApiKey");
 
             if (new[] { cloudinaryName, apiKey, apiSecret }.Any(string.IsNullOrWhiteSpace))
             {
@@ -68,6 +78,10 @@ namespace AuctionExpert.Web
                 }).AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "X-CSRF-TOKEN";
+            });
 
             services.AddSingleton(configuration);
             services.AddSingleton(cloudinary);
@@ -78,14 +92,17 @@ namespace AuctionExpert.Web
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
+            services.AddTransient<IEmailSender>(x => new SendGridEmailSender(sendGridApiKey));
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ICountryService, CountryService>();
+            services.AddTransient<ICityService, CityService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ISubCategoryService, SubCategoryService>();
             services.AddTransient<IAuctionService, AuctionService>();
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IBidService, BidService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IReviewService, ReviewService>();
         }
 
         private static void Configure(WebApplication app)

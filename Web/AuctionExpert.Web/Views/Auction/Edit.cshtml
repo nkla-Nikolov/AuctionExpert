@@ -1,0 +1,120 @@
+﻿@using AuctionExpert.Web.ViewModels.Auction;
+@model EditAuctionInputModel
+
+@{
+    this.ViewData["Title"] = "Edit Auction";
+}
+
+<div class="inner-banner">
+    <div class="container">
+        <h2 class="inner-banner-title  wow fadeInLeft" data-wow-duration="1.5s" data-wow-delay=".4s">Edit Auction</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit Auction</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-xl-6 col-lg-8 col-md-10">
+            <div class="form-wrapper wow fadeInUp" data-wow-duration="0.5s" data-wow-delay=".2s">
+                <form class="w-100" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-inner">
+                                <label asp-for="Title">Title *</label>
+                                <input asp-for="Title" class="form-control" placeholder="Title">
+                                <span asp-validation-for="@Model.Title" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-inner">
+                                <label asp-for="Description">Description *</label>
+                                <textarea rows="5" asp-for="Description" class="form-control" placeholder="Description"></textarea>
+                                <span asp-validation-for="@Model.Description" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-inner" onchange="getSubCategories()">
+                                <label asp-for="CategoryId">Select Category *</label>
+                                <select asp-for="CategoryId" class="form-control">
+                                    <option selected="selected">--Please select a category--</option>
+                                    @foreach (var category in Model.Categories)
+                                    {
+                                        <option value="@category.Id">@category.Name</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="@Model.CategoryId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12" style="display: none">
+                            <div class="form-inner" onchange="getSubCategoryId()">
+                                <label asp-for="SubCateogoryId">Select Sub Category *</label>
+                                <select asp-for="SubCateogoryId" class="form-control">
+                                    <option></option>
+                                </select>
+                                <span asp-validation-for="@Model.SubCateogoryId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-inner">
+                                <label asp-for="Condition">Condition *</label>
+                                <select asp-for="Condition" class="form-control">
+                                    <option>--Enter item condition--</option>
+                                    <option value="1">Brand new</option>
+                                    <option value="2">Used</option>
+                                </select>
+                                <span asp-validation-for="@Model.Condition" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-inner">
+                                <label asp-for="AuctionType">Type of sale *</label>
+                                <select asp-for="AuctionType" class="form-control">
+                                    <option>--Enter auction sale type--</option>
+                                    <option value="1">Standart auction</option>
+                                    <option value="2">Auction with fixed price</option>
+                                </select>
+                                <span asp-validation-for="@Model.AuctionType" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-inner">
+                                <label asp-for="StartPrice">Price *</label>
+                                <input asp-for="StartPrice" class="form-control" />
+                                <span asp-validation-for="@Model.StartPrice" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-inner">
+                                <label asp-for="StepAmount">Step *</label>
+                                <input asp-for="StepAmount" class="form-control" placeholder="Enter step">
+                                <span asp-validation-for="@Model.StepAmount" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-inner">
+                                <label asp-for="Images">Upload images *</label>
+                                <input asp-for="Images" class="form-control" />
+                                <span asp-validation-for="@Model.Images" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" asp-controller="Auction" asp-action="Edit" asp-route-auctionId="@Model.Id" class="account-btn">Edit Auction</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

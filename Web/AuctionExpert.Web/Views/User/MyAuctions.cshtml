@@ -1,0 +1,157 @@
+﻿@using AuctionExpert.Web.ViewModels.Auction;
+@model MyAuctionsPaginatedViewModel
+@{
+    this.ViewData["Title"] = "My Auctions";
+}
+
+<div class="inner-banner">
+    <div class="container">
+        <h2 class="inner-banner-title wow fadeInLeft" data-wow-duration="1.5s" data-wow-delay=".2s">My auctions</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">My Auctions</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="dashboard-section pt-120 pb-120">
+    <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-top">
+    <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-bottom">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3">
+                <div class="nav flex-column nav-pills gap-4 wow fadeInUp" data-wow-duration="1.5s" data-wow-delay=".2s">
+                    <a asp-controller="User" asp-action="MyAuctions" class="nav-link nav-btn-style mx-auto mb-20">
+                        My Auctions
+                    </a>
+                    <a asp-controller="User" asp-action="MyProfile" class="nav-link nav-btn-style mx-auto mb-20">
+                        My Profile
+                    </a>
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })" method="post">
+                        <button class="nav-link nav-btn-style mx-auto" type="submit" role="tab">Logout</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="tab-content wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
+                    <div class="dashboard-area box--shadow pb-120">
+                        <div class="row g-4">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="dashboard-card hover-border1">
+                                    <div class="header">
+                                        <h5>My auctions</h5>
+                                    </div>
+                                    <div class="body">
+                                        <div class="counter-item">
+                                            <h2>@Model.ItemsCount</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6">
+                                <div class="dashboard-card hover-border1">
+                                    <div class="header">
+                                        <h5>My Active Auctions</h5>
+                                    </div>
+                                    <div class="body">
+                                        <div class="counter-item">
+                                            <h2>@Model.ActiveAuctionsCount</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-title-area">
+                        <h3>My Auction List</h3>
+                        <select>
+                            <option value="01">Show: Last 5 Auctions</option>
+                            <option value="02">Show: Last 10 Auctions</option>
+                            <option value="03">Show: Last 15 Auctions</option>
+                            <option value="04">Show: Last 20 Auctions</option>
+                        </select>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="eg-table order-table table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Initial Price</th>
+                                    <th>Highest Bid</th>
+                                    <th>Type</th>
+                                    <th>Expires At</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var auction in Model.Auctions)
+                                {
+                                    <tr>
+                                        <td data-label="Image"><img alt="image" src="@auction.ImageUrl" class="img-fluid"></td>
+                                        <td data-label="Initial Price">$@auction.StartPrice</td>
+                                        <td data-label="Highest Bid">$@auction.HighestBid</td>
+                                        <td data-label="Type">@auction.AuctionType</td>
+                                        <td data-label="Expires At">@auction.ClosesIn</td>
+
+                                        @if (auction.Status == "Active")
+                                        {
+                                            <td data-label="Status" class="text-green">@auction.Status</td>
+                                        }
+                                        else
+                                        {
+                                            <td data-label="Status" class="text-red">@auction.Status</td>
+                                        }
+                                        @if (auction.Status != "Finished")
+                                        {
+                                            <td data-label="Action">
+                                                <form method="post">
+                                                    <button asp-controller="Auction" asp-action="Delete" asp-route-auctionId="@auction.Id" class="eg-btn action-btn text-danger">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- pagination area -->
+                    <div class="table-pagination justify-content-center">
+                        <nav class="pagination-wrap">
+                            <ul class="pagination style-one d-flex gap-md-3 gap-2">
+                                <li class="page-item @if(!Model.HasPreviousPage) { <text>disabled</text> }">
+                                    <a class="page-link" asp-action="MyAuctions" asp-route-id="@Model.PreviousPageNumber">Prev</a>
+                                </li>
+                                @for (int i = Model.PageNumber - 2; i < Model.PageNumber; i++)
+                                {
+                                    if (i > 0)
+                                    {
+                                        <a class="page-link" asp-action="MyAuctions" asp-route-id="@i">@i</a>
+                                    }
+                                }
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link">@Model.PageNumber</a>
+                                </li>
+                                @for (int i = Model.PageNumber + 1; i <= Model.PageNumber + 2; i++)
+                                {
+                                    if (i <= Model.PagesCount)
+                                    {
+                                        <a class="page-link" asp-action="MyAuctions" asp-route-id="@i">@i</a>
+                                    }
+                                }
+                                <li class="page-item @if(!Model.HasNextPage) { <text>disabled</text> }">
+                                    <a class="page-link" asp-action="MyAuctions" asp-route-id="@Model.NextPageNumber">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

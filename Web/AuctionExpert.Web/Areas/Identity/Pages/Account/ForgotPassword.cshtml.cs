@@ -6,9 +6,11 @@
     using System.Text;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
+
+    using AuctionExpert.Common;
     using AuctionExpert.Data.Models;
+    using AuctionExpert.Services.Messaging;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
@@ -56,6 +58,8 @@
                     protocol: this.Request.Scheme);
 
                 await this.emailSender.SendEmailAsync(
+                    GlobalConstants.AppEmail,
+                    GlobalConstants.SystemName,
                     this.Input.Email,
                     "Reset Password",
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");

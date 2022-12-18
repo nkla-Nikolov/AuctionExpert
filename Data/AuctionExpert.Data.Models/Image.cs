@@ -1,6 +1,7 @@
 ﻿namespace AuctionExpert.Data.Models
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
 
     using AuctionExpert.Data.Common.Models;
 
@@ -11,8 +12,10 @@
             this.Id = Guid.NewGuid().ToString();
         }
 
+        [Required]
         public string UrlPath { get; set; }
 
+        [Required]
         public int AuctionId { get; set; }
 
         public virtual Auction Auction { get; set; }

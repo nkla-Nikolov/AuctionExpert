@@ -5,7 +5,7 @@
 
     using AuctionExpert.Data.Common.Repositories;
     using AuctionExpert.Data.Models;
-    using AuctionExpert.Services.Data;
+    using AuctionExpert.Services.Data.Settings;
     using AuctionExpert.Web.ViewModels.Settings;
     using Microsoft.AspNetCore.Mvc;
 

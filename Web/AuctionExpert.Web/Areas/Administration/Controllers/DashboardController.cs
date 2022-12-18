@@ -1,6 +1,6 @@
 ﻿namespace AuctionExpert.Web.Areas.Administration.Controllers
 {
-    using AuctionExpert.Services.Data;
+    using AuctionExpert.Services.Data.Settings;
     using AuctionExpert.Web.ViewModels.Administration.Dashboard;
     using Microsoft.AspNetCore.Mvc;
 

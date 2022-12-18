@@ -1,0 +1,57 @@
+﻿@{
+    this.ViewData["Title"] = "How It Works";
+}
+
+<div class="how-work-section pt-120 pb-120">
+    <img alt="image" src="~/assets/images/bg/section-bg.png" class="section-bg-top">
+    <div class="container">
+        <div class="row g-4 mb-60">
+            <div class="col-xl-6 col-lg-6">
+                <div class="how-work-content wow fadeInUp" data-wow-duration="1.5s" data-wow-delay=".2s">
+                    <span>01.</span>
+                    <h3>Register Now & Start Selleing Your Things</h3>
+                    <p class="para">Before we start, first you need to do is to create an account to access the features we offer.</p>
+                    <a asp-area="Identity" asp-page="/Account/Register" class="eg-btn btn--primary btn--md">Register Account</a>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 d-flex justify-content-lg-end justify-content-center">
+                <div class="how-work-img wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
+                    <img alt="image" src="~/assets/images/bg/how-work1.png" class="work-img">
+                </div>
+            </div>
+        </div>
+        <div class="row g-4 mb-60">
+            <div class="col-xl-6 col-lg-6 d-flex justify-content-lg-start justify-content-center order-lg-1 order-2">
+                <div class="how-work-img wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
+                    <img alt="image" src="~/assets/images/bg/how-work2.png" class="work-img">
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 order-lg-2 order-1">
+                <div class="how-work-content wow fadeInUp" data-wow-duration="1.5s" data-wow-delay=".2s">
+                    <span>02.</span>
+                    <h3>Select Or Sell Your Item</h3>
+                    <p class="para">Now, when you got registered, you can start looking for your favourite items!
+                       If you are in possesion of an item you want to sell this is the right place to do it easily without any effort.</p>
+                    <a asp-controller="Auction" asp-action="Sell" class="eg-btn btn--primary btn--md">Sell Your Item</a>
+                </div>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-xl-6 col-lg-6">
+                <div class="how-work-content wow fadeInUp" data-wow-duration="1.5s" data-wow-delay=".2s">
+                    <span>03.</span>
+                    <h3>Purcahse Items</h3>
+                    <p class="para">To purchase an item you can check auctions that are with fixed price or bid for the item you are looking for!
+                        The auctions with fixed price are unnable to bid, so to get the item, you need to get in touch with the seller.
+                        Here are some of our hot auctions today!</p>
+                    <a asp-controller="Home" asp-action="Index" class="eg-btn btn--primary btn--md">Purchase Item</a>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 d-flex justify-content-lg-end justify-content-center">
+                <div class="how-work-img wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
+                    <img alt="image" src="~/assets/images/bg/how-work3.png" class="work-img">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

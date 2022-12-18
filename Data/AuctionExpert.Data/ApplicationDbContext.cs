@@ -95,6 +95,16 @@
                 .Property(x => x.MoneyPlaced)
                 .HasColumnType("decimal(10,2)");
 
+            builder.Entity<ApplicationUser>()
+                .HasMany(x => x.Reviews)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId);
+
+            builder.Entity<Auction>()
+                .HasMany(x => x.Reviews)
+                .WithOne(x => x.Auction)
+                .HasForeignKey(x => x.AuctionId);
+
             // Needed for Identity models configuration
             base.OnModelCreating(builder);
 

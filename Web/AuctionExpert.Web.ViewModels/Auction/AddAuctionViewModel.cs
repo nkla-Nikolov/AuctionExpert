@@ -8,7 +8,7 @@
     using AuctionExpert.Web.ViewModels.Category;
     using Microsoft.AspNetCore.Http;
 
-    using static AuctionExpert.Common.GlobalConstants.AuctionConstraintsAndMessages;
+    using static AuctionExpert.Common.AuctionConstraintsAndMessages;
 
     public class AddAuctionViewModel
     {
@@ -37,9 +37,14 @@
         public ConditionType Condition { get; set; }
 
         [Required]
-        public TypeSale Type { get; set; }
+        public TypeSale AuctionType { get; set; }
 
         [Required]
+        [Range(1, 1000)]
+        public int StepAmount { get; set; }
+
+        [Required]
+        [Range(1, int.MaxValue)]
         public int StartPrice { get; set; }
 
         [Required]

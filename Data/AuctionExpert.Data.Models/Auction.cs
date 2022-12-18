@@ -7,7 +7,7 @@
     using AuctionExpert.Data.Common.Enumerations;
     using AuctionExpert.Data.Common.Models;
 
-    using static AuctionExpert.Common.GlobalConstants.AuctionConstraintsAndMessages;
+    using static AuctionExpert.Common.AuctionConstraintsAndMessages;
 
     public class Auction : BaseDeletableModel<int>
     {
@@ -15,6 +15,7 @@
         {
             this.Bids = new HashSet<Bid>();
             this.Images = new HashSet<Image>();
+            this.Reviews = new HashSet<Review>();
         }
 
         [Required]
@@ -28,6 +29,12 @@
 
         [Required]
         public TypeSale AuctionType { get; set; }
+
+        [Required]
+        public ConditionType Condition { get; set; }
+
+        [Required]
+        public int StepAmount { get; set; }
 
         [Required]
         public int Duration { get; set; }
@@ -50,6 +57,11 @@
         public virtual Country Country { get; set; }
 
         [Required]
+        public int CategoryId { get; set; }
+
+        public virtual Category Category { get; set; }
+
+        [Required]
         public int SubCategoryId { get; set; }
 
         public virtual SubCategory SubCategory { get; set; }
@@ -57,5 +69,7 @@
         public virtual ICollection<Bid> Bids { get; set; }
 
         public virtual ICollection<Image> Images { get; set; }
+
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }

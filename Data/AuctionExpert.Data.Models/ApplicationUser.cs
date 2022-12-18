@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using AuctionExpert.Data.Common.Models;
     using Microsoft.AspNetCore.Identity;
@@ -30,15 +31,25 @@
 
         public DateTime? DeletedOn { get; set; }
 
+        [Required]
         public int Age { get; set; }
 
+        [Required]
         public string FirstName { get; set; }
 
+        [Required]
         public string LastName { get; set; }
 
+        public string ProfileImageUrl { get; set; }
+
+        [Required]
         public int CountryId { get; set; }
 
         public virtual Country Country { get; set; }
+
+        public int? CityId { get; set; }
+
+        public virtual City City { get; set; }
 
         public virtual ICollection<Review> Reviews { get; set; }
 

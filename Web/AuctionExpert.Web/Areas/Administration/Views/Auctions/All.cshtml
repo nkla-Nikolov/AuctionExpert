@@ -1,0 +1,60 @@
+﻿@using AuctionExpert.Web.ViewModels.Administration.Auction;
+@model PaginatedAuctionListModel
+@{
+    this.ViewData["Title"] = "Auctions Administration";
+}
+
+<div class="container">
+    <div class="row g-4">
+        <div class="col g-3">
+            <h2 class="text-center pt-80 pb-80">@this.ViewData["Title"]</h2>
+            <div class="table-wrapper">
+                <table class="eg-table order-table table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Title</th>
+                            <th>Bids Count</th>
+                            <th>Category</th>
+                            <th>Created On</th>
+                            <th>Closes In</th>
+                            <th>Delete</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var auction in Model.Auctions)
+                        {
+                            <tr>
+                                <td data-label="Id">@auction.Id</td>
+                                <td data-label="Title">@(auction.Title.Substring(0, 30))...</td>
+                                <td data-label="Bids Count">@auction.BidsCount</td>
+                                <td data-label="Category">@auction.CategoryName</td>
+                                <td data-label="Created On">@auction.CreatedOn.ToShortDateString()</td>
+                                <td data-label="Closes In">@auction.ClosesIn.ToShortDateString()</td>
+                                <td data-label="Delete">
+                                    <form method="post">
+                                        <button asp-area="Administration"
+                                            asp-controller="Auctions"
+                                            asp-action="Delete"
+                                            asp-route-auctionId="@auction.Id" class="eg-btn action-btn text-danger">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                                <td data-label="Edit">
+                                    <a asp-area="" 
+                                    asp-controller="Auction" 
+                                    asp-action="Edit"
+                                   asp-route-auctionId="@auction.Id" 
+                                   class="text-warning">Edit</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <partial name="_PagingPartial" model="@Model" />
+        </div>
+    </div>
+</div>

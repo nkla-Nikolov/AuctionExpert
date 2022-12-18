@@ -16,6 +16,10 @@
     <EmbeddedResource Remove="Views\Users\**" />
     <None Remove="Views\Users\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Views\User\Dashboard.cshtml~RF49a3aa0f.TMP" />
+  </ItemGroup>
 	<ItemGroup>
 		<AdditionalFiles Include="..\..\stylecop.json" />
 	</ItemGroup>
@@ -53,5 +57,11 @@
     <ProjectReference Include="..\..\Services\AuctionExpert.Services\AuctionExpert.Services.csproj" />
     <ProjectReference Include="..\AuctionExpert.Web.Infrastructure\AuctionExpert.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\AuctionExpert.Web.ViewModels\AuctionExpert.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Administration\Views\Countries\All.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

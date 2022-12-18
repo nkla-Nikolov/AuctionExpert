@@ -10,11 +10,14 @@
         public Category()
         {
             this.SubCategories = new HashSet<SubCategory>();
+            this.Auctions = new HashSet<Auction>();
         }
 
         [Required]
         public string Name { get; set; }
 
         public virtual ICollection<SubCategory> SubCategories { get; set; }
+
+        public virtual ICollection<Auction> Auctions { get; set; }
     }
 }

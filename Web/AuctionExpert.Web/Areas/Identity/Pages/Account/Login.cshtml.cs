@@ -16,6 +16,8 @@ namespace AuctionExpert.Web.Areas.Identity.Pages.Account
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
 
+    using static AuctionExpert.Common.GlobalConstants;
+
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> signInManager;

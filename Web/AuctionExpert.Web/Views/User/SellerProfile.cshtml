@@ -1,0 +1,175 @@
+﻿@using AuctionExpert.Web.ViewModels.Profile;
+@model SellerProfileViewModel
+
+@{
+    this.ViewData["Title"] = $"{Model.FullName} Profile";
+}
+
+<section style="background-color: #eee;">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        @if (Model.AvatarUrl == null)
+                        {
+                            <img src="~/assets/images/bg/NoProfilePicture.png"
+                             class="rounded-circle img-fluid" style="width: 150px;">
+                        }
+                        else
+                        {
+                            <img src="@Model.AvatarUrl" class="rounded-circle img-fluid" style="width: 150px;">
+                        }
+                        <h5 class="my-3">@Model.FullName</h5>
+                        <p class="text-muted mb-4">@Model.Address</p>
+                        @*<div class="d-flex justify-content-center mb-2">
+                            <button type="button" class="btn btn-primary">Follow</button>
+                            <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Full Name</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">@Model.FullName</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Email</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">@Model.Email</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Phone</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">@(Model.PhoneNumber == null ? "No phone number" : Model.PhoneNumber)</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Address</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">@Model.Address</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="testimonial-section pt-80 pb-80">
+    <img alt="image" src="~/assets/images/bg/client-right.png" class="client-right-vector">
+    <img alt="image" src="~/assets/images/bg/client-left.png" class="client-left-vector">
+    <img alt="image" src="~/assets/images/bg/clent-circle1.png" class="client-circle1">
+    <img alt="image" src="~/assets/images/bg/clent-circle2.png" class="client-circle2">
+    <img alt="image" src="~/assets/images/bg/clent-circle3.png" class="client-circle3">
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="col-sm-12 col-md-10 col-lg-8 col-xl-6">
+                <div class="section-title4">
+                    <h2>What Client Say</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center position-relative">
+            <div class="swiper testimonial-slider">
+                <div class="swiper-wrapper">
+                    @if (Model.Comments.Count() > 0)
+                    {
+                        @foreach (var review in Model.Comments)
+                        {
+                            <div class="swiper-slide">
+                                <div class="testimonial-single hover-border3 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
+                                    <img alt="image" src="~/assets/images/icons/quote-green2.svg" class="quote-icon">
+                                    <div class="testi-img">
+                                        @if (review.ReviewerProfileImage != null)
+                                        {
+                                            <img alt="image" src="@review.ReviewerProfileImage">
+                                        }
+                                        else
+                                        {
+                                            <img alt="image" src="~/assets/images/bg/NoProfilePicture.png">
+                                        }
+                                    </div>
+                                    <div class="testi-content">
+                                        <p class="para">
+                                            @review.Comment
+                                        </p>
+                                        <div class="testi-designation">
+                                            <h5><a asp-controller="User" asp-action="SellerProfile" asp-route-userId="@review.ReviewerId">@review.ReviewerFirstName @review.ReviewerLastName</a></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="slider-arrows testimonial2-arrow d-flex justify-content-between gap-3">
+                <div class="testi-prev1 style-3 swiper-prev-arrow" tabindex="0" role="button"
+                     aria-label="Previous slide">
+                    <i class="bi bi-arrow-left"></i>
+                </div>
+                <div class="testi-next1 style-3 swiper-next-arrow" tabindex="0" role="button"
+                     aria-label="Next slide">
+                    <i class="bi bi-arrow-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if (this.User.Identity.IsAuthenticated)
+{
+    <div class="blog-details-section pt-120 pb-120">
+        <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-top">
+        <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-bottom">
+        <div class="container">
+            <div class="row gy-5">
+                <div class="col-lg-8">
+                    <div class="blog-details-single">
+                        <div class="comment-form">
+                            <div class="blog-widget-title style2">
+                                <h4>Leave A Comment</h4>
+                                <span></span>
+                            </div>
+                            <form method="post" asp-controller="User" asp-action="SellerProfile" asp-route-userId="@Model.Id">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-inner">
+                                            <div asp-validation-summary="All"></div>
+                                            <textarea asp-for="Comment" placeholder="Write Message :" rows="10"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="eg-btn btn--primary btn--md form--btn">Submit Now</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,65 @@
+﻿@using AuctionExpert.Web.ViewModels.Administration.Country;
+@model PaginatedCountryListModel
+@{
+    this.ViewData["Title"] = "Countries Administration";
+}
+
+<div class="container">
+    <div class="row g-4">
+        <div class="col g-3">
+            <h2 class="text-center pt-80 pb-80">@this.ViewData["Title"]</h2>
+            <form method="post">
+                <div class="input-group mb-3">
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <input asp-for="@Model.CountryName" class="form-control" placeholder="Enter country name" />
+                    <span asp-validation-for="@Model.CountryName" class="text-danger"></span>
+                    <button asp-area="Administration" asp-controller="Countries" asp-action="Add" class="btn btn-success" id="button-addon2">Add Country</button>
+                </div>
+            </form>
+            <div class="table-wrapper">
+                <table class="eg-table order-table table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Cities Count</th>
+                            <th>Delete</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var country in Model.Countries)
+                        {
+                            <tr>
+                                <td data-label="Id">@country.Id</td>
+                                <td data-label="Name">@country.Name</td>
+                                <td data-label="Cities Count">@country.CitiesCount</td>
+                                <td data-label="Delete">
+                                    <form method="post">
+                                        <button asp-area="Administration"
+                                            asp-controller="Countries"
+                                            asp-action="Delete"
+                                            asp-route-countryId="@country.Id" class="eg-btn action-btn text-danger">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                                <td data-label="Edit">
+                                    <form method="post">
+                                        <button asp-area="Administration"
+                                            asp-controller="Countries"
+                                            asp-action="Edit"
+                                            asp-route-userId="@country.Id" class="eg-btn action-btn text-warning">
+                                            Edit
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <partial name="_PagingPartial" model="@Model" />
+        </div>
+    </div>
+</div>

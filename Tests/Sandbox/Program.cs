@@ -11,7 +11,7 @@
     using AuctionExpert.Data.Models;
     using AuctionExpert.Data.Repositories;
     using AuctionExpert.Data.Seeding;
-    using AuctionExpert.Services.Data;
+    using AuctionExpert.Services.Data.Settings;
     using AuctionExpert.Services.Messaging;
     using CommandLine;
     using Microsoft.EntityFrameworkCore;

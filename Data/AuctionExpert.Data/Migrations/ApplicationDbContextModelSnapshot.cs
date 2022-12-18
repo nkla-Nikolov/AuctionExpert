@@ -74,6 +74,9 @@ namespace AuctionExpert.Data.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CityId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -95,12 +98,14 @@ namespace AuctionExpert.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -129,6 +134,9 @@ namespace AuctionExpert.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfileImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -140,6 +148,8 @@ namespace AuctionExpert.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.HasIndex("CountryId");
 
@@ -167,8 +177,14 @@ namespace AuctionExpert.Data.Migrations
                     b.Property<int>("AuctionType")
                         .HasColumnType("int");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("ClosesIn")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Condition")
+                        .HasColumnType("int");
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
@@ -200,6 +216,9 @@ namespace AuctionExpert.Data.Migrations
                     b.Property<decimal>("StartPrice")
                         .HasColumnType("decimal(10,2)");
 
+                    b.Property<int>("StepAmount")
+                        .HasColumnType("int");
+
                     b.Property<int>("SubCategoryId")
                         .HasColumnType("int");
 
@@ -212,6 +231,8 @@ namespace AuctionExpert.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("CountryId");
 
@@ -387,6 +408,7 @@ namespace AuctionExpert.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UrlPath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -406,10 +428,17 @@ namespace AuctionExpert.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("AuctionId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Comment")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DatePlaced")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeletedOn")
@@ -427,13 +456,19 @@ namespace AuctionExpert.Data.Migrations
                     b.Property<int>("PositiveReviews")
                         .HasColumnType("int");
 
+                    b.Property<string>("ReviewerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AuctionId");
+
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ReviewerId");
 
                     b.HasIndex("UserId");
 
@@ -617,17 +652,29 @@ namespace AuctionExpert.Data.Migrations
 
             modelBuilder.Entity("AuctionExpert.Data.Models.ApplicationUser", b =>
                 {
+                    b.HasOne("AuctionExpert.Data.Models.City", "City")
+                        .WithMany("Users")
+                        .HasForeignKey("CityId");
+
                     b.HasOne("AuctionExpert.Data.Models.Country", "Country")
                         .WithMany("Users")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("City");
+
                     b.Navigation("Country");
                 });
 
             modelBuilder.Entity("AuctionExpert.Data.Models.Auction", b =>
                 {
+                    b.HasOne("AuctionExpert.Data.Models.Category", "Category")
+                        .WithMany("Auctions")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("AuctionExpert.Data.Models.Country", "Country")
                         .WithMany("Auctions")
                         .HasForeignKey("CountryId")
@@ -645,6 +692,8 @@ namespace AuctionExpert.Data.Migrations
                         .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("Country");
 
@@ -696,11 +745,21 @@ namespace AuctionExpert.Data.Migrations
 
             modelBuilder.Entity("AuctionExpert.Data.Models.Review", b =>
                 {
+                    b.HasOne("AuctionExpert.Data.Models.Auction", "Auction")
+                        .WithMany("Reviews")
+                        .HasForeignKey("AuctionId");
+
+                    b.HasOne("AuctionExpert.Data.Models.ApplicationUser", "Reviewer")
+                        .WithMany()
+                        .HasForeignKey("ReviewerId");
+
                     b.HasOne("AuctionExpert.Data.Models.ApplicationUser", "User")
                         .WithMany("Reviews")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Auction");
+
+                    b.Navigation("Reviewer");
 
                     b.Navigation("User");
                 });
@@ -787,11 +846,20 @@ namespace AuctionExpert.Data.Migrations
                     b.Navigation("Bids");
 
                     b.Navigation("Images");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("AuctionExpert.Data.Models.Category", b =>
                 {
+                    b.Navigation("Auctions");
+
                     b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("AuctionExpert.Data.Models.City", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("AuctionExpert.Data.Models.Country", b =>
