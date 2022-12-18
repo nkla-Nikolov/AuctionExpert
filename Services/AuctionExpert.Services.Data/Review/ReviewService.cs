@@ -80,7 +80,7 @@
 
             if (auction == null || reviewer == false)
             {
-                throw new NullReferenceException();
+                throw new ArgumentNullException();
             }
 
             auction.Reviews.Add(new Review()

@@ -53,7 +53,9 @@
 
         public async Task DeleteCountry(int id)
         {
-            var country = await this.GetCountryById<Country>(id);
+            var country = await this.countryRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (country == null)
             {
@@ -66,6 +68,11 @@
 
         public async Task AddCountry(string name)
         {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException();
+            }
+
             var country = new Country()
             {
                 Name = name,
