@@ -67,7 +67,7 @@ function countDown() {
         let minutes = Math.floor((difference % hour) / minute)
         let seconds = Math.floor((difference % minute) / second)
 
-        if (days < 1 && hours < 24 && minutes < 59) {
+        if (days < 1 && hours < 1 && minutes < 6) {
             let id = document.querySelector(`#timer${i}`).getAttribute('data-auctionId');
 
             deleteAuction(id);
