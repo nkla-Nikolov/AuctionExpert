@@ -4,6 +4,8 @@ namespace AuctionExpert.Web
     using System.Linq;
     using System.Reflection;
 
+    using AspNetCoreHero.ToastNotification;
+    using AspNetCoreHero.ToastNotification.Extensions;
     using AuctionExpert.Data;
     using AuctionExpert.Data.Common;
     using AuctionExpert.Data.Common.Repositories;
@@ -82,6 +84,13 @@ namespace AuctionExpert.Web
             {
                 options.HeaderName = "X-CSRF-TOKEN";
             });
+            services.AddNotyf(config =>
+            {
+                config.Position = NotyfPosition.TopRight;
+                config.HasRippleEffect = true;
+                config.IsDismissable = true;
+                config.DurationInSeconds = 5;
+            });
 
             services.AddSingleton(configuration);
             services.AddSingleton(cloudinary);
@@ -136,6 +145,7 @@ namespace AuctionExpert.Web
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseNotyf();
 
             app.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
