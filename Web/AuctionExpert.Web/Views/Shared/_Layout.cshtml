@@ -1,4 +1,9 @@
-﻿@inject ICategoryService categoryService
+﻿@using AuctionExpert.Services.Data.Category;
+@using AuctionExpert.Common
+@using AuctionExpert.Services.Data;
+@using AuctionExpert.Web.ViewModels.Category;
+
+@inject ICategoryService categoryService
 
 @{
     var categories = categoryService.GetAllCategories<CategoryListModel>();
@@ -17,6 +22,7 @@
     <link rel="icon" href="~/assets/images/bg/sm-logo.png" type="image/gif" sizes="20x20">
     <link rel="stylesheet" href="~/assets/css/animate.css">
     <link rel="stylesheet" href="~/assets/css/all.css">
+    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/assets/css/boxicons.min.css">
     <link rel="stylesheet" href="~/assets/css/bootstrap-icons.css">
     <link rel="stylesheet" href="~/assets/css/jquery-ui.css">
@@ -110,10 +116,14 @@
             </div>
         }
     </header>
-    <partial name="_CookieConsentPartial" />
-    <main role="main">
-        @this.RenderBody()
-    </main>
+
+    <div>
+        @*<partial name="_CookieConsentPartial" />*@
+        <main role="main" class="pb-3">
+            @this.RenderBody()
+        </main>
+    </div>
+
     <footer>
         <div class="footer-top">
             <div class="container">
@@ -175,19 +185,20 @@
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
-    <script src="~/assets/js/jquery-ui.js"></script>
-    <script src="~/assets/js/jquery.magnific-popup.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
+    <script src="~/assets/js/jquery-3.6.0.min.js"></script>
+    <script src="~/assets/js/jquery-ui.js"></script>
+    <script src="~/assets/js/bootstrap.bundle.min.js"></script>
     <script src="~/assets/js/wow.min.js"></script>
     <script src="~/assets/js/swiper-bundle.min.js"></script>
     <script src="~/assets/js/slick.js"></script>
     <script src="~/assets/js/jquery.nice-select.js"></script>
     <script src="~/assets/js/odometer.min.js"></script>
     <script src="~/assets/js/viewport.jquery.js"></script>
+    <script src="~/assets/js/jquery.magnific-popup.min.js"></script>
     <script src="~/assets/js/main.js"></script>
     @await this.RenderSectionAsync("Scripts", required: false)
-    @await this.Component.InvokeAsync("Notyf")
 </body>
 </html>
