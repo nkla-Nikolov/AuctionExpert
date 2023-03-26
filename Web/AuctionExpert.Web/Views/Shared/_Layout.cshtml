@@ -1,9 +1,4 @@
-﻿@using AuctionExpert.Services.Data.Category;
-@using AuctionExpert.Common
-@using AuctionExpert.Services.Data;
-@using AuctionExpert.Web.ViewModels.Category;
-
-@inject ICategoryService categoryService
+﻿@inject ICategoryService categoryService
 
 @{
     var categories = categoryService.GetAllCategories<CategoryListModel>();
@@ -43,40 +38,44 @@
             <span></span>
         </div>
     </div>
-
     <header class="header-area style-1">
-        <div class="header-logo" style="background:none">
+        <div class="header-logo">
+            <a asp-area="" asp-controller="Home" asp-action="Index"><span>AUCTION EXPERT</span></a>
         </div>
         <div class="main-menu">
             <div class="mobile-logo-area d-lg-none d-flex justify-content-between align-items-center">
-                <div class="mobile-logo-wrap">
+                <div class="mobile-logo-wrap ">
+                    <a asp-area="" asp-controller="Home" asp-action="Index"><span>AUCTION EXPERT</span></a>
                 </div>
                 <div class="menu-close-btn">
                     <i class="bi bi-x-lg"></i>
                 </div>
             </div>
             <ul class="menu-list">
-                <li class="menu-item">
+                <li>
                     <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
                 <li class="menu-item-has-children">
-                    <a>Categories</a><i class='bx bx-plus dropdown-icon'></i>
+                    <a class="drop-down">Categories</a><i class='bx bx-plus dropdown-icon'></i>
                     <ul class="submenu">
                         @foreach (var category in categories)
                         {
-                            <li><a asp-area="" asp-controller="Auction" asp-action="Browse" asp-route-categoryId="@category.Id">@category.Name</a></li>
+                            <li><a asp-area="" asp-controller="Auction" asp-action="Browse" asp-route-categoryId="@category.Id">@category.Name</a></li>   
                         }
                     </ul>
                 </li>
-                <li>
-                    <a asp-area="" asp-controller="Home" asp-action="How">How It Works</a>
-                </li>
                 @if (this.User.Identity.IsAuthenticated)
                 {
-                    <li class="menu-item">
+                    <li>
                         <a asp-area="" asp-controller="Auction" asp-action="Sell">Sell</a>
                     </li>
                 }
+                <li>
+                    <a asp-area="" asp-controller="Home" asp-action="How">How It Works</a>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Home" asp-action="">Contact</a>
+                </li>
                 @if (this.User.IsInRole("Administrator"))
                 {
                     <li class="menu-item-has-children">
@@ -96,40 +95,46 @@
                         <button type="submit" class="eg-btn btn--primary btn--sm">Search</button>
                     </div>
                 </form>
+
             </div>
         </div>
-        @if (this.User.Identity.IsAuthenticated)
-        {
-            <div class="nav-right d-flex align-items-center">
-                <div class="eg-btn btn--primary header-btn">
-                    <a asp-area="" asp-controller="User" asp-action="MyAuctions">Hello, @this.User.Identity.Name</a>
-                </div>
+        <div class="nav-right d-flex align-items-center">
+            <div class="search-btn">
+                <i class="bi bi-search"></i>
             </div>
-        }
-        else
-        {
-            <div class="nav-right d-flex align-items-center">
-                <div class="eg-btn btn--primary header-btn">
-                    <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+            @if (this.User.Identity.IsAuthenticated)
+            {
+                <div class="nav-right d-flex align-items-center">
+                    <div class="eg-btn btn--primary header-btn">
+                        <a asp-area="" asp-controller="User" asp-action="MyAuctions">Hello, @this.User.Identity.Name</a>
+                    </div>
                 </div>
+            }
+            else
+            {
+                <div class="nav-right d-flex align-items-center">
+                    <div class="eg-btn btn--primary header-btn">
+                        <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+                    </div>
+                </div>
+            }
+            <div class="mobile-menu-btn d-lg-none d-block">
+                <i class='bx bx-menu'></i>
             </div>
-        }
+        </div>
     </header>
-
     <div>
-        @*<partial name="_CookieConsentPartial" />*@
-        <main role="main" class="pb-3">
+        <partial name="_CookieConsentPartial" />
+        <main role="main">
             @this.RenderBody()
         </main>
     </div>
-
     <footer>
         <div class="footer-top">
             <div class="container">
                 <div class="row gy-5">
                     <div class="col-lg-3 col-md-6">
                         <div class="footer-item">
-                            @*<a href="index.html"><img src="~/assets/images/bg/FOOTER LOGO SOON" alt=""></a>*@
                             <p>
                                 Enter your email adress so we can send you weekly bulletin with recommended auctions.
                                 We hope this will help you to find items you are looking for.
@@ -146,35 +151,19 @@
                         <div class="footer-item">
                             <h5>Navigation</h5>
                             <ul class="footer-list">
-                                <li><a asp-controller="Home" asp-action="How">How It Works</a></li>
-                                <li><a asp-controller="User" asp-action="Dashboard">My Account</a></li>
-                                <li><a asp-controller="Home" asp-action="About">About Company</a></li>
+                                @if (this.User.Identity.IsAuthenticated)
+                                {
+                                    <li><a asp-area="" asp-controller="User" asp-action="MyProfile">My Account</a></li>
+                                }
+                                else
+                                {
+                                    <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+                                }
+                                <li><a asp-area="" asp-controller="Home" asp-action="How">How It Works</a></li>
+                                <li><a asp-area="" asp-controller="Auction" asp-action="Sell">Sell</a></li>
+                                <li><a asp-area="" asp-controller="Home" asp-action="">Contact us</a></li>
                             </ul>
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 d-flex justify-content-lg-center">
-                        <div class="footer-item">
-                            <h5>Help & FAQs</h5>
-                            <ul class="footer-list">
-                                <li><a asp-controller="Home" asp-action="Help">Customer FAQs</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="row d-flex align-items-center g-4">
-                    <div class="col-lg-6 d-flex justify-content-lg-end justify-content-center align-items-center flex-sm-nowrap flex-wrap">
-                        <p class="d-sm-flex d-none">We Accepts:</p>
-                        <ul class="footer-logo-list">
-                            <li><a><img src="~/assets/images/bg/footer-pay1.png" alt=""></a></li>
-                            <li><a><img src="~/assets/images/bg/footer-pay2.png" alt=""></a></li>
-                            <li><a><img src="~/assets/images/bg/footer-pay3.png" alt=""></a></li>
-                            <li><a><img src="~/assets/images/bg/footer-pay4.png" alt=""></a></li>
-                            <li><a><img src="~/assets/images/bg/footer-pay5.png" alt=""></a></li>
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -182,6 +171,7 @@
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/assets/js/jquery-3.6.0.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -197,5 +187,6 @@
     <script src="~/assets/js/jquery.magnific-popup.min.js"></script>
     <script src="~/assets/js/main.js"></script>
     @await this.RenderSectionAsync("Scripts", required: false)
+    @await this.Component.InvokeAsync("NToastNotify")
 </body>
 </html>

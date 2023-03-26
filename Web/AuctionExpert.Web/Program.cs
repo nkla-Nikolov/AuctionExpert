@@ -31,6 +31,7 @@ namespace AuctionExpert.Web
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using NToastNotify;
 
     public class Program
     {
@@ -76,7 +77,12 @@ namespace AuctionExpert.Web
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 }).AddRazorRuntimeCompilation();
-            services.AddRazorPages();
+            services.AddRazorPages().AddNToastNotifyToastr(new ToastrOptions
+            {
+                ProgressBar = true,
+                TimeOut = 5000,
+                CloseButton = true,
+            });
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddAntiforgery(options =>
             {
@@ -139,6 +145,7 @@ namespace AuctionExpert.Web
 
             app.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            app.UseNToastNotify();
             app.MapRazorPages();
         }
     }

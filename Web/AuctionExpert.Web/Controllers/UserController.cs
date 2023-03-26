@@ -169,6 +169,7 @@
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 CityName = user.City?.Name,
+                CityId = user.CityId,
                 Username = user.UserName,
                 PhoneNumber = user.PhoneNumber ?? "No Phone added",
                 ProfileImageUrl = user.ProfileImageUrl,

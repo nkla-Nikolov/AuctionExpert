@@ -1,6 +1,4 @@
-﻿@using AuctionExpert.Data.Common.Enumerations;
-@using AuctionExpert.Web.ViewModels.Auction;
-@model DetailViewModel
+﻿@model DetailViewModel
 
 @{
     this.ViewData["Title"] = "Auction Details";
@@ -212,7 +210,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-inner">
-                                        <textarea asp-for="Comment" placeholder="Write Message :" rows="10"></textarea>
+                                        <textarea asp-for="Comment" placeholder="Write Message :" rows="10" style="resize: none;"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-12">

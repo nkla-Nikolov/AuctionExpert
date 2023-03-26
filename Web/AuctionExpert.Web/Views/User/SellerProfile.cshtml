@@ -1,5 +1,4 @@
-﻿@using AuctionExpert.Web.ViewModels.Profile;
-@model SellerProfileViewModel
+﻿@model SellerProfileViewModel
 
 @{
     this.ViewData["Title"] = $"{Model.FullName} Profile";
@@ -158,7 +157,7 @@
                                     <div class="col-12">
                                         <div class="form-inner">
                                             <div asp-validation-summary="All"></div>
-                                            <textarea asp-for="Comment" placeholder="Write Message :" rows="10"></textarea>
+                                            <textarea asp-for="Comment" placeholder="Write Message :" rows="10" style="resize:none;"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-12">

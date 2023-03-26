@@ -1,7 +1,4 @@
-﻿@using AuctionExpert.Services.Data
-@using AuctionExpert.Web.ViewModels.Auction
-@using AuctionExpert.Web.ViewModels.SubCategory
-@model AddAuctionViewModel
+﻿@model AddAuctionViewModel
 @{
     this.ViewData["Title"] = "Sell Product";
 }
@@ -24,7 +21,7 @@
                         <div class="col-md-12">
                             <div class="form-inner">
                                 <label asp-for="Description">Description *</label>
-                                <textarea rows="5" asp-for="Description" class="form-control" placeholder="Description"></textarea>
+                                <textarea rows="5" asp-for="Description" class="form-control" placeholder="Description" style="resize:none;"></textarea>
                             </div>
                         </div>
 

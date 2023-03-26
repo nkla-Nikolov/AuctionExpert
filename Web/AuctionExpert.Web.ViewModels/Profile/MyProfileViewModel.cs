@@ -17,5 +17,7 @@
         public string Username { get; set; }
 
         public UpdateProfileViewModel UpdateProfileInput { get; set; }
+
+        public int? CityId { get; set; }
     }
 }
