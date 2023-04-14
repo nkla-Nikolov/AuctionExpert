@@ -16,9 +16,10 @@
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
 
-            this.Reviews = new HashSet<Review>();
+            this.UserReviews = new HashSet<UserReview>();
             this.Auctions = new HashSet<Auction>();
             this.Bids = new HashSet<Bid>();
+            this.LikedAuctions = new HashSet<Auction>();
         }
 
         // Audit info
@@ -51,11 +52,13 @@
 
         public virtual City City { get; set; }
 
-        public virtual ICollection<Review> Reviews { get; set; }
+        public virtual ICollection<UserReview> UserReviews { get; set; }
 
         public virtual ICollection<Auction> Auctions { get; set; }
 
         public virtual ICollection<Bid> Bids { get; set; }
+
+        public virtual ICollection<Auction> LikedAuctions { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 

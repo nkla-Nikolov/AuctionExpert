@@ -8,11 +8,8 @@
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Data.Bid;
     using AuctionExpert.Services.Data.Image;
-    using AuctionExpert.Services.Data.Review;
     using AuctionExpert.Services.Mapping;
     using AuctionExpert.Web.ViewModels.Auction;
-    using AuctionExpert.Web.ViewModels.Image;
-    using AuctionExpert.Web.ViewModels.Review;
     using Microsoft.EntityFrameworkCore;
 
     using static AuctionExpert.Common.AuctionConstraintsAndMessages;
@@ -22,18 +19,15 @@
         private readonly IDeletableEntityRepository<Auction> auctionRepository;
         private readonly IImageService imageService;
         private readonly IBidService bidService;
-        private readonly IReviewService reviewService;
 
         public AuctionService(
             IDeletableEntityRepository<Auction> auctionRepository,
             IImageService imageService,
-            IBidService bidService,
-            IReviewService reviewService)
+            IBidService bidService)
         {
             this.auctionRepository = auctionRepository;
             this.imageService = imageService;
             this.bidService = bidService;
-            this.reviewService = reviewService;
         }
 
         public IQueryable<T> GetAllAuctions<T>()
@@ -43,10 +37,12 @@
                 .To<T>();
         }
 
-        public async Task<Auction> GetAuctionById(int auctionId)
+        public async Task<Auction> GetAuctionByIdAsync(int auctionId)
         {
             return await this.auctionRepository
                 .All()
+                .Include(x => x.Category)
+                .Include(x => x.SubCategory)
                 .FirstOrDefaultAsync(x => x.Id == auctionId);
         }
 
@@ -89,7 +85,7 @@
 
         public async Task DeleteAsync(int auctionId)
         {
-            var auction = await this.GetAuctionById(auctionId);
+            var auction = await this.GetAuctionByIdAsync(auctionId);
 
             if (auction == null)
             {
@@ -102,7 +98,7 @@
 
         public async Task CreateAsync(AddAuctionViewModel model, ApplicationUser user)
         {
-            var auction = new Auction()
+            var auction = new Auction
             {
                 AuctionType = model.AuctionType,
                 CountryId = user.CountryId,
@@ -125,48 +121,9 @@
             await this.auctionRepository.SaveChangesAsync();
         }
 
-        public async Task<DetailViewModel> GetDetailAuctionModelByIdAsync(int auctionId)
-        {
-            var highestBid = await this.bidService
-                .GetLastHighestBid(auctionId);
-
-            var comments = await this.reviewService
-                .GetAllReviewsOnAuction<ReviewViewModel>(auctionId)
-                .OrderByDescending(x => x.DatePlaced)
-                .ToListAsync();
-
-            var bidders = await this.bidService
-                .GetAllBidsByAuctionId<BidderViewModel>(auctionId)
-                .ToListAsync();
-
-            var images = await this.imageService
-                .GetAllImages<DetailsImageViewModel>(auctionId)
-                .ToListAsync();
-
-            return await this.auctionRepository
-                .AllAsNoTracking()
-                .Where(x => x.Id == auctionId)
-                .Select(x => new DetailViewModel()
-                {
-                    Id = x.Id,
-                    Title = x.Title,
-                    CategoryName = x.Category.Name,
-                    SubCategoryName = x.SubCategory.Name,
-                    Condition = x.Condition.ToString(),
-                    StepAmount = x.StepAmount,
-                    Description = x.Description,
-                    BiddingPrice = x.Bids.Count == 0 ? x.StartPrice : highestBid,
-                    Comments = comments,
-                    Bidders = bidders,
-                    Images = images,
-                    AuctionType = x.AuctionType,
-                })
-                .FirstOrDefaultAsync();
-        }
-
         public async Task PlaceBidAsync(int? currentBid, string userId, int auctionId)
         {
-            var auction = await this.GetAuctionById(auctionId);
+            var auction = await this.GetAuctionByIdAsync(auctionId);
 
             if (auction == null)
             {
@@ -205,7 +162,7 @@
 
         public async Task EditAuction(int auctionId, EditAuctionInputModel model)
         {
-            var auction = await this.GetAuctionById(auctionId);
+            var auction = await this.GetAuctionByIdAsync(auctionId);
 
             if (auction == null)
             {
@@ -256,6 +213,21 @@
                 .AllAsNoTracking()
                 .Where(x => x.CategoryId == categoryId)
                 .Count();
+        }
+
+        public IQueryable<T> GetAllCommentsByAuctionId<T>(int auctionId)
+        {
+            return this.auctionRepository
+                .AllAsNoTracking()
+                .Where(x => x.Id == auctionId)
+                .Select(x => x.AuctionReviews)
+                .To<T>();
+        }
+
+        public async Task LikeAuction(Auction auction, ApplicationUser user)
+        {
+            auction.UsersLiked.Add(user);
+            await this.auctionRepository.SaveChangesAsync();
         }
     }
 }

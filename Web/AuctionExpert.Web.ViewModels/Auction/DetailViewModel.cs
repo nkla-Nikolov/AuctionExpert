@@ -13,7 +13,7 @@
         {
             this.Images = new HashSet<DetailsImageViewModel>();
             this.Bidders = new List<BidderViewModel>();
-            this.Comments = new HashSet<ReviewViewModel>();
+            this.Comments = new HashSet<AuctionReviewViewModel>();
         }
 
         public int Id { get; set; }
@@ -41,7 +41,7 @@
 
         public IEnumerable<DetailsImageViewModel> Images { get; set; }
 
-        public IEnumerable<ReviewViewModel> Comments { get; set; }
+        public IEnumerable<AuctionReviewViewModel> Comments { get; set; }
 
         public IEnumerable<BidderViewModel> Bidders { get; set; }
     }

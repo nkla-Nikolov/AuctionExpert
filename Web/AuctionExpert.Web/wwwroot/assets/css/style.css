@@ -54,6 +54,7 @@ body {
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 a {
@@ -1018,12 +1019,11 @@ i.bx {
 header.style-1 {
   background-color: #fff;
   width: 100%;
-  position: relative;
-  top: 0;
-  z-index: 99;
   padding: 0px 60px 0px 0px;
   display: flex;
   justify-content: space-between;
+  position: sticky;
+  z-index: 3;
   align-items: center;
 }
 
@@ -1047,10 +1047,10 @@ header.style-1 {
 }
 
 header.style-1.sticky {
-  position: fixed;
+  position: sticky;
   top: 0px;
   left: 0;
-  z-index: 999;
+  z-index: 3;
   background: #fff;
   box-shadow: 5px 3px 40px rgba(0, 72, 88, 0.1);
   animation: smooth-header 0.65s linear;
@@ -3275,15 +3275,30 @@ header.style-3 .mobile-menu-form input[type=text] {
   margin-top: 25px;
 }
 
+.auction-card-bttm .like {
+    padding: 7px;
+    background-color: #EEEEEE;
+    border-radius: 55%;
+    cursor: pointer;
+}
+
+.auction-card-bttm i.bi-heart-fill:hover{
+    color: red;
+}
+
+.auction-card-bttm i.bi-heart:hover {
+    color: red;
+}
+
 .auction-card1 .author-area {
-  position: absolute;
-  top: 30px;
-  left: 30px;
-  display: flex;
-  justify-content: start;
-  flex-wrap: wrap;
-  align-items: center;
-  cursor: pointer;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    align-items: center;
+    cursor: pointer;
 }
 
 .auction-card1 .author-area .author-emo {

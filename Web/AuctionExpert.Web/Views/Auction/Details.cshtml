@@ -20,27 +20,27 @@
     <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-top">
     <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-bottom">
     <div class="container">
-        <div class="row g-4 mb-50">
-            <div class="col-xl-6 col-lg-7 d-flex flex-row align-items-start justify-content-lg-start justify-content-center flex-md-nowrap flex-wrap gap-4">
-                <ul class="nav small-image-list d-flex flex-md-column flex-row justify-content-center gap-4  wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".4s">
-                    @for (int i = 0; i < Model.Images.Count(); i++)
-                    {
-                        var image = Model.Images.ToArray()[i];
-                        <li class="nav-item">
-                            <div data-bs-toggle="pill" id="image+@i" onclick="LoadBigImage(@i)">
-                                <img alt="image" src="@image.UrlPath" class="img-fluid">
+        <div class="row g-4 mb-50"> 
+            <div class="col-xl-6 col-lg-7 d-flex flex-row align-items-start justify-content-lg-start justify-content-center flex-md-nowrap flex-wrap gap-4 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
+                <img alt="image" style="cursor:pointer;" src="@Model.Images.First().UrlPath" onclick="openModal();currentSlide(1)" class="img-fluid">
+                <div id="myModal" class="modal">
+                    <span class="close cursor" onclick="closeModal()">&times;</span>
+                    <div class="modal-content">
+                        @for (int i = 0; i < Model.Images.Count(); i++)
+                        {
+                            var image = Model.Images.ToArray()[i];
+                            <div class="mySlides">
+                                <div class="numbertext">@(i + 1) / @Model.Images.Count()</div>
+                                <img src="@image.UrlPath" style="width:100%">
                             </div>
-                        </li>
-                    }
-                </ul>
-                <div class="tab-content mb-4 d-flex justify-content-lg-start justify-content-center  wow fadeInUp" data-wow-duration="1.5s" data-wow-delay=".4s">
-                    <div class="tab-pane big-image fade show active">
-                        <img alt="image" id="bigImage" src="@Model.Images.First().UrlPath" class="img-fluid">
+                            <a class="prev" onclick="plusSlides(- 1)">&#10094;</a>
+                            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                        }
                     </div>
                 </div>
             </div>
             <div class="col-xl-6 col-lg-5">
-                <div class="product-details-right  wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
+                <div class="product-details-right wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
                     <h3>@Model.Title</h3>
                     @if (Model.Description.Length > 30)
                     {
@@ -180,15 +180,15 @@
                                             <div class="comment-box">
                                                 <div class="comment-header d-flex justify-content-between align-items-center">
                                                     <div class="author d-flex flex-wrap">
-                                                        @if (comment.ReviewerProfileImage != null)
+                                                        @if (comment.AuthorProfileImage != null)
                                                         {
-                                                            <img alt="image" style="width:50px" src="@comment.ReviewerProfileImage">
+                                                            <img alt="image" style="width:50px" src="@comment.AuthorProfileImage">
                                                         }
                                                         else
                                                         {
                                                             <img alt="image" style="width:50px" src="~/assets/images/bg/NoProfilePicture.png">
                                                         }
-                                                        <h5><a asp-controller="User" asp-action="SellerProfile" asp-route-userId="@comment.ReviewerId">@comment.ReviewerFirstName @comment.ReviewerLastName</a></h5><span class="commnt-date"> @comment.DatePlaced.ToLocalTime()</span>
+                                                        <h5><a asp-controller="User" asp-action="SellerProfile" asp-route-userId="@comment.AuthorId">@comment.AuthorFirstName @comment.AuthorLastName</a></h5><span class="commnt-date"> @comment.DatePlaced.ToLocalTime()</span>
                                                     </div>
                                                 </div>
                                                 <div class="comment-body">
@@ -224,5 +224,3 @@
         </div>
     </div>
 </div>
-
-<script src="~/js/LoadImage.js"></script>

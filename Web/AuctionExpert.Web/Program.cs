@@ -10,6 +10,8 @@ namespace AuctionExpert.Web
     using AuctionExpert.Data.Models;
     using AuctionExpert.Data.Repositories;
     using AuctionExpert.Data.Seeding;
+    using AuctionExpert.Factories.Auction;
+    using AuctionExpert.Factories.User;
     using AuctionExpert.Services.Data.Auction;
     using AuctionExpert.Services.Data.Bid;
     using AuctionExpert.Services.Data.Category;
@@ -20,6 +22,7 @@ namespace AuctionExpert.Web
     using AuctionExpert.Services.Data.Settings;
     using AuctionExpert.Services.Data.SubCategory;
     using AuctionExpert.Services.Data.User;
+    using AuctionExpert.Services.Data.UserReview;
     using AuctionExpert.Services.Mapping;
     using AuctionExpert.Services.Messaging;
     using AuctionExpert.Web.ViewModels;
@@ -108,7 +111,12 @@ namespace AuctionExpert.Web
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IBidService, BidService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IReviewService, ReviewService>();
+            services.AddTransient<IAuctionReviewService, AuctionReviewService>();
+            services.AddTransient<IUserReviewService, UserReviewService>();
+
+            // Model factories
+            services.AddScoped<IAuctionModelFactory, AuctionModelFactory>();
+            services.AddScoped<IUserModelFactory, UserModelFactory>();
         }
 
         private static void Configure(WebApplication app)

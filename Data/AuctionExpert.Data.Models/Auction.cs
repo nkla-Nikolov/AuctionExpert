@@ -15,7 +15,8 @@
         {
             this.Bids = new HashSet<Bid>();
             this.Images = new HashSet<Image>();
-            this.Reviews = new HashSet<Review>();
+            this.AuctionReviews = new HashSet<AuctionReview>();
+            this.UsersLiked = new HashSet<ApplicationUser>();
         }
 
         [Required]
@@ -70,6 +71,8 @@
 
         public virtual ICollection<Image> Images { get; set; }
 
-        public virtual ICollection<Review> Reviews { get; set; }
+        public virtual ICollection<AuctionReview> AuctionReviews { get; set; }
+
+        public virtual ICollection<ApplicationUser> UsersLiked { get; set; }
     }
 }

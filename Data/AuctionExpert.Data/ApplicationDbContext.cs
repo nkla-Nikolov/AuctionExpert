@@ -25,6 +25,8 @@
 
         public DbSet<Auction> Auctions { get; set; }
 
+        public DbSet<AuctionReview> AuctionReviews { get; set; }
+
         public DbSet<Bid> Bids { get; set; }
 
         public DbSet<Category> Categories { get; set; }
@@ -33,7 +35,7 @@
 
         public DbSet<Country> Countries { get; set; }
 
-        public DbSet<Review> Reviews { get; set; }
+        public DbSet<UserReview> UserReviews { get; set; }
 
         public DbSet<SubCategory> SubCategories { get; set; }
 
@@ -96,12 +98,16 @@
                 .HasColumnType("decimal(10,2)");
 
             builder.Entity<ApplicationUser>()
-                .HasMany(x => x.Reviews)
+                .HasMany(x => x.UserReviews)
                 .WithOne(x => x.User)
                 .HasForeignKey(x => x.UserId);
 
+            builder.Entity<ApplicationUser>()
+                .HasMany(x => x.LikedAuctions)
+                .WithMany(x => x.UsersLiked);
+
             builder.Entity<Auction>()
-                .HasMany(x => x.Reviews)
+                .HasMany(x => x.AuctionReviews)
                 .WithOne(x => x.Auction)
                 .HasForeignKey(x => x.AuctionId);
 

@@ -123,5 +123,10 @@
             this.userRepository.Update(user);
             await this.userRepository.SaveChangesAsync();
         }
+
+        public Task<ApplicationUser> GetUserByIdAsync(string userId)
+        {
+            return this.userManager.FindByIdAsync(userId);
+        }
     }
 }

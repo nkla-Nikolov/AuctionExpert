@@ -19,11 +19,11 @@
 
     public class ReviewServiceTests
     {
-        private IDeletableEntityRepository<Review> reviewRepository;
+        private IDeletableEntityRepository<UserReview> reviewRepository;
         private IDeletableEntityRepository<Auction> auctionRepository;
         private IDeletableEntityRepository<ApplicationUser> userRepository;
         private ApplicationDbContext context;
-        private IReviewService reviewService;
+        private IAuctionReviewService reviewService;
 
         public ReviewServiceTests()
         {
@@ -40,7 +40,7 @@
         [Fact]
         public async Task GetAllOnAuctionShouldReturnCorrectNumber()
         {
-            this.reviewRepository = new EfDeletableEntityRepository<Review>(this.context);
+            this.reviewRepository = new EfDeletableEntityRepository<UserReview>(this.context);
             this.auctionRepository = new EfDeletableEntityRepository<Auction>(this.context);
             this.userRepository = new EfDeletableEntityRepository<ApplicationUser>(this.context);
             this.reviewService = new ReviewService(this.auctionRepository, this.reviewRepository, this.userRepository);
@@ -51,22 +51,22 @@
                 Description = "Some Description",
                 OwnerId = "SomeGuid()",
                 Title = "Some title",
-                Reviews = new List<Review>
+                Reviews = new List<UserReview>
                 {
-                    new Review() { Comment = "Some comment" },
-                    new Review() { Comment = "Some comment" },
-                    new Review() { Comment = "Some comment" },
+                    new UserReview() { Comment = "Some comment" },
+                    new UserReview() { Comment = "Some comment" },
+                    new UserReview() { Comment = "Some comment" },
                 },
             });
             await this.auctionRepository.SaveChangesAsync();
 
-            Assert.Equal(3, await this.reviewService.GetAllReviewsOnAuction<ReviewViewModel>(1).CountAsync());
+            Assert.Equal(3, await this.reviewService.GetAllAuctionReviews<UserReviewViewModel>(1).CountAsync());
         }
 
         [Fact]
         public async Task GetAllOnAuctionShouldReturnCorrectCommentContent()
         {
-            this.reviewRepository = new EfDeletableEntityRepository<Review>(this.context);
+            this.reviewRepository = new EfDeletableEntityRepository<UserReview>(this.context);
             this.auctionRepository = new EfDeletableEntityRepository<Auction>(this.context);
             this.userRepository = new EfDeletableEntityRepository<ApplicationUser>(this.context);
             this.reviewService = new ReviewService(this.auctionRepository, this.reviewRepository, this.userRepository);
@@ -77,23 +77,23 @@
                 Description = "Some Description",
                 OwnerId = "SomeGuid()",
                 Title = "Some title",
-                Reviews = new List<Review>
+                Reviews = new List<UserReview>
                 {
-                    new Review() { Comment = "Some comment1" },
-                    new Review() { Comment = "Some comment2" },
-                    new Review() { Comment = "Some comment3" },
+                    new UserReview() { Comment = "Some comment1" },
+                    new UserReview() { Comment = "Some comment2" },
+                    new UserReview() { Comment = "Some comment3" },
                 },
             });
             await this.auctionRepository.SaveChangesAsync();
 
-            Assert.Equal("Some comment1", this.reviewService.GetAllReviewsOnAuction<ReviewViewModel>(1).First().Comment);
-            Assert.Equal("Some comment3", this.reviewService.GetAllReviewsOnAuction<ReviewViewModel>(1).Last().Comment);
+            Assert.Equal("Some comment1", this.reviewService.GetAllAuctionReviews<UserReviewViewModel>(1).First().Comment);
+            Assert.Equal("Some comment3", this.reviewService.GetAllAuctionReviews<UserReviewViewModel>(1).Last().Comment);
         }
 
         [Fact]
         public async Task GetAllOnAuctionShouldReturnZero()
         {
-            this.reviewRepository = new EfDeletableEntityRepository<Review>(this.context);
+            this.reviewRepository = new EfDeletableEntityRepository<UserReview>(this.context);
             this.auctionRepository = new EfDeletableEntityRepository<Auction>(this.context);
             this.userRepository = new EfDeletableEntityRepository<ApplicationUser>(this.context);
             this.reviewService = new ReviewService(this.auctionRepository, this.reviewRepository, this.userRepository);
@@ -107,13 +107,13 @@
             });
             await this.auctionRepository.SaveChangesAsync();
 
-            Assert.Equal(0, await this.reviewService.GetAllReviewsOnAuction<ReviewViewModel>(1).CountAsync());
+            Assert.Equal(0, await this.reviewService.GetAllAuctionReviews<UserReviewViewModel>(1).CountAsync());
         }
 
         [Fact]
         public async Task GetAllOnUserShouldReturnCorrectNumber()
         {
-            this.reviewRepository = new EfDeletableEntityRepository<Review>(this.context);
+            this.reviewRepository = new EfDeletableEntityRepository<UserReview>(this.context);
             this.auctionRepository = new EfDeletableEntityRepository<Auction>(this.context);
             this.userRepository = new EfDeletableEntityRepository<ApplicationUser>(this.context);
             this.reviewService = new ReviewService(this.auctionRepository, this.reviewRepository, this.userRepository);
@@ -124,23 +124,23 @@
                 FirstName = "Nikola",
                 LastName = "Nikolov",
                 Age = 26,
-                Reviews = new List<Review>
+                Reviews = new List<UserReview>
                 {
-                    new Review() { Comment = "Some comment" },
-                    new Review() { Comment = "Some comment" },
-                    new Review() { Comment = "Some comment" },
-                    new Review() { Comment = "Some comment" },
+                    new UserReview() { Comment = "Some comment" },
+                    new UserReview() { Comment = "Some comment" },
+                    new UserReview() { Comment = "Some comment" },
+                    new UserReview() { Comment = "Some comment" },
                 },
             });
             await this.userRepository.SaveChangesAsync();
 
-            Assert.Equal(4, await this.reviewService.GetAllReviewsOnUser<ReviewViewModel>("SomeGuid").CountAsync());
+            Assert.Equal(4, await this.reviewService.GetAllReviewsOnUser<UserReviewViewModel>("SomeGuid").CountAsync());
         }
 
         [Fact]
         public async Task GetAllOnUserShouldReturnZero()
         {
-            this.reviewRepository = new EfDeletableEntityRepository<Review>(this.context);
+            this.reviewRepository = new EfDeletableEntityRepository<UserReview>(this.context);
             this.auctionRepository = new EfDeletableEntityRepository<Auction>(this.context);
             this.userRepository = new EfDeletableEntityRepository<ApplicationUser>(this.context);
             this.reviewService = new ReviewService(this.auctionRepository, this.reviewRepository, this.userRepository);
@@ -154,13 +154,13 @@
             });
             await this.userRepository.SaveChangesAsync();
 
-            Assert.Equal(0, await this.reviewService.GetAllReviewsOnUser<ReviewViewModel>("SomeGuid").CountAsync());
+            Assert.Equal(0, await this.reviewService.GetAllReviewsOnUser<UserReviewViewModel>("SomeGuid").CountAsync());
         }
 
         [Fact]
         public async Task GetAllOnUserShouldReturnCorrectComments()
         {
-            this.reviewRepository = new EfDeletableEntityRepository<Review>(this.context);
+            this.reviewRepository = new EfDeletableEntityRepository<UserReview>(this.context);
             this.auctionRepository = new EfDeletableEntityRepository<Auction>(this.context);
             this.userRepository = new EfDeletableEntityRepository<ApplicationUser>(this.context);
             this.reviewService = new ReviewService(this.auctionRepository, this.reviewRepository, this.userRepository);
@@ -171,24 +171,24 @@
                 FirstName = "Nikola",
                 LastName = "Nikolov",
                 Age = 26,
-                Reviews = new List<Review>
+                Reviews = new List<UserReview>
                 {
-                    new Review() { Comment = "Some comment1" },
-                    new Review() { Comment = "Some comment2" },
-                    new Review() { Comment = "Some comment3" },
-                    new Review() { Comment = "Some comment4" },
+                    new UserReview() { Comment = "Some comment1" },
+                    new UserReview() { Comment = "Some comment2" },
+                    new UserReview() { Comment = "Some comment3" },
+                    new UserReview() { Comment = "Some comment4" },
                 },
             });
             await this.userRepository.SaveChangesAsync();
 
-            Assert.Equal("Some comment1", this.reviewService.GetAllReviewsOnUser<ReviewViewModel>("SomeGuid").First().Comment);
-            Assert.Equal("Some comment4", this.reviewService.GetAllReviewsOnUser<ReviewViewModel>("SomeGuid").Last().Comment);
+            Assert.Equal("Some comment1", this.reviewService.GetAllReviewsOnUser<UserReviewViewModel>("SomeGuid").First().Comment);
+            Assert.Equal("Some comment4", this.reviewService.GetAllReviewsOnUser<UserReviewViewModel>("SomeGuid").Last().Comment);
         }
 
         [Fact]
         public async Task PlaceCommentOnUserShouldThrowExceptionIfUserIsNull()
         {
-            this.reviewRepository = new EfDeletableEntityRepository<Review>(this.context);
+            this.reviewRepository = new EfDeletableEntityRepository<UserReview>(this.context);
             this.auctionRepository = new EfDeletableEntityRepository<Auction>(this.context);
             this.userRepository = new EfDeletableEntityRepository<ApplicationUser>(this.context);
             this.reviewService = new ReviewService(this.auctionRepository, this.reviewRepository, this.userRepository);
@@ -209,7 +209,7 @@
         [Fact]
         public async Task PlaceCommentOnUserShouldThrowExceptionIfReviewerIsNull()
         {
-            this.reviewRepository = new EfDeletableEntityRepository<Review>(this.context);
+            this.reviewRepository = new EfDeletableEntityRepository<UserReview>(this.context);
             this.auctionRepository = new EfDeletableEntityRepository<Auction>(this.context);
             this.userRepository = new EfDeletableEntityRepository<ApplicationUser>(this.context);
             this.reviewService = new ReviewService(this.auctionRepository, this.reviewRepository, this.userRepository);
@@ -230,7 +230,7 @@
         [Fact]
         public async Task PlaceCommentOnUserShouldWorkCorrectly()
         {
-            this.reviewRepository = new EfDeletableEntityRepository<Review>(this.context);
+            this.reviewRepository = new EfDeletableEntityRepository<UserReview>(this.context);
             this.auctionRepository = new EfDeletableEntityRepository<Auction>(this.context);
             this.userRepository = new EfDeletableEntityRepository<ApplicationUser>(this.context);
             this.reviewService = new ReviewService(this.auctionRepository, this.reviewRepository, this.userRepository);
@@ -253,14 +253,14 @@
 
             await this.reviewService.CommentOnUser("UserIdGuid", "ReviewerIdGuid", "Hello");
 
-            Assert.Equal(1, await this.reviewService.GetAllReviewsOnUser<ReviewViewModel>("UserIdGuid").CountAsync());
-            Assert.Equal("Hello", this.reviewService.GetAllReviewsOnUser<ReviewViewModel>("UserIdGuid").First().Comment);
+            Assert.Equal(1, await this.reviewService.GetAllReviewsOnUser<UserReviewViewModel>("UserIdGuid").CountAsync());
+            Assert.Equal("Hello", this.reviewService.GetAllReviewsOnUser<UserReviewViewModel>("UserIdGuid").First().Comment);
         }
 
         [Fact]
         public async Task PlaceCommentOnAuctionShouldThrowExceptionIfAuctionIsNull()
         {
-            this.reviewRepository = new EfDeletableEntityRepository<Review>(this.context);
+            this.reviewRepository = new EfDeletableEntityRepository<UserReview>(this.context);
             this.auctionRepository = new EfDeletableEntityRepository<Auction>(this.context);
             this.userRepository = new EfDeletableEntityRepository<ApplicationUser>(this.context);
             this.reviewService = new ReviewService(this.auctionRepository, this.reviewRepository, this.userRepository);
@@ -288,7 +288,7 @@
         [Fact]
         public async Task PlaceCommentOnAuctionShouldThrowExceptionIfUserIsNull()
         {
-            this.reviewRepository = new EfDeletableEntityRepository<Review>(this.context);
+            this.reviewRepository = new EfDeletableEntityRepository<UserReview>(this.context);
             this.auctionRepository = new EfDeletableEntityRepository<Auction>(this.context);
             this.userRepository = new EfDeletableEntityRepository<ApplicationUser>(this.context);
             this.reviewService = new ReviewService(this.auctionRepository, this.reviewRepository, this.userRepository);
@@ -319,7 +319,7 @@
         [Fact]
         public async Task PlaceCommentOnAuctionShouldWorkCorrectly()
         {
-            this.reviewRepository = new EfDeletableEntityRepository<Review>(this.context);
+            this.reviewRepository = new EfDeletableEntityRepository<UserReview>(this.context);
             this.auctionRepository = new EfDeletableEntityRepository<Auction>(this.context);
             this.userRepository = new EfDeletableEntityRepository<ApplicationUser>(this.context);
             this.reviewService = new ReviewService(this.auctionRepository, this.reviewRepository, this.userRepository);

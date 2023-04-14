@@ -52,6 +52,7 @@
     <ProjectReference Include="..\..\AuctionExpert.Common\AuctionExpert.Common.csproj" />
     <ProjectReference Include="..\..\Data\AuctionExpert.Data.Models\AuctionExpert.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\AuctionExpert.Data\AuctionExpert.Data.csproj" />
+    <ProjectReference Include="..\..\Services\AuctionExpert.Factories\AuctionExpert.Factories.csproj" />
     <ProjectReference Include="..\..\Services\AuctionExpert.Services.Data\AuctionExpert.Services.Data.csproj" />
     <ProjectReference Include="..\..\Services\AuctionExpert.Services.Mapping\AuctionExpert.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Services\AuctionExpert.Services.Messaging\AuctionExpert.Services.Messaging.csproj" />

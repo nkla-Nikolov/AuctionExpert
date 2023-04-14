@@ -5,28 +5,24 @@
 
     using AuctionExpert.Data.Common.Models;
 
-    public class Review : BaseDeletableModel<int>
+    public class UserReview : BaseDeletableModel<int>
     {
         [Required]
         public string Comment { get; set; }
 
-        public int PositiveReviews { get; set; }
-
-        public int NegativeReviews { get; set; }
+        public int Likes { get; set; }
 
         [Required]
         public DateTime DatePlaced { get; set; }
 
-        public int? AuctionId { get; set; }
-
-        public virtual Auction Auction { get; set; }
-
+        [Required]
         public string UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; }
 
-        public string ReviewerId { get; set; }
+        [Required]
+        public string AuthorId { get; set; }
 
-        public virtual ApplicationUser Reviewer { get; set; }
+        public virtual ApplicationUser Author { get; set; }
     }
 }

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "AuctionExpert.Services.Mapping": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:54257;http://localhost:54262"
+    }
+  }
+}

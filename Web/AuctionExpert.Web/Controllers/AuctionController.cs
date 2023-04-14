@@ -5,9 +5,11 @@
     using System.Threading.Tasks;
 
     using AuctionExpert.Data.Models;
+    using AuctionExpert.Factories.Auction;
     using AuctionExpert.Services.Data.Auction;
     using AuctionExpert.Services.Data.Category;
     using AuctionExpert.Services.Data.Review;
+    using AuctionExpert.Services.Data.User;
     using AuctionExpert.Web.ViewModels.Auction;
     using AuctionExpert.Web.ViewModels.Category;
     using Microsoft.AspNetCore.Authorization;
@@ -20,19 +22,28 @@
     {
         private readonly ICategoryService categoryService;
         private readonly IAuctionService auctionService;
-        private readonly IReviewService reviewService;
+        private readonly IAuctionReviewService reviewService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IAuctionModelFactory auctionModelFactory;
+        private readonly IToastNotification notificationService;
+        private readonly IUserService userService;
 
         public AuctionController(
             ICategoryService categoryService,
             IAuctionService auctionService,
-            IReviewService reviewService,
-            UserManager<ApplicationUser> userManager)
+            IAuctionReviewService reviewService,
+            UserManager<ApplicationUser> userManager,
+            IAuctionModelFactory auctionModelFactory,
+            IToastNotification notificationService,
+            IUserService userService)
         {
             this.categoryService = categoryService;
             this.auctionService = auctionService;
             this.reviewService = reviewService;
             this.userManager = userManager;
+            this.auctionModelFactory = auctionModelFactory;
+            this.notificationService = notificationService;
+            this.userService = userService;
         }
 
         [HttpGet]
@@ -62,15 +73,16 @@
         [HttpGet]
         public async Task<IActionResult> Details(int auctionId)
         {
-            var auction = await this.auctionService.GetDetailAuctionModelByIdAsync(auctionId);
-
-            if (auction == null)
+            try
+            {
+                var model = await this.auctionModelFactory.PrepareAuctionDetailViewModelAsync(auctionId);
+                return this.View(model);
+            }
+            catch (ArgumentNullException)
             {
                 this.Response.StatusCode = 404;
                 return this.View("NotFound404");
             }
-
-            return this.View(auction);
         }
 
         [HttpPost]
@@ -85,7 +97,7 @@
             catch (InvalidOperationException ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
-                model = await this.auctionService.GetDetailAuctionModelByIdAsync(model.Id);
+                model = await this.auctionModelFactory.PrepareAuctionDetailViewModelAsync(model.Id);
 
                 return this.View(model);
             }
@@ -95,6 +107,7 @@
                 return this.View("NotFound404");
             }
 
+            this.notificationService.AddSuccessToastMessage("Successfully placed a bid");
             return this.RedirectToAction(nameof(this.Details), new { auctionId = model.Id });
         }
 
@@ -139,6 +152,7 @@
                 return this.View("NotFound404");
             }
 
+            this.notificationService.AddSuccessToastMessage("Successfully deleted auction");
             return this.RedirectToAction("Index", "Home");
         }
 
@@ -146,10 +160,11 @@
         public async Task<IActionResult> Comment(int auctionId, DetailViewModel model)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var auction = await this.auctionService.GetAuctionByIdAsync(auctionId);
 
             try
             {
-                await this.reviewService.CommentOnAuction(auctionId, model.Comment, userId);
+                await this.reviewService.CommentOnAuction(auction, model.Comment, userId);
             }
             catch (ArgumentNullException)
             {
@@ -157,13 +172,14 @@
                 return this.View("NotFound404");
             }
 
+            this.notificationService.AddSuccessToastMessage("Successfully added new comment");
             return this.RedirectToAction(nameof(this.Details), new { auctionId });
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int auctionId)
         {
-            var auction = await this.auctionService.GetAuctionById(auctionId);
+            var auction = await this.auctionService.GetAuctionByIdAsync(auctionId);
             var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (auction == null)
@@ -177,23 +193,7 @@
                 return this.Unauthorized();
             }
 
-            var categories = await this.categoryService
-                .GetAllCategories<CategoryListModel>()
-                .ToListAsync();
-
-            var model = new EditAuctionInputModel()
-            {
-                Id = auction.Id,
-                AuctionType = auction.AuctionType,
-                Categories = categories,
-                Condition = auction.Condition,
-                Description = auction.Description,
-                StartPrice = (int)auction.StartPrice,
-                StepAmount = auction.StepAmount,
-                Title = auction.Title,
-                SubCateogoryId = auction.SubCategoryId,
-            };
-
+            var model = await this.auctionModelFactory.PrepareEditAuctionInputModel(auction);
             return this.View(model);
         }
 
@@ -203,12 +203,9 @@
             if (!this.ModelState.IsValid)
             {
                 this.ModelState.AddModelError(string.Empty, string.Empty);
+                var auction = await this.auctionService.GetAuctionByIdAsync(auctionId);
 
-                model.Id = auctionId;
-                model.Categories = await this.categoryService
-                    .GetAllCategories<CategoryListModel>()
-                    .ToListAsync();
-
+                model = await this.auctionModelFactory.PrepareEditAuctionInputModel(auction);
                 return this.View(model);
             }
 
@@ -216,13 +213,30 @@
             {
                 await this.auctionService.EditAuction(auctionId, model);
             }
-            catch (NullReferenceException)
+            catch (ArgumentNullException)
             {
                 this.Response.StatusCode = 404;
                 return this.View("NotFound404");
             }
 
+            this.notificationService.AddSuccessToastMessage("Successfully updated auction");
             return this.RedirectToAction(nameof(this.Details), new { auctionId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LikeAuction(int auctionId, string userId)
+        {
+            var auction = await this.auctionService.GetAuctionByIdAsync(auctionId);
+            var user = await this.userService.GetUserByIdAsync(userId);
+
+            if (auction == null || user == null)
+            {
+                this.Response.StatusCode = 404;
+                return this.View("NotFound404");
+            }
+
+            await this.auctionService.LikeAuction(auction, user);
+            return this.Json(new { Result = true });
         }
     }
 }

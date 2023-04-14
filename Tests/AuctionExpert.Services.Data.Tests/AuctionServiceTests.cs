@@ -24,7 +24,7 @@
         private IAuctionService auctionService;
         private IImageService imageService;
         private IBidService bidService;
-        private IReviewService reviewService;
+        private IAuctionReviewService reviewService;
         private ApplicationDbContext context;
 
         public AuctionServiceTests()

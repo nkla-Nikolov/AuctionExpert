@@ -8,7 +8,7 @@
     {
         public SellerProfileViewModel()
         {
-            this.Comments = new HashSet<ReviewViewModel>();
+            this.Comments = new HashSet<UserReviewViewModel>();
         }
 
         public string Id { get; set; }
@@ -25,6 +25,6 @@
 
         public string Comment { get; set; }
 
-        public IEnumerable<ReviewViewModel> Comments { get; set; }
+        public IEnumerable<UserReviewViewModel> Comments { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 {
     using System.Diagnostics;
     using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using AuctionExpert.Services.Data.Auction;
@@ -15,8 +16,7 @@
     {
         private readonly IAuctionService auctionService;
 
-        public HomeController(
-            IAuctionService auctionService)
+        public HomeController(IAuctionService auctionService)
         {
             this.auctionService = auctionService;
         }
@@ -29,6 +29,12 @@
                 .OrderByDescending(x => x.ReviewsCount)
                 .Take(6)
                 .ToListAsync();
+
+            foreach (var auction in auctions)
+            {
+                auction.LikedByUser = auction.UserIdsLikedAuction
+                    .Contains(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            }
 
             return this.View(auctions);
         }

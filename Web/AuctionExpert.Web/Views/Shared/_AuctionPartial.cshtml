@@ -31,28 +31,19 @@
                 <p>Category : <a asp-controller="Auction" asp-action="Browse" asp-route-categoryId="@auction.CategoryId"><span><span>@auction.CategoryName</span></span></a></p>
                 @if (this.User.Identity.IsAuthenticated)
                 {
-                    @if (auction.OwnerId == userId)
-                    {
-                        <a asp-controller="Auction" asp-action="Edit" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary2 btn--sm">Edit</a>
-                        <form method="post" style="display: inline-block;">
-                            <button type="submit" asp-controller="Auction" asp-action="Delete" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary2 btn--sm">Delete</button>
-                        </form>
-                    }
                     <div class="auction-card-bttm">
                         <a asp-controller="Auction" asp-action="Details" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary btn--sm">
                             @(auction.AuctionType == TypeSale.StandartAuction ? "Place a Bid" : "Details")
                         </a>
-
-                        <div class="share-area">
-                            <ul class="social-icons d-flex">
-                                <li><a href="https://www.facebook.com/"><i class="bx bxl-facebook"></i></a></li>
-                                <li><a href="https://www.twitter.com/"><i class="bx bxl-twitter"></i></a></li>
-                                <li><a href="https://www.pinterest.com/"><i class="bx bxl-pinterest"></i></a></li>
-                                <li><a href="https://www.instagram.com/"><i class="bx bxl-instagram"></i></a></li>
-                            </ul>
-                            <div>
-                                <div class="share-btn"><i class='bx bxs-share-alt'></i></div>
-                            </div>
+                        <div class="like">
+                            @if (auction.LikedByUser)
+                            {
+                                <i class="bi bi-heart-fill"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-heart"></i>
+                            }
                         </div>
                     </div>
                 }

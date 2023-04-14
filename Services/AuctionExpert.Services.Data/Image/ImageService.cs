@@ -43,7 +43,7 @@
                     var parameters = new ImageUploadParams()
                     {
                         File = new FileDescription(imageFile.FileName, stream),
-                        Transformation = new Transformation().Width(444).Height(352),
+                        //Transformation = new Transformation().Width(444).Height(352),
                     };
 
                     var result = await this.cloudinary.UploadAsync(parameters);

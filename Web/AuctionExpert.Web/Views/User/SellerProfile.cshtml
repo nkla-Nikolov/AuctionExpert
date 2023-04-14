@@ -102,9 +102,9 @@
                                 <div class="testimonial-single hover-border3 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".2s">
                                     <img alt="image" src="~/assets/images/icons/quote-green2.svg" class="quote-icon">
                                     <div class="testi-img">
-                                        @if (review.ReviewerProfileImage != null)
+                                        @if (review.AuthorProfileImage != null)
                                         {
-                                            <img alt="image" src="@review.ReviewerProfileImage">
+                                            <img alt="image" src="@review.AuthorProfileImage">
                                         }
                                         else
                                         {
@@ -116,7 +116,7 @@
                                             @review.Comment
                                         </p>
                                         <div class="testi-designation">
-                                            <h5><a asp-controller="User" asp-action="SellerProfile" asp-route-userId="@review.ReviewerId">@review.ReviewerFirstName @review.ReviewerLastName</a></h5>
+                                            <h5><a asp-controller="User" asp-action="SellerProfile" asp-route-userId="@review.AuthorId">@review.AuthorFirstName @review.AuthorLastName</a></h5>
                                         </div>
                                     </div>
                                 </div>

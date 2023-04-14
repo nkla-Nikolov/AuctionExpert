@@ -12,11 +12,11 @@
 
         Task DeleteAsync(int auctionId);
 
-        Task<Auction> GetAuctionById(int auctionId);
+        Task LikeAuction(Auction auction, ApplicationUser user);
+
+        Task<Auction> GetAuctionByIdAsync(int auctionId);
 
         Task PlaceBidAsync(int? currentBid, string userId, int auctionId);
-
-        Task<DetailViewModel> GetDetailAuctionModelByIdAsync(int auctionId);
 
         Task EditAuction(int auctionId, EditAuctionInputModel model);
 
@@ -37,5 +37,7 @@
         int MyAuctionsWithDeletedCount(string ownerId);
 
         int MyActiveAuctionsCount(string ownerId);
+
+        IQueryable<T> GetAllCommentsByAuctionId<T>(int auctionId);
     }
 }
