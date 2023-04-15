@@ -1,5 +1,6 @@
 ﻿namespace AuctionExpert.Services.Data.Image
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -47,6 +48,11 @@
                     };
 
                     var result = await this.cloudinary.UploadAsync(parameters);
+
+                    if (result.Error != null)
+                    {
+                        throw new InvalidOperationException(result.Error.Message);
+                    }
 
                     var image = new Image()
                     {

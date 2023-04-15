@@ -1,6 +1,7 @@
 ﻿namespace AuctionExpert.Services.Data.Auction
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -114,7 +115,17 @@
                 Title = model.Title,
             };
 
-            var images = await this.imageService.UploadImages(model.Images);
+            var images = new List<Image>();
+
+            try
+            {
+                images = (await this.imageService.UploadImages(model.Images)).ToList();
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw ex;
+            }
+
             auction.Images = images.ToList();
 
             await this.auctionRepository.AddAsync(auction);
@@ -224,10 +235,49 @@
                 .To<T>();
         }
 
-        public async Task LikeAuction(Auction auction, ApplicationUser user)
+        public async Task LikeAuction(int auctionId, ApplicationUser user)
         {
+            var auction = await this.auctionRepository
+                .All()
+                .Where(x => x.Id == auctionId)
+                .Include(x => x.UsersLiked)
+                .FirstOrDefaultAsync();
+
+            if (auction == null || user == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             auction.UsersLiked.Add(user);
             await this.auctionRepository.SaveChangesAsync();
+        }
+
+        public async Task DislikeAuction(int auctionId, ApplicationUser user)
+        {
+            var auction = await this.auctionRepository
+                .All()
+                .Where(x => x.Id == auctionId)
+                .Include(x => x.UsersLiked)
+                .FirstOrDefaultAsync();
+
+            if (auction == null || user == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            auction.UsersLiked.Remove(user);
+            await this.auctionRepository.SaveChangesAsync();
+        }
+
+        public async Task<bool> DoesUserLikeCurrentAuction(int auctionId, string userId)
+        {
+            var auction = await this.auctionRepository
+                .AllAsNoTracking()
+                .Where(x => x.Id == auctionId)
+                .Include(x => x.UsersLiked)
+                .FirstOrDefaultAsync();
+
+            return auction.UsersLiked.Any(x => x.Id == userId);
         }
     }
 }

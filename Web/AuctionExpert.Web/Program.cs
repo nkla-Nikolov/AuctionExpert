@@ -14,6 +14,7 @@ namespace AuctionExpert.Web
     using AuctionExpert.Factories.User;
     using AuctionExpert.Services.Data.Auction;
     using AuctionExpert.Services.Data.Bid;
+    using AuctionExpert.Services.Data.Blog;
     using AuctionExpert.Services.Data.Category;
     using AuctionExpert.Services.Data.City;
     using AuctionExpert.Services.Data.Country;
@@ -113,6 +114,7 @@ namespace AuctionExpert.Web
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAuctionReviewService, AuctionReviewService>();
             services.AddTransient<IUserReviewService, UserReviewService>();
+            services.AddTransient<IBlogPostService, BlogPostService>();
 
             // Model factories
             services.AddScoped<IAuctionModelFactory, AuctionModelFactory>();

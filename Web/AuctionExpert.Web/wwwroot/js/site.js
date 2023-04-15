@@ -212,3 +212,66 @@ function showSlides(n) {
         captionText.innerHTML = dots[slideIndex - 1].alt;
     }
 }
+
+function likeAuction(postData, token, e) {
+    $.ajax({
+        type: 'POST',
+        url: '/Auction/LikeAuction',
+        data: postData,
+        headers: {
+            'X-CSRF-TOKEN': token
+        },
+        success: function (response) {
+            if (response.result == true) {
+                e.target.classList.remove('bi-heart')
+                e.target.classList.add('bi-heart-fill')
+            }
+        }
+    });
+}
+
+function dislikeAuction(postData, token, e) {
+    $.ajax({
+        type: 'POST',
+        url: '/Auction/DislikeAuction',
+        data: postData,
+        headers: {
+            'X-CSRF-TOKEN': token
+        },
+        success: function (response) {
+            if (response.result == true) {
+                e.target.classList.remove('bi-heart-fill')
+                e.target.classList.add('bi-heart')
+            }
+        }
+    });
+}
+
+$(document).ready(function () {
+    $('.like i').click(function (e) {
+        e.preventDefault();
+        let auctionId = $(this).parent().attr('data-auctionid');
+        let token = $('#antiForgeryForm input').val();
+
+        var postData = {
+            auctionId
+        };
+
+        $.ajax({
+            type: 'GET',
+            url: '/Auction/DoesUserLikeCurrentAuction',
+            data: postData,
+            headers: {
+                'X-CSRF-TOKEN': token
+            },
+            success: function (response) {
+                if (!response) {
+                    likeAuction(postData, token, e);
+                }
+                else {
+                    dislikeAuction(postData, token, e)
+                }
+            }
+        });
+    });
+});

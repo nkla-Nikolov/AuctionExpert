@@ -72,37 +72,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        $(document).ready(function() {
-            $('.like i').click(function() {
-                let auctionId = $('.countdown').attr('data-auctionid');
-                let userId = '@this.User.FindFirstValue(ClaimTypes.NameIdentifier)';
-                let token = $('#antiForgeryForm input').val();
-
-                var postData = {
-                    auctionId,
-                    userId
-                };
-
-                console.log(auctionId);
-
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("LikeAuction", "Auction")',
-                    data: postData,
-                    headers: {
-                        'X-CSRF-TOKEN': token
-                    },
-                    success: function(response){
-                        if (response.result == true){
-                            $('.like i').removeClass('bi-heart')
-                            $('.like i').addClass('bi-heart-fill')
-                        }
-                    }
-                });
-            });
-        });
-    </script>
-}

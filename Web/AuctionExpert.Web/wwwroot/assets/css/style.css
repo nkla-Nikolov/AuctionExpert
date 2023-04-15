@@ -3202,8 +3202,10 @@ header.style-3 .mobile-menu-form input[type=text] {
 
 .auction-card1 .auction-img img {
   width: 100%;
-  border-radius: 5px 5px 0px 0px;
+  border-radius: 5px 5px 5px 5px;
   transition: all 0.65s ease;
+  height: 350px;
+  object-fit: fill;
 }
 
 .auction-card1 .auction-img .auction-timer {
@@ -3215,7 +3217,7 @@ header.style-3 .mobile-menu-form input[type=text] {
   transform: translateX(-50%);
   bottom: 20px;
   background: #fff;
-  min-width: 230px;
+  min-width: 275px;
 }
 
 .auction-card1 .auction-img .auction-timer .countdown h4 {
@@ -3282,11 +3284,7 @@ header.style-3 .mobile-menu-form input[type=text] {
     cursor: pointer;
 }
 
-.auction-card-bttm i.bi-heart-fill:hover{
-    color: red;
-}
-
-.auction-card-bttm i.bi-heart:hover {
+.auction-card-bttm i.bi-heart-fill {
     color: red;
 }
 
@@ -5378,6 +5376,9 @@ footer {
   background-position: center;
   background-color: #0A0A0F;
   position: relative;
+  width: 100%;
+  bottom: 0;
+  margin-top: 50px;
 }
 
 footer .footer-top {

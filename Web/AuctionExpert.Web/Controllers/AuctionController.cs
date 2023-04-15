@@ -65,7 +65,17 @@
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
-            await this.auctionService.CreateAsync(model, user);
+
+            try
+            {
+                await this.auctionService.CreateAsync(model, user);
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                model.Categories = this.categoryService.GetAllCategories<CategoryListModel>();
+                return this.View(model);
+            }
 
             return this.RedirectToAction("Index", "Home");
         }
@@ -224,19 +234,48 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> LikeAuction(int auctionId, string userId)
+        public async Task<IActionResult> LikeAuction(int auctionId)
         {
-            var auction = await this.auctionService.GetAuctionByIdAsync(auctionId);
-            var user = await this.userService.GetUserByIdAsync(userId);
-
-            if (auction == null || user == null)
+            var user = await this.userService.GetUserByIdAsync(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            try
+            {
+                await this.auctionService.LikeAuction(auctionId, user);
+            }
+            catch (ArgumentNullException)
             {
                 this.Response.StatusCode = 404;
                 return this.View("NotFound404");
             }
 
-            await this.auctionService.LikeAuction(auction, user);
+            var auctionName = (await this.auctionService.GetAuctionByIdAsync(auctionId)).Title;
+            this.notificationService.AddSuccessToastMessage($"{auctionName} is added to liked auctions");
             return this.Json(new { Result = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DislikeAuction(int auctionId)
+        {
+            var user = await this.userService.GetUserByIdAsync(this.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            try
+            {
+                await this.auctionService.DislikeAuction(auctionId, user);
+            }
+            catch (ArgumentNullException)
+            {
+                this.Response.StatusCode = 404;
+                return this.View("NotFound404");
+            }
+
+            var auctionName = (await this.auctionService.GetAuctionByIdAsync(auctionId)).Title;
+            this.notificationService.AddWarningToastMessage($"{auctionName} is removed from liked auctions");
+            return this.Json(new { Result = true });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DoesUserLikeCurrentAuction(int auctionId)
+        {
+            var result = await this.auctionService.DoesUserLikeCurrentAuction(auctionId, this.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            return this.Json(result);
         }
     }
 }

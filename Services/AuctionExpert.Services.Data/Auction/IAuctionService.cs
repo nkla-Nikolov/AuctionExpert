@@ -12,7 +12,11 @@
 
         Task DeleteAsync(int auctionId);
 
-        Task LikeAuction(Auction auction, ApplicationUser user);
+        Task LikeAuction(int auctionId, ApplicationUser user);
+
+        Task DislikeAuction(int auctionId, ApplicationUser user);
+
+        Task<bool> DoesUserLikeCurrentAuction(int auctionId, string userId);
 
         Task<Auction> GetAuctionByIdAsync(int auctionId);
 

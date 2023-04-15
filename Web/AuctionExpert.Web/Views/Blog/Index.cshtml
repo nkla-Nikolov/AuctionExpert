@@ -1,0 +1,47 @@
+﻿@model List<BlogPostViewModel>
+
+<div class="inner-banner">
+    <div class="container">
+        <h2 class="inner-banner-title wow fadeInLeft" data-wow-duration="1.5s" data-wow-delay=".2s">Our Blog</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Blog</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="blog-section pt-120 pb-120">
+    <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-top">
+    <img alt="image" src="~/assets/images/bg/section-bg.png" class="img-fluid section-bg-bottom">
+    <div class="container">
+        <div class="row d-flex justify-content-center g-4 mb-60">
+            @foreach (var blog in Model)
+            {
+                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-10">
+                    <div class="single-blog-style1 wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".4s">
+                        <div class="blog-img">
+                            <a class="blog-date"><i class="bi bi-calendar-check"></i>@blog.CreatedOn.ToLocalTime()</a>
+                            <img alt="@blog.Title" src="@blog.ImageUrl">
+                        </div>
+                        <div class="blog-content">
+                            <h5>
+                                <a asp-controller="Blog" asp-action="Details" asp-route-id="@blog.Id">
+                                    @blog.Title
+                                </a>
+                            </h5>
+                            <div class="blog-meta">
+                                <div class="comment">
+                                    <img alt="comment image" src="~/assets/images/icons/comment-icon.svg">
+                                    <a href="#" class="comment">@blog.Reviews.Count Comments</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <!--TODO: pagination-->
+    </div>
+</div>

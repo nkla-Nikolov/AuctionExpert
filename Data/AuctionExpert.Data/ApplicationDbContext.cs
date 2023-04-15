@@ -43,6 +43,10 @@
 
         public DbSet<Image> Images { get; set; }
 
+        public DbSet<BlogPost> BlogPosts { get; set; }
+
+        public DbSet<BlogPostReview> BlogPostReviews { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -110,6 +114,21 @@
                 .HasMany(x => x.AuctionReviews)
                 .WithOne(x => x.Auction)
                 .HasForeignKey(x => x.AuctionId);
+
+            builder.Entity<BlogPost>()
+                .HasMany(x => x.Reviews)
+                .WithOne(x => x.BlogPost)
+                .HasForeignKey(x => x.BlogPostId);
+
+            builder.Entity<BlogPost>()
+                .HasOne(x => x.Image)
+                .WithOne(x => x.BlogPost)
+                .HasForeignKey<Image>(x => x.BlogPostId);
+
+            builder.Entity<Image>()
+                .HasOne(x => x.BlogPost)
+                .WithOne(x => x.Image)
+                .HasForeignKey<BlogPost>(x => x.ImageId);
 
             // Needed for Identity models configuration
             base.OnModelCreating(builder);

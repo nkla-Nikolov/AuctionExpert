@@ -5,20 +5,18 @@
 
     using AuctionExpert.Data.Common.Models;
 
-    public class Image : BaseDeletableModel<string>
+    public class BlogPostReview : BaseDeletableModel<int>
     {
-        public Image()
-        {
-            this.Id = Guid.NewGuid().ToString();
-        }
+        [Required]
+        public string Comment { get; set; }
 
         [Required]
-        public string UrlPath { get; set; }
+        public DateTime DatePlaced { get; set; }
 
         [Required]
-        public int AuctionId { get; set; }
+        public string UserId { get; set; }
 
-        public virtual Auction Auction { get; set; }
+        public ApplicationUser User { get; set; }
 
         [Required]
         public int BlogPostId { get; set; }

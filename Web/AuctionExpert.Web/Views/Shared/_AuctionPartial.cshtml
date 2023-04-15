@@ -35,7 +35,7 @@
                         <a asp-controller="Auction" asp-action="Details" asp-route-auctionId="@auction.Id" class="eg-btn btn--primary btn--sm">
                             @(auction.AuctionType == TypeSale.StandartAuction ? "Place a Bid" : "Details")
                         </a>
-                        <div class="like">
+                        <div class="like" data-auctionid="@auction.Id">
                             @if (auction.LikedByUser)
                             {
                                 <i class="bi bi-heart-fill"></i>
