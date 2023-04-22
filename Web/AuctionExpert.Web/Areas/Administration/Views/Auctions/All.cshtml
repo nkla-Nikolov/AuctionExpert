@@ -27,7 +27,7 @@
                         {
                             <tr>
                                 <td data-label="Id">@auction.Id</td>
-                                <td data-label="Title">@(auction.Title.Substring(0, 30))...</td>
+                                <td data-label="Title">@auction.Title</td>
                                 <td data-label="Bids Count">@auction.BidsCount</td>
                                 <td data-label="Category">@auction.CategoryName</td>
                                 <td data-label="Created On">@auction.CreatedOn.ToShortDateString()</td>
@@ -37,7 +37,7 @@
                                         <button asp-area="Administration"
                                             asp-controller="Auctions"
                                             asp-action="Delete"
-                                            asp-route-auctionId="@auction.Id" class="eg-btn action-btn text-danger">
+                                            asp-route-auctionId="@auction.Id" class="btn btn-sm btn-outline-danger">
                                             Delete
                                         </button>
                                     </form>
@@ -46,8 +46,8 @@
                                     <a asp-area="" 
                                     asp-controller="Auction" 
                                     asp-action="Edit"
-                                   asp-route-auctionId="@auction.Id" 
-                                   class="text-warning">Edit</a>
+                                    asp-route-auctionId="@auction.Id" 
+                                   class="btn btn-sm btn-outline-warning">Edit</a>
                                 </td>
                             </tr>
                         }

@@ -39,7 +39,7 @@
                                 <td data-label="Email">@user.Email</td>
                                 <td data-label="Join Date">@user.CreatedOn.ToLocalTime().ToShortDateString()</td>
                                 <td data-label="Auctions Count">@user.AuctionsCount</td>
-                                <td data-label="Profile"><a asp-area="" asp-controller="User" asp-action="SellerProfile" asp-route-userId="@user.Id">Profile page</a></td>
+                                <td data-label="Profile"><a asp-area="" asp-controller="User" asp-action="SellerProfile" asp-route-userId="@user.Id" class="btn btn-sm btn-outline-secondary">Profile page</a></td>
                                 @if (user.IsAdmin)
                                 {
                                     <td data-label="Manage Roles">
@@ -47,7 +47,7 @@
                                             <button asp-area="Administration"
                                             asp-controller="Users"
                                             asp-action="RemoveFromRole"
-                                            asp-route-userId="@user.Id" class="eg-btn action-btn text-danger">
+                                            asp-route-userId="@user.Id" class="btn btn-sm btn-outline-danger">
                                                 Remove Admin
                                             </button>
                                         </form>
@@ -60,7 +60,7 @@
                                             <button asp-area="Administration"
                                             asp-controller="Users"
                                             asp-action="AddToRole"
-                                            asp-route-userId="@user.Id" class="eg-btn action-btn text-success">
+                                            asp-route-userId="@user.Id" class="btn btn-sm btn-outline-success">
                                                 Make Admin
                                             </button>
                                         </form>

@@ -7,14 +7,19 @@
     using AuctionExpert.Web.ViewModels.Administration.Country;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
+    using NToastNotify;
 
     public class CountriesController : AdministrationController
     {
         private readonly ICountryService countryService;
+        private readonly IToastNotification notificationService;
 
-        public CountriesController(ICountryService countryService)
+        public CountriesController(
+            ICountryService countryService,
+            IToastNotification notificationService)
         {
             this.countryService = countryService;
+            this.notificationService = notificationService;
         }
 
         [HttpGet]
@@ -46,11 +51,11 @@
             }
             catch (ArgumentNullException)
             {
-                this.Response.StatusCode = 404;
-                return this.View("NotFound404");
+                return this.Json(new { Result = false });
             }
 
-            return this.RedirectToAction(nameof(this.All));
+            this.notificationService.AddSuccessToastMessage($"Country deleted successfully");
+            return this.Json(new { Result = true });
         }
 
         [HttpPost]

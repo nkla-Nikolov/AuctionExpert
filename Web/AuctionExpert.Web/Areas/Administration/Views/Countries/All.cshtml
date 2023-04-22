@@ -7,17 +7,17 @@
 <div class="container">
     <div class="row g-4">
         <div class="col g-3">
-            <h2 class="text-center pt-80 pb-80">@this.ViewData["Title"]</h2>
-            <form method="post">
-                <div class="input-group mb-3">
+            <h2 class="text-center pt-80 pb-60">@this.ViewData["Title"]</h2>
+            <form method="post" asp-area="Administration" asp-controller="Countries" asp-action="Add">
+                <div class="col-md-6">
                     <div asp-validation-summary="ModelOnly"></div>
-                    <input asp-for="@Model.CountryName" class="form-control" placeholder="Enter country name" />
+                    <input asp-for="@Model.CountryName" placeholder="Enter country name" />
                     <span asp-validation-for="@Model.CountryName" class="text-danger"></span>
-                    <button asp-area="Administration" asp-controller="Countries" asp-action="Add" class="btn btn-success" id="button-addon2">Add Country</button>
+                    <button class="btn btn-sm btn-outline-success">Add Country</button>
                 </div>
             </form>
             <div class="table-wrapper">
-                <table class="eg-table order-table table mb-0">
+                <table id="countries-table" class="eg-table order-table table mb-0">
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -35,24 +35,14 @@
                                 <td data-label="Name">@country.Name</td>
                                 <td data-label="Cities Count">@country.CitiesCount</td>
                                 <td data-label="Delete">
-                                    <form method="post">
-                                        <button asp-area="Administration"
-                                            asp-controller="Countries"
-                                            asp-action="Delete"
-                                            asp-route-countryId="@country.Id" class="eg-btn action-btn text-danger">
-                                            Delete
-                                        </button>
-                                    </form>
+                                    <button id="delete-country_@country.Id" class="btn btn-sm btn-outline-danger">
+                                        Delete
+                                    </button>
                                 </td>
                                 <td data-label="Edit">
-                                    <form method="post">
-                                        <button asp-area="Administration"
-                                            asp-controller="Countries"
-                                            asp-action="Edit"
-                                            asp-route-userId="@country.Id" class="eg-btn action-btn text-warning">
-                                            Edit
-                                        </button>
-                                    </form>
+                                    <button id="edit-country_@country.Id" class="btn btn-sm btn-outline-warning">
+                                        Edit
+                                    </button>
                                 </td>
                             </tr>
                         }
@@ -63,3 +53,83 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#countries-table td .btn.btn-sm.btn-outline-danger').click(function(e){
+                let country = $(e.target).attr('id');
+                let indexOfId = country.indexOf('_')
+                let countryId = Number(country.substring(indexOfId + 1));
+                let token = $('form > input').val();
+                
+                let postData = {
+                    countryId
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Administration/Countries/Delete',
+                    data: postData,
+                    headers: {
+                        'X-CSRF-TOKEN': token
+                    },
+                    success: function(response){
+                        if (!response.result){
+                            alert('Country does not exist!')
+                        }
+                        else{
+                            $(e.target).parent().parent().remove();
+                        }
+                    },
+                    error: function(response){
+                        alert('Request failed. Please try again')
+                    }
+                })
+            })
+
+            $('#countries-table td .btn.btn-sm.btn-outline-warning').click(function (e) {
+                let country = $(e.target).attr('id');
+                let indexOfId = country.indexOf('_')
+                let countryId = Number(country.substring(indexOfId + 1));
+                let token = $('form > input').val();
+
+                let postData = {
+                    countryId
+                };
+
+                let tdName = $(this).parent().parent().children()[1];
+                let currentCountryName = tdName.textContent;
+                tdName.textContent = '';
+                let div = document.createElement('div');
+                div.classList.add('d-flex');
+                div.style.margin = 'auto';
+
+                let input = document.createElement('input');
+                input.classList.add('form-control');
+
+                let updateBtn = document.createElement('button')
+                updateBtn.classList.add('btn', 'btn-sm', 'btn-outline-success');
+                updateBtn.style.marginLeft = '20px';
+                updateBtn.textContent = 'Update';
+                updateBtn.id = 'updateBtn';
+
+                let cancelBtn = document.createElement('button');
+                cancelBtn.classList.add('btn', 'btn-sm', 'btn-outline-danger');
+                cancelBtn.style.marginLeft = '20px';
+                cancelBtn.textContent = 'Cancel'; 
+                cancelBtn.id = 'cancelBtn';
+                cancelBtn.onclick = cancelUpdate(currentCountryName);
+
+                div.append(input);
+                div.append(updateBtn);
+                div.append(cancelBtn);
+                tdName.append(div);
+            })
+        })
+
+        function cancelUpdate(countryName){
+            console.log($(this));
+        }
+    </script>
+}
