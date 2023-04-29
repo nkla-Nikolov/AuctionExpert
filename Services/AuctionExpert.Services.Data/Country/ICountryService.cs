@@ -13,6 +13,8 @@
 
         Task DeleteCountry(int id);
 
+        Task UpdateCountry(AuctionExpert.Data.Models.Country country, string countryName);
+
         Task AddCountry(string name);
 
         int GetCount();

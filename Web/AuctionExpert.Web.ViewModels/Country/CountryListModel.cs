@@ -13,6 +13,7 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Country, CountryListModel>();
+            configuration.CreateMap<Country, Country>();
         }
     }
 }

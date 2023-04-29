@@ -81,5 +81,12 @@
             await this.countryRepository.AddAsync(country);
             await this.countryRepository.SaveChangesAsync();
         }
+
+        public async Task UpdateCountry(Country country, string countryName)
+        {
+            country.Name = countryName;
+            this.countryRepository.Update(country);
+            await this.countryRepository.SaveChangesAsync();
+        }
     }
 }
