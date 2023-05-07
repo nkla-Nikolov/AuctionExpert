@@ -48,8 +48,8 @@
                             <div class="col-12">
                                 <div class="form-agreement form-inner d-flex justify-content-between flex-wrap">
                                     <div class="form-group">
-                                        <input type="checkbox" id="html">
-                                        <label for="html">I agree to the <a href="#">Terms & Policy</a></label>
+                                        <input asp-for="Input.RememberMe" type="checkbox">
+                                        <label asp-for="Input.RememberMe"></label>
                                     </div>
                                     <a asp-area="Identity" asp-page="/Account/ForgotPassword" class="forgot-pass">Forgotten Password</a>
                                 </div>

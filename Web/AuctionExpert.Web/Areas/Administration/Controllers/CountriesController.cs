@@ -1,6 +1,7 @@
 ﻿namespace AuctionExpert.Web.Areas.Administration.Controllers
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using AuctionExpert.Data.Models;
@@ -23,7 +24,6 @@
             this.notificationService = notificationService;
         }
 
-        [HttpGet]
         public async Task<IActionResult> All(int id = 1)
         {
             const int itemsPerPage = 500;
@@ -43,14 +43,27 @@
             return this.View(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(int currentPage, int itemsPerPage)
         {
             var countries = await this.countryService
                 .GetAllCountries<CountryListModel>()
+                .Skip((currentPage - 1) * itemsPerPage)
+                .Take(itemsPerPage)
                 .ToListAsync();
 
-            return this.Json(countries);
+            var countriesCount = this.countryService.GetCount();
+
+            var pagesCount = (int)Math.Ceiling((double)countriesCount / itemsPerPage);
+            var model = new
+            {
+                PagesCount = pagesCount,
+                HasPreviousPage = currentPage > 1,
+                HasNextPage = currentPage < pagesCount,
+                Countries = countries,
+                CurrentPage = currentPage,
+            };
+
+            return this.Json(model);
         }
 
         [HttpPost]
@@ -100,7 +113,7 @@
 
             await this.countryService.AddCountry(model.CountryName);
 
-            return this.RedirectToAction(nameof(this.All));
+            return this.RedirectToAction(nameof(this.GetAll));
         }
     }
 }

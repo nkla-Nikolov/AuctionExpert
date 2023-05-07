@@ -1,5 +1,5 @@
-﻿@using AuctionExpert.Web.ViewModels.Administration.Country;
-@model PaginatedCountryListModel
+﻿@model PaginatedCountryListModel
+
 @{
     this.ViewData["Title"] = "Countries Administration";
 }
@@ -8,14 +8,22 @@
     <div class="row g-4">
         <div class="col g-3">
             <h2 class="text-center pt-80 pb-60">@this.ViewData["Title"]</h2>
-            <form method="post" asp-area="Administration" asp-controller="Countries" asp-action="Add">
-                <div class="col-md-6">
-                    <div asp-validation-summary="ModelOnly"></div>
-                    <input asp-for="@Model.CountryName" placeholder="Enter country name" />
-                    <span asp-validation-for="@Model.CountryName" class="text-danger"></span>
-                    <button class="btn btn-sm btn-outline-success">Add Country</button>
-                </div>
-            </form>
+            <div class="table-title-area" id="itemsPerPage" style="justify-content: flex-end">
+                @*<form method="post">
+                    <div class="input-group-md">
+                        <div asp-validation-summary="ModelOnly"></div>
+                        <input class="form-control" asp-for="@Model.CountryName" placeholder="Enter country name" />
+                        <span asp-validation-for="@Model.CountryName" class="text-danger"></span>
+                        <button class="btn btn-sm btn-outline-success">Add Country</button>
+                    </div>
+                </form>*@
+                <select>
+                    <option value="10">Show: 10 per page</option>
+                    <option value="20">Show: 20 per page</option>
+                    <option value="30">Show: 30 per page</option>
+                    <option value="50">Show: 50 per page</option>
+                </select>
+            </div>
             <div class="table-wrapper">
                 <table id="countries-table" class="eg-table order-table table mb-0">
                     <thead>
@@ -28,62 +36,203 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @*@foreach (var country in Model.Countries)
-                        {
-                            <tr>
-                                <td>@country.Id</td>
-                                <td>@country.Name</td>
-                                <td>@country.CitiesCount</td>
-                                <td>
-                                    <button id="delete-country_@country.Id" class="btn btn-sm btn-outline-danger">
-                                        Delete
-                                    </button>
-                                </td>
-                                <td>
-                                    <button id="edit-country_@country.Id" class="btn btn-sm btn-outline-warning">
-                                        Edit
-                                    </button>
-                                </td>
-                            </tr>
-                        }*@
                     </tbody>
                 </table>
             </div>
-            <partial name="_PagingPartial" model="@Model" />
+            <div class="table-pagination justify-content-center">
+                <nav class="pagination-wrap">
+                    <ul class="pagination style-one d-flex gap-md-3 gap-2">
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
-            $.ajax({
-                type: 'GET',
-                url: '/Administration/Countries/GetAll',
-                success: function(data){
-                    $.each(data, function(index, country){
-                        var row = '<tr>' +
-                            '<td>' + country.id + '</td>' +
-                            '<td>' + country.name + '</td>' +
-                            '<td>' + country.citiesCount + '</td>' +
-                            '<td>' + '<button id=`delete-country_{country.Id}` class="btn btn-sm btn-outline-danger">' + 'Delete' + '</button>' + '</td>' +
-                            '</tr>';
-                        $('table tbody').append(row);
-                    })
-                },
-            })
+            loadCountries();
+
+            $('#itemsPerPage').change(function () {
+                let itemsCount = $('.list .selected').attr('data-value');
+                let postData = {
+                    itemsPerPage: Number(itemsCount),
+                    currentPage: 1
+                };
+
+                loadCountries(postData);
+            });
+
+            function loadCountries(postData) {
+                if (postData == null) {
+                    postData = {
+                        itemsPerPage: 10,
+                        currentPage: 1
+                    };
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/Administration/Countries/GetAll',
+                    data: postData,
+                    success: function (data) {
+                        $('#countries-table tbody').empty();
+                        $('.pagination').empty();
+
+                        data.countries.forEach(elem => {
+                            updateTable(elem);
+                        });
+
+                        pagination(data);
+                    }
+                });
+            };
+
+            function pagination(data) {
+                let ul = document.querySelector('.pagination');
+
+                //prev element
+                let prevElement = document.createElement('li');
+                prevElement.classList.add('page-item');
+                let prevLink = document.createElement('a');
+                prevLink.classList.add('page-link');
+                prevLink.textContent = 'Prev';
+
+                if (!data.hasPreviousPage) {
+                    prevElement.classList.add('disabled');
+                }
+                else {
+                    prevLink.setAttribute('data-pageNumber', data.currentPage - 1);
+                }
+                prevElement.appendChild(prevLink);
+                ul.appendChild(prevElement);
+
+                //previous pages
+                for (let i = data.currentPage - 3; i < data.currentPage; i++) {
+                    if (i > 0) {
+                        let prevPageElement = document.createElement('li');
+                        prevPageElement.classList.add('page-item');
+                        let prevPageLink = document.createElement('a');
+                        prevPageLink.classList.add('page-link');
+                        prevPageLink.textContent = i;
+                        prevPageElement.appendChild(prevPageLink);
+                        ul.appendChild(prevPageElement);
+                    }
+                }
+                //current page
+                let currentPageElement = document.createElement('li');
+                currentPageElement.classList.add('page-item', 'active');
+                currentPageElement.setAttribute('aria-current', 'page');
+
+                let currentPageLink = document.createElement('a');
+                currentPageLink.classList.add('page-link');
+                currentPageLink.textContent = data.currentPage;
+                currentPageElement.appendChild(currentPageLink);
+                ul.appendChild(currentPageElement);
+                //next pages
+
+                for (let i = data.currentPage + 1; i <= data.currentPage + 2; i++) {
+                    if (i <= data.pagesCount) {
+                        //<a class="page-link" asp - action="All" asp - route - id="i" > i</a>
+                        let nextPageElement = document.createElement('li');
+                        nextPageElement.classList.add('page-item');
+
+                        let nextPageLink = document.createElement('a');
+                        nextPageLink.classList.add('page-link');
+                        nextPageLink.textContent = i;
+                        nextPageElement.appendChild(nextPageLink);
+                        ul.appendChild(nextPageElement);
+                    }
+                }
+
+                //next element
+                let nextElement = document.createElement('li');
+                nextElement.classList.add('page-item');
+
+                let nextLink = document.createElement('a');
+                nextLink.classList.add('page-link');
+                nextLink.textContent = 'Next';
+
+                if (!data.hasNextPage) {
+                    nextElement.classList.add('disabled');
+                }
+                else {
+                    nextLink.setAttribute('data-pageNumber', data.currentPage + 1);
+                }
+                nextElement.appendChild(nextLink);
+                ul.appendChild(nextElement);
 
 
+                //events for page numbers
+                let pageElements = [...document.querySelectorAll('.page-item')];
 
+                pageElements.forEach(element => {
+                    element.addEventListener('click', (e) => {
+                        e.preventDefault();
 
+                        if (!e.currentTarget.classList.contains('disabled')) {
+                            let pageNumber = Number(e.currentTarget.children[0].textContent);
 
-            $('#countries-table td .btn.btn-sm.btn-outline-danger').click(function(e){
+                            if (isNaN(pageNumber)) {
+                                pageNumber = Number(e.currentTarget.children[0].getAttribute('data-pagenumber'));
+                            }
+
+                            let postData = {
+                                currentPage: pageNumber,
+                                itemsPerPage: Number(document.querySelector('.list .selected').getAttribute('data-value'))
+                            };
+
+                            loadCountries(postData);
+                        }
+                    });
+                });
+            };
+
+            function updateTable(data) {
+                let row = document.createElement('tr');
+                
+                let tdId = document.createElement('td');
+                tdId.textContent = data.id;
+
+                let tdName = document.createElement('td');
+                tdName.textContent = data.name;
+
+                let tdCitiesCount = document.createElement('td');
+                tdCitiesCount.textContent = data.citiesCount;
+
+                let tdDeleteButton = document.createElement('td');
+                let deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.classList.add('btn', 'btn-sm', 'btn-outline-danger');
+                deleteButton.id = `delete-country_${data.id}`;
+                deleteButton.addEventListener('click', deleteButtonHandler);
+                tdDeleteButton.appendChild(deleteButton);
+
+                let tdEditButton = document.createElement('td');
+                let editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.classList.add('btn', 'btn-sm', 'btn-outline-warning');
+                editButton.id = `edit-country_${data.id}`;
+                editButton.addEventListener('click', editButtonHandler);
+                tdEditButton.appendChild(editButton);
+
+                row.appendChild(tdId);
+                row.appendChild(tdName);
+                row.appendChild(tdCitiesCount);
+                row.appendChild(tdDeleteButton);
+                row.appendChild(tdEditButton);
+
+                $('#countries-table tbody').append(row);
+            };
+
+            function deleteButtonHandler(e) {
                 let country = $(e.target).attr('id');
                 let indexOfId = country.indexOf('_')
                 let countryId = Number(country.substring(indexOfId + 1));
                 let token = $('form > input').val();
-                
+
                 let postData = {
                     countryId
                 };
@@ -95,21 +244,22 @@
                     headers: {
                         'X-CSRF-TOKEN': token
                     },
-                    success: function(response){
-                        if (!response.result){
+                    success: function (response) {
+                        if (!response.result) {
                             alert('Country does not exist!')
                         }
-                        else{
+                        else {
                             $(e.target).parent().parent().remove();
                         }
                     },
-                    error: function(response){
+                    error: function (response) {
                         alert('Request failed. Please try again')
                     }
                 });
-            });
+            };
 
-            $('#countries-table td .btn.btn-sm.btn-outline-warning').click(function (e) {
+            function editButtonHandler(e) {
+                e.target.setAttribute('disabled', 'disabled');
                 let country = $(e.target).attr('id');
                 let indexOfId = country.indexOf('_')
                 let countryId = Number(country.substring(indexOfId + 1));
@@ -127,7 +277,7 @@
                 div.style.margin = 'auto';
 
                 let input = document.createElement('input');
-                input.classList.add('form-control');    
+                input.classList.add('form-control');
                 input.value = currentCountryName;
 
                 let updateBtn = document.createElement('button')
@@ -138,13 +288,13 @@
                 let cancelBtn = document.createElement('button');
                 cancelBtn.classList.add('btn', 'btn-sm', 'btn-outline-danger');
                 cancelBtn.style.marginLeft = '20px';
-                cancelBtn.textContent = 'Cancel'; 
+                cancelBtn.textContent = 'Cancel';
 
                 div.append(input);
                 div.append(updateBtn);
                 div.append(cancelBtn);
                 tdElement.append(div);
-                
+
                 $(updateBtn).click(function () {
                     let inputValue = $(this).parent().children()[0];
                     let countryName = inputValue.value;
@@ -152,7 +302,7 @@
                     let data = {
                         countryId,
                         countryName
-                    };  
+                    };
 
                     $.ajax({
                         type: 'POST',
@@ -181,8 +331,9 @@
                 $(cancelBtn).click(function () {
                     $(tdElement).empty();
                     tdElement.textContent = currentCountryName;
+                    e.target.removeAttribute('disabled', 'disabled');
                 });
-            });
+            };
         })
     </script>
 }
