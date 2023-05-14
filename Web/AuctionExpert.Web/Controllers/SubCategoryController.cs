@@ -1,13 +1,13 @@
 ﻿namespace AuctionExpert.Web.Controllers
 {
-    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     using AuctionExpert.Services.Data.SubCategory;
     using AuctionExpert.Web.ViewModels.SubCategory;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
 
-    [Route("api/[controller]")]
-    [ApiController]
-    public class SubCategoryController : ControllerBase
+    public class SubCategoryController : BaseController
     {
         private readonly ISubCategoryService subCategoryService;
 
@@ -16,10 +16,18 @@
             this.subCategoryService = subCategoryService;
         }
 
-        [HttpGet]
-        public IEnumerable<SubCategoryListModel> Get(int id)
+        public async Task<IActionResult> GetSubCategoriesByCategoryId(int categoryId)
         {
-            return this.subCategoryService.GetAllByCategoryId<SubCategoryListModel>(id);
+            var subCategories = await this.subCategoryService
+                .GetAllByCategoryId<SubCategoryListModel>(categoryId)
+                .ToListAsync();
+
+            if (subCategories.Count == 0)
+            {
+                return this.Json(new { Success = false, ErrorMessage = "There are no sub categories" });
+            }
+
+            return this.Json(new { Success = true, SubCategories = subCategories });
         }
     }
 }

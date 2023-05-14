@@ -28,7 +28,7 @@
                         </div>
 
                         <div class="col-md-12">
-                            <div class="form-inner" onchange="getSubCategories()">
+                            <div class="form-inner" id="loadSubCategories">
                                 <label asp-for="CategoryId">Category *</label>
                                 <select asp-for="CategoryId">
                                     <option>Select category</option>
@@ -42,7 +42,7 @@
                         </div>
 
                         <div class="col-md-12" style="display: none">
-                            <div class="form-inner" onchange="getSubCategoryId()">
+                            <div class="form-inner" id="loadSubCategoryId">
                                 <label asp-for="SubCateogoryId">Subcategory *</label>
                                 <select asp-for="SubCateogoryId">
                                     <option>Select subcategory</option>

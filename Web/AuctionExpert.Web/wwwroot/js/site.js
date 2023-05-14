@@ -3,6 +3,310 @@
 
 // Write your JavaScript code.
 
+$(document).ready(function () {
+    setInterval(countDown, 1000);
+    
+    $('.like i').click(likeAuctionHandler);
+    $('#loadSubCategories').change(getSubCategories);
+    $('#loadSubCategoryId').change(getSubCategoryId);
+    $('#adminCountriesPerPage').change(adminCountriesPerPage);
+});
+
+function adminCountriesPerPage(e) {
+    e.preventDefault();
+
+    let itemsPerPage = Number($(e.currentTarget).children('.nice-select').children('.list').children('.selected').attr('data-value'));
+    
+    let postData = {
+        itemsPerPage,
+        currentPage: 1
+    };
+
+    loadCountries(postData);
+}
+
+function loadCountries(postData) {
+    if (postData == null) {
+        postData = {
+            itemsPerPage: 10,
+            currentPage: 1
+        };
+    }
+
+    $.ajax({
+        type: 'GET',
+        url: '/Administration/Countries/GetAll',
+        data: postData,
+        success: function (data) {
+            $('#countries-table tbody').empty();
+            $('.pagination').empty();
+
+            updateTable(data.countries);
+            pagination(data);
+        }
+    });
+};
+
+function pagination(data) {
+    let ul = $('#adminCountriesPagination');
+    let fragment = $(document.createDocumentFragment());
+
+    //prev element
+    let prevElement = $(document.createElement('li'));
+    $(prevElement).addClass('page-item');
+    let prevLink = $(document.createElement('a'));
+    $(prevLink).addClass('page-link');
+    $(prevLink).text('Prev');
+
+    if (!data.hasPreviousPage) {
+        $(prevElement).addClass('disabled');
+    }
+    else {
+        $(prevLink).attr('data-pageNumber', data.currentPage - 1);
+    }
+    $(prevElement).append(prevLink);
+    $(fragment).append(prevElement);
+
+    //previous pages
+    for (let i = data.currentPage - 3; i < data.currentPage; i++) {
+        if (i > 0) {
+            let prevPageElement = $(document.createElement('li'));
+            $(prevPageElement).addClass('page-item');
+            let prevPageLink = $(document.createElement('a'));
+            $(prevPageLink).addClass('page-link');
+            $(prevPageLink).text(i);
+            $(prevPageElement).append(prevPageLink);
+
+            $(fragment).append(prevPageElement);
+        }
+    }
+
+    //current page
+    let currentPageElement = $(document.createElement('li'));
+    $(currentPageElement).addClass('page-item', 'active');
+    $(currentPageElement).attr('aria-current', 'page');
+
+    let currentPageLink = $(document.createElement('a'));
+    $(currentPageLink).addClass('page-link');
+    $(currentPageLink).text(data.currentPage);
+    $(currentPageElement).append(currentPageLink);
+
+    $(fragment).append(currentPageElement);
+
+    //next pages
+    for (let i = data.currentPage + 1; i <= data.currentPage + 2; i++) {
+        if (i <= data.pagesCount) {
+            let nextPageElement = $(document.createElement('li'));
+            $(nextPageElement).addClass('page-item');
+
+            let nextPageLink = $(document.createElement('a'));
+            $(nextPageLink).addClass('page-link');
+            $(nextPageLink).text(i);
+            $(nextPageElement).append(nextPageLink);
+
+            $(fragment).append(nextPageElement);
+        }
+    }
+
+    //next element
+    let nextElement = $(document.createElement('li'));
+    $(nextElement).addClass('page-item');
+
+    let nextLink = $(document.createElement('a'));
+    $(nextLink).addClass('page-link');
+    $(nextLink).text('Next');
+
+    if (!data.hasNextPage) {
+        $(nextElement).addClass('disabled');
+    }
+    else {
+        $(nextLink).attr('data-pageNumber', data.currentPage + 1);
+    }
+    $(nextElement).append(nextLink);
+
+    $(fragment).append(nextElement);
+    $(ul).append(fragment);
+
+    //events for page numbers
+    let pageElements = $('.page-item');
+
+    $(pageElements).each(function (index, element) {
+        $(element).click(function (e) {
+            e.preventDefault();
+
+            if (!$(e.currentTarget).hasClass('disabled')) {
+                let pageNumber = Number($(e.currentTarget).children().text())
+
+                if (isNaN(pageNumber)) {
+                    pageNumber = Number($(e.currentTarget).children().first().attr('data-pagenumber'));
+                }
+
+                let itemsPerPage = Number($('#adminCountriesPerPage').children('.nice-select').children('.list').children('.selected').attr('data-value'));
+                let postData = {
+                    currentPage: pageNumber,
+                    itemsPerPage
+                };
+
+                loadCountries(postData);
+            }
+        });
+    });
+};
+
+function updateTable(countries) {
+    let fragment = $(document.createDocumentFragment());
+
+    $(countries).each(function (index, country) {
+
+        let row = $(document.createElement('tr'));
+
+        let tdId = $(document.createElement('td'));
+        $(tdId).text(country.id);
+
+        let tdName = $(document.createElement('td'));
+        $(tdName).text(country.name);
+
+        let tdCitiesCount = $(document.createElement('td'));
+        $(tdCitiesCount).text(country.citiesCount);
+
+        let tdDeleteButton = $(document.createElement('td'));
+        let deleteButton = $(document.createElement('button'));
+        $(deleteButton).text('Delete');
+        $(deleteButton).addClass(['btn', 'btn-sm', 'btn-outline-danger']);
+        $(deleteButton).prop('id', `delete-country_${country.id}`);
+
+        $(deleteButton).click(deleteButtonHandler);
+        $(tdDeleteButton).append(deleteButton);
+
+        let tdEditButton = $(document.createElement('td'));
+        let editButton = $(document.createElement('button'));
+        $(editButton).text('Edit');
+        $(editButton).addClass(['btn', 'btn-sm', 'btn-outline-warning']);
+        $(editButton).prop('id', `edit-country_${country.id}`);
+
+        $(editButton).click(editButtonHandler);
+        $(tdEditButton).append(editButton);
+
+        $(row).append(tdId);
+        $(row).append(tdName);
+        $(row).append(tdCitiesCount);
+        $(row).append(tdDeleteButton);
+        $(row).append(tdEditButton);
+
+        $(fragment).append(row);
+    });
+
+    $('#countries-table tbody').append(fragment);
+};
+
+function deleteButtonHandler(e) {
+    let country = $(e.target).attr('id');
+    let indexOfId = country.indexOf('_')
+    let countryId = Number(country.substring(indexOfId + 1));
+    let token = $('#antiForgeryForm input').val();
+
+    let postData = {
+        countryId
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/Administration/Countries/Delete',
+        data: postData,
+        headers: {
+            'X-CSRF-TOKEN': token
+        },
+        success: function (response) {
+            if (!response.result) {
+                alert('Country does not exist!')
+            }
+            else {
+                $(e.target).parent().parent().remove();
+            }
+        },
+        error: function (response) {
+            alert('Request failed. Please try again')
+        }
+    });
+};
+
+function editButtonHandler(e) {
+    e.target.setAttribute('disabled', 'disabled');
+    let country = $(e.target).attr('id');
+    let indexOfId = country.indexOf('_')
+    let countryId = Number(country.substring(indexOfId + 1));
+    let token = $('form > input').val();
+
+    let postData = {
+        countryId
+    };
+
+    let tdElement = $(this).parent().parent().children()[1];
+    let currentCountryName = tdElement.textContent;
+    tdElement.textContent = '';
+    let div = document.createElement('div');
+    div.classList.add('d-flex');
+    div.style.margin = 'auto';
+
+    let input = document.createElement('input');
+    input.classList.add('form-control');
+    input.value = currentCountryName;
+
+    let updateBtn = document.createElement('button')
+    updateBtn.classList.add('btn', 'btn-sm', 'btn-outline-success');
+    updateBtn.style.marginLeft = '20px';
+    updateBtn.textContent = 'Update';
+
+    let cancelBtn = document.createElement('button');
+    cancelBtn.classList.add('btn', 'btn-sm', 'btn-outline-danger');
+    cancelBtn.style.marginLeft = '20px';
+    cancelBtn.textContent = 'Cancel';
+
+    div.append(input);
+    div.append(updateBtn);
+    div.append(cancelBtn);
+    tdElement.append(div);
+
+    $(updateBtn).click(function () {
+        let inputValue = $(this).parent().children()[0];
+        let countryName = inputValue.value;
+
+        let data = {
+            countryId,
+            countryName
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/Administration/Countries/Update',
+            data: data,
+            headers: {
+                'X-CSRF-TOKEN': token
+            },
+            success: function (response) {
+                if (!response.result) {
+                    alert(response.message);
+                    cancelBtn.click();
+                }
+                else {
+                    cancelBtn.click();
+                    tdElement.textContent = countryName;
+                }
+            },
+            error: function (response) {
+                alert('Request failed. Please try again');
+                cancelBtn.click();
+            }
+        });
+    });
+
+    $(cancelBtn).click(function () {
+        $(tdElement).empty();
+        tdElement.textContent = currentCountryName;
+        e.target.removeAttribute('disabled', 'disabled');
+    });
+};
+
 //Home Page timer
 function getTimers() {
     let index = 0;
@@ -80,54 +384,57 @@ function countDown() {
     }
 }
 
-setInterval(countDown, 1000);
-
-
 //Loading Subcategories
-function getSubCategories() {
-    let selected = document.querySelectorAll("div .list")[0];
-    let categoryId = Number.parseInt(selected.querySelector('.selected').getAttribute("data-value"));
-    let ul = document.querySelectorAll("div .list")[1];
+function getSubCategories(e) {
+    e.preventDefault();
 
-    if (!Number.isInteger(categoryId) || categoryId == 0) {
-        ul.parentElement.parentElement.parentElement.style.display = 'none';
+    let categoryId = Number($(e.currentTarget).children('.nice-select').children('.list').children('.selected').attr('data-value'));
+    $('#loadSubCategoryId').children('.nice-select').children('.list').empty();
+
+    if (!Number.isInteger(categoryId)) {
+
+        $('#loadSubCategoryId').parent().css('display', 'none');
         return;
     }
 
-    fetch(`/api/SubCategory/?id=${categoryId}`, {
-        method: 'get'
-    })
-        .then(response => response.json())
-        .then(subCategories => {
+    $.ajax({
+        type: 'get',
+        url: '/SubCategory/GetSubCategoriesByCategoryId',
+        data: { categoryId },
+        success: function (response) {
+            if (response.success) {
+                let fragment = $(document.createDocumentFragment());
 
-            ul.parentElement.parentElement.parentElement.style.display = 'block';
+                $(response.subCategories).each(function (index, subCategory) {
+                    let liElement = $(document.createElement('li'));
+                    $(liElement).addClass('option');
+                    $(liElement).attr('data-value', subCategory.id);
+                    $(liElement).text(subCategory.name);
 
-            for (let i = 0; i < subCategories.length; i++) {
+                    fragment.append(liElement);
+                });
 
-                let liElement = document.createElement("li");
-                liElement.classList.add("option");
-                liElement.setAttribute("data-value", subCategories[i].id)
-                liElement.textContent = subCategories[i].name
-                ul.appendChild(liElement)
+                $('#loadSubCategoryId').children('.nice-select').children('.list').append(fragment);
+                $('#loadSubCategoryId').parent().css('display', 'block');
             }
-        })
-
-    ul.innerHTML = '';
-    document.querySelectorAll('.current')[1].textContent = '';
+            else {
+                alert(response.errorMessage);
+            }
+        },
+        error: function () {
+            alert('Request failed. Please try again later');
+        }
+    });
 }
 
-function getSubCategoryId() {
-    let selected = document.querySelectorAll("div .list")[1];
-    let subCategoryId = Number.parseInt(selected.querySelector('.selected').getAttribute("data-value"));
+function getSubCategoryId(e) {
+    e.preventDefault();
 
-    let optionElement = selected.parentElement.parentElement.getElementsByTagName('option')[0];
-    optionElement.setAttribute('value', subCategoryId);
-    optionElement.classList.add('selected');
+    let subCategoryId = Number($(e.currentTarget).children('.nice-select').children('.list').children('.selected').attr('data-value'));
+    $(e.currentTarget).children('select').children().val(subCategoryId);
 }
 
-
-//Auction details modal pictures
-
+//Auction details modal 
 function openModal() {
     document.getElementById("myModal").style.display = "block";
     document.querySelector('body').style.overflow = 'hidden';
@@ -247,31 +554,29 @@ function dislikeAuction(postData, token, e) {
     });
 }
 
-$(document).ready(function () {
-    $('.like i').click(function (e) {
-        e.preventDefault();
-        let auctionId = $(this).parent().attr('data-auctionid');
-        let token = $('#antiForgeryForm input').val();
+function likeAuctionHandler(e) {
+    e.preventDefault();
+    let auctionId = $(this).parent().attr('data-auctionid');
+    let token = $('#antiForgeryForm input').val();
 
-        var postData = {
-            auctionId
-        };
+    var postData = {
+        auctionId
+    };
 
-        $.ajax({
-            type: 'GET',
-            url: '/Auction/DoesUserLikeCurrentAuction',
-            data: postData,
-            headers: {
-                'X-CSRF-TOKEN': token
-            },
-            success: function (response) {
-                if (!response) {
-                    likeAuction(postData, token, e);
-                }
-                else {
-                    dislikeAuction(postData, token, e)
-                }
+    $.ajax({
+        type: 'GET',
+        url: '/Auction/DoesUserLikeCurrentAuction',
+        data: postData,
+        headers: {
+            'X-CSRF-TOKEN': token
+        },
+        success: function (response) {
+            if (!response) {
+                likeAuction(postData, token, e);
             }
-        });
+            else {
+                dislikeAuction(postData, token, e)
+            }
+        }
     });
-});
+}
