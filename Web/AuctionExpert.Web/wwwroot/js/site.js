@@ -161,15 +161,19 @@ function updateTable(countries) {
         let row = $(document.createElement('tr'));
 
         let tdId = $(document.createElement('td'));
+        $(tdId).attr('data-label', 'Country ID');
         $(tdId).text(country.id);
 
         let tdName = $(document.createElement('td'));
+        $(tdName).attr('data-label', 'Country name');
         $(tdName).text(country.name);
 
         let tdCitiesCount = $(document.createElement('td'));
+        $(tdCitiesCount).attr('data-label', 'Cities count');
         $(tdCitiesCount).text(country.citiesCount);
 
         let tdDeleteButton = $(document.createElement('td'));
+        $(tdDeleteButton).attr('data-label', 'Delete');
         let deleteButton = $(document.createElement('button'));
         $(deleteButton).text('Delete');
         $(deleteButton).addClass(['btn', 'btn-sm', 'btn-outline-danger']);
@@ -179,6 +183,7 @@ function updateTable(countries) {
         $(tdDeleteButton).append(deleteButton);
 
         let tdEditButton = $(document.createElement('td'));
+        $(tdEditButton).attr('data-label', 'Edit');
         let editButton = $(document.createElement('button'));
         $(editButton).text('Edit');
         $(editButton).addClass(['btn', 'btn-sm', 'btn-outline-warning']);
@@ -231,45 +236,43 @@ function deleteButtonHandler(e) {
 };
 
 function editButtonHandler(e) {
-    e.target.setAttribute('disabled', 'disabled');
+    $(e.target).attr('disabled', 'disabled');
     let country = $(e.target).attr('id');
     let indexOfId = country.indexOf('_')
     let countryId = Number(country.substring(indexOfId + 1));
-    let token = $('form > input').val();
-
-    let postData = {
-        countryId
-    };
+    let token = $('#antiForgeryForm input').val();
 
     let tdElement = $(this).parent().parent().children()[1];
-    let currentCountryName = tdElement.textContent;
-    tdElement.textContent = '';
-    let div = document.createElement('div');
-    div.classList.add('d-flex');
-    div.style.margin = 'auto';
+    let currentCountryName = $(tdElement).text();
+    $(tdElement).text('');
+    let div = $(document.createElement('div'));
+    $(div).addClass('d-flex');
+    $(div).css('margin', 'auto');
 
-    let input = document.createElement('input');
-    input.classList.add('form-control');
-    input.value = currentCountryName;
+    let input = $(document.createElement('input'));
+    $(input).addClass('form-control');
+    $(input).val(currentCountryName);
 
-    let updateBtn = document.createElement('button')
-    updateBtn.classList.add('btn', 'btn-sm', 'btn-outline-success');
-    updateBtn.style.marginLeft = '20px';
-    updateBtn.textContent = 'Update';
+    let updateBtn = $(document.createElement('button'));
+    $(updateBtn).addClass(['btn', 'btn-sm', 'btn-outline-success']);
+    $(updateBtn).css('margin-left', '20px');
+    $(updateBtn).text('Update');
 
-    let cancelBtn = document.createElement('button');
-    cancelBtn.classList.add('btn', 'btn-sm', 'btn-outline-danger');
-    cancelBtn.style.marginLeft = '20px';
-    cancelBtn.textContent = 'Cancel';
+    let cancelBtn = $(document.createElement('button'));
+    $(cancelBtn).addClass(['btn', 'btn-sm', 'btn-outline-danger']);
+    $(cancelBtn).css('margin-left', '20px');
+    $(cancelBtn).text('Cancel');
 
-    div.append(input);
-    div.append(updateBtn);
-    div.append(cancelBtn);
-    tdElement.append(div);
+    $(div).append(input);
+    $(div).append(updateBtn);
+    $(div).append(cancelBtn);
+    $(tdElement).append(div);
 
-    $(updateBtn).click(function () {
+    $(updateBtn).click(function (e) {
+        e.preventDefault();
+
         let inputValue = $(this).parent().children()[0];
-        let countryName = inputValue.value;
+        let countryName = $(inputValue).val();
 
         let data = {
             countryId,
@@ -286,24 +289,24 @@ function editButtonHandler(e) {
             success: function (response) {
                 if (!response.result) {
                     alert(response.message);
-                    cancelBtn.click();
+                    $(cancelBtn).trigger('click');
                 }
                 else {
-                    cancelBtn.click();
+                    $(cancelBtn).trigger('click');
                     tdElement.textContent = countryName;
                 }
             },
             error: function (response) {
                 alert('Request failed. Please try again');
-                cancelBtn.click();
+                $(cancelBtn).trigger('click');
             }
         });
     });
 
     $(cancelBtn).click(function () {
         $(tdElement).empty();
-        tdElement.textContent = currentCountryName;
-        e.target.removeAttribute('disabled', 'disabled');
+        $(tdElement).text(currentCountryName);
+        $(e.target).removeAttr('disabled');
     });
 };
 
@@ -323,27 +326,21 @@ function getTimers() {
 }
 
 function deleteAuction(id) {
-    var antiForgeryToken = document.querySelector('#antiForgeryForm input').value;
-    
-    fetch(`/api/ApiAuction/?id=${id}`, {
-        method: 'DELETE',
+    var token = $('#antiForgeryForm input').val();
+
+    $.ajax({
+        type: 'POST',
+        data: { id },
+        url: '/Auction/Delete',
         headers: {
-            'X-CSRF-TOKEN': antiForgeryToken
+            'X-CSRF-TOKEN': token
+        },
+        success: function (response) {
+            if (response.success && location.href.endsWith(id)) {
+                location.href = '/Home/Index';
+            }
         }
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Something went wrong')
-            }
-        })
-        .then(() => {
-            if (window.location.href.endsWith(id)) {
-                window.location.href = 'https://localhost:44319/';
-            }
-            else {
-                window.location.reload()
-            }
-        });
+    });
 }
 
 function countDown() {

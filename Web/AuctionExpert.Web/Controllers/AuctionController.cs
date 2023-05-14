@@ -150,6 +150,19 @@
         }
 
         [HttpPost]
+        public async Task<IActionResult> DeleteAuction(int id)
+        {
+            var auction = await this.auctionService.GetAuctionByIdAsync(id);
+            if (auction == null)
+            {
+                return this.Json(new { Success = false });
+            }
+
+            await this.auctionService.DeleteAsync(id);
+            return this.Json(new { Success = true });
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Delete(int auctionId)
         {
             try
