@@ -70,9 +70,9 @@
             {
                 await this.auctionService.CreateAsync(model, user);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                this.ModelState.AddModelError(string.Empty, ex.Message);
+                this.ModelState.AddModelError(string.Empty, "Failed while creating auction. Please try again.");
                 model.Categories = this.categoryService.GetAllCategories<CategoryListModel>();
                 return this.View(model);
             }

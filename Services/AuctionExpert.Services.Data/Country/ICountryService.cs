@@ -3,6 +3,8 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using AuctionExpert.Data.Models;
+
     public interface ICountryService
     {
         IQueryable<T> GetAllCountries<T>();
@@ -15,7 +17,7 @@
 
         Task UpdateCountry(AuctionExpert.Data.Models.Country country, string countryName);
 
-        Task AddCountry(string name);
+        Task AddCountry(Country country);
 
         int GetCount();
     }

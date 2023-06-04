@@ -66,18 +66,8 @@
             await this.countryRepository.SaveChangesAsync();
         }
 
-        public async Task AddCountry(string name)
+        public async Task AddCountry(Country country)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException();
-            }
-
-            var country = new Country()
-            {
-                Name = name,
-            };
-
             await this.countryRepository.AddAsync(country);
             await this.countryRepository.SaveChangesAsync();
         }

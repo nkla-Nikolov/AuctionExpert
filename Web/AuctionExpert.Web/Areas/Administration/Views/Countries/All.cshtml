@@ -1,20 +1,32 @@
-﻿@model PaginatedCountryListModel
-
-@{
+﻿@{
     this.ViewData["Title"] = "Countries Administration";
 }
 
-<div class="container">
-    <div class="row g-4">
+<div class="card">
+    <div class="card-header border-transparent">
+        <h3 class="card-title">Countries</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
         <div class="col g-3">
-            <h2 class="text-center pt-80 pb-60">@this.ViewData["Title"]</h2>
-            <div class="table-title-area" id="adminCountriesPerPage" style="justify-content: flex-end">
+            <div class="table-title-area" id="adminCountriesPerPage">
                 <select>
                     <option value="10">Show: 10 per page</option>
                     <option value="20">Show: 20 per page</option>
                     <option value="30">Show: 30 per page</option>
                     <option value="50">Show: 50 per page</option>
                 </select>
+                <div class="d-flex col-md-2 align-items-center">
+                    <label class="form-check-label" style="margin-right: 12px;">Search</label>
+                    <input id="search-country" class="form-control"/>
+                </div>
             </div>
             <div class="table-wrapper">
                 <table id="countries-table" class="eg-table order-table table mb-0">
@@ -39,6 +51,29 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="card col-md-6 collapsed-card">
+    <div class="card-header">
+        <h3 class="card-title">Add country</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="col-md-10 d-flex align-items-center">
+            <label for="addCountryName" class="form-label" style="margin: 0 14px;">Name</label>
+            <input id="addCountryName" type="text" class="form-control" style="margin-right: 14px;" required />
+            <button id="addCountry" class="btn btn-sm btn-outline-success" style="padding: 0.40rem 0.70rem">Add</button>
+        </div>
+        <div class="offset-2 invalid-feedback">Name should not be empty</div>
+    </div>
+    
 </div>
 
 @section Scripts {

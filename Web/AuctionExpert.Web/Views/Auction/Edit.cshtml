@@ -40,10 +40,10 @@
                         </div>
 
                         <div class="col-md-12">
-                            <div class="form-inner" onchange="getSubCategories()">
+                            <div class="form-inner" id="editAuctionGetSubCategories">
                                 <label asp-for="CategoryId">Select Category *</label>
                                 <select asp-for="CategoryId" class="form-control">
-                                    <option selected="selected">--Please select a category--</option>
+                                    <option>Select category</option>
                                     @foreach (var category in Model.Categories)
                                     {
                                         <option value="@category.Id">@category.Name</option>
@@ -54,10 +54,10 @@
                         </div>
 
                         <div class="col-md-12" style="display: none">
-                            <div class="form-inner" onchange="getSubCategoryId()">
+                            <div class="form-inner" id="editAuctionGetSubCategoryId">
                                 <label asp-for="SubCateogoryId">Select Sub Category *</label>
                                 <select asp-for="SubCateogoryId" class="form-control">
-                                    <option></option>
+                                    <option>Select subcategory</option>
                                 </select>
                                 <span asp-validation-for="@Model.SubCateogoryId" class="text-danger"></span>
                             </div>

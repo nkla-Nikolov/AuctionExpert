@@ -1115,9 +1115,13 @@ header.style-1 .nav-right .search-btn .bi {
 }
 
 header.style-1 .header-logo {
-  background: #32c36c;
   height: 100%;
   padding: 25px 60px;
+}
+
+header.style-1 .header-logo span {
+    font-family: fantasy;
+    font-size: 30px;
 }
 
 @media (min-width: 1200px) and (max-width: 1399px) {
@@ -1129,6 +1133,10 @@ header.style-1 .header-logo {
 @media (max-width: 1199px) {
   header.style-1 .header-logo {
     padding: 21px 30px;
+  }
+
+  header.style-1 .header-logo span {
+      font-size: 26px;
   }
 }
 

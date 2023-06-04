@@ -1,7 +1,11 @@
-﻿@using AuctionExpert.Web
+﻿@using AuctionExpert.Services.Data.User;
+@using AuctionExpert.Web
 @using AuctionExpert.Web.ViewModels
 @using AuctionExpert.Web.ViewModels.Administration.Country;
 @using AuctionExpert.Web.ViewModels.Administration.User;
 @using AuctionExpert.Web.ViewModels.Administration.Auction;
+@using System.Security.Claims;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, AuctionExpert.Web
+
+@inject IUserService userService

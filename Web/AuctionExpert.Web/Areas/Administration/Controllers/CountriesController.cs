@@ -24,23 +24,9 @@
             this.notificationService = notificationService;
         }
 
-        public async Task<IActionResult> All(int id = 1)
+        public IActionResult All()
         {
-            const int itemsPerPage = 500;
-
-            var countries = await this.countryService
-                .GetAllCountriesPaginated<CountryListModel>(id, itemsPerPage)
-                .ToListAsync();
-
-            var model = new PaginatedCountryListModel()
-            {
-                PageNumber = id,
-                ItemsPerPage = itemsPerPage,
-                ItemsCount = this.countryService.GetCount(),
-                Countries = countries,
-            };
-
-            return this.View(model);
+            return this.View();
         }
 
         public async Task<IActionResult> GetAll(int currentPage, int itemsPerPage)
@@ -64,6 +50,16 @@
             };
 
             return this.Json(model);
+        }
+
+        public async Task<IActionResult> GetAllBySearchTerm(string name)
+        {
+            var countries = await this.countryService
+                .GetAllCountries<CountryListModel>()
+                .Where(x => x.Name.Contains(name))
+                .ToListAsync();
+
+            return this.Json(new { countries });
         }
 
         [HttpPost]
@@ -103,17 +99,22 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(PaginatedCountryListModel model)
+        public async Task<IActionResult> Add(string countryName)
         {
-            if (model.CountryName == null)
+            if (string.IsNullOrEmpty(countryName))
             {
-                this.ModelState.AddModelError(nameof(model.CountryName), "To add a country you need to enter a name!");
-                return this.View(model);
+                return this.Json(new { Success = false, ErrorMessage = "Name should not be empty!" });
             }
 
-            await this.countryService.AddCountry(model.CountryName);
+            var country = new Country
+            {
+                Name = countryName,
+                CreatedOn = DateTime.UtcNow,
+            };
+            await this.countryService.AddCountry(country);
 
-            return this.RedirectToAction(nameof(this.GetAll));
+            this.notificationService.AddSuccessToastMessage("Country added successfully!");
+            return this.Json(new { Success = true });
         }
     }
 }

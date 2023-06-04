@@ -4,13 +4,72 @@
 // Write your JavaScript code.
 
 $(document).ready(function () {
+    $('select').niceSelect();
     setInterval(countDown, 1000);
     
     $('.like i').click(likeAuctionHandler);
     $('#loadSubCategories').change(getSubCategories);
     $('#loadSubCategoryId').change(getSubCategoryId);
     $('#adminCountriesPerPage').change(adminCountriesPerPage);
+    $('#editAuctionGetSubCategories').change(getSubCategories);
+    $('#editAuctionGetSubCategoryId').change(getSubCategoryId);
+    $('#addCountry').click(addCountry);
+    $('#search-country').on('input', searchCountry);
 });
+
+function searchCountry(e) {
+    e.preventDefault();
+    let name = $(e.target).val();
+
+    if (name.length > 0) {
+        $.ajax({
+            type: 'GET',
+            url: '/Administration/Countries/GetAllBySearchTerm',
+            data: { name },
+            success: function (response) {
+                $('#countries-table tbody').empty();
+                updateTable(response.countries);
+            }
+        });
+    }
+    else {
+        loadCountries();
+    }
+}
+
+function addCountry() {
+    let countryName = $('#addCountryName').val();
+    if (countryName.length == 0) {
+        $('#addCountryName').addClass('is-invalid');
+        $('.invalid-feedback').css('display', 'block').css('font-size', '16px');
+        return;
+    }
+    else {
+        $('.invalid-feedback').css('display', 'none');
+        $('#addCountryName').removeClass('is-invalid');
+    }
+
+    let token = $('#antiForgeryForm input').val();
+    $.ajax({
+        type: 'POST',
+        url: '/Administration/Countries/Add',
+        data: { countryName },
+        headers: {
+            'X-CSRF-TOKEN': token
+        },
+        success: function (response) {
+            if (!response.success) {
+                alert(response.errorMessage);
+            }
+        },
+        error: function () {
+            alert('Request failed. Please try again');
+        },
+        complete: function () {
+            $('#addCountryName').val('');
+        }
+    });
+}
 
 function adminCountriesPerPage(e) {
     e.preventDefault();
@@ -83,7 +142,7 @@ function pagination(data) {
 
     //current page
     let currentPageElement = $(document.createElement('li'));
-    $(currentPageElement).addClass('page-item', 'active');
+    $(currentPageElement).addClass(['page-item', 'active']);
     $(currentPageElement).attr('aria-current', 'page');
 
     let currentPageLink = $(document.createElement('a'));
@@ -331,7 +390,7 @@ function deleteAuction(id) {
     $.ajax({
         type: 'POST',
         data: { id },
-        url: '/Auction/Delete',
+        url: '/Auction/DeleteAuction',
         headers: {
             'X-CSRF-TOKEN': token
         },
@@ -387,6 +446,9 @@ function getSubCategories(e) {
 
     let categoryId = Number($(e.currentTarget).children('.nice-select').children('.list').children('.selected').attr('data-value'));
     $('#loadSubCategoryId').children('.nice-select').children('.list').empty();
+    $('#editAuctionGetSubCategoryId').children('.nice-select').children('.list').empty();
+    $('#loadSubCategoryId').children().find('span.current').text('Select subcategory');
+    $('#editAuctionGetSubCategoryId').children().find('span.current').text('Select subcategory');
 
     if (!Number.isInteger(categoryId)) {
 
@@ -411,8 +473,14 @@ function getSubCategories(e) {
                     fragment.append(liElement);
                 });
 
-                $('#loadSubCategoryId').children('.nice-select').children('.list').append(fragment);
-                $('#loadSubCategoryId').parent().css('display', 'block');
+                if (location.href.includes('Edit')) {
+                    $('#editAuctionGetSubCategoryId').children('.nice-select').children('.list').append(fragment);
+                    $('#editAuctionGetSubCategoryId').parent().css('display', 'block');
+                }
+                else {
+                    $('#loadSubCategoryId').children('.nice-select').children('.list').append(fragment);
+                    $('#loadSubCategoryId').parent().css('display', 'block');
+                }
             }
             else {
                 alert(response.errorMessage);
@@ -526,9 +594,9 @@ function likeAuction(postData, token, e) {
             'X-CSRF-TOKEN': token
         },
         success: function (response) {
-            if (response.result == true) {
-                e.target.classList.remove('bi-heart')
-                e.target.classList.add('bi-heart-fill')
+            if (response.result) {
+                $(e.target).removeClass('bi-heart');
+                $(e.target).addClass('bi-heart-fill');
             }
         }
     });
@@ -543,9 +611,9 @@ function dislikeAuction(postData, token, e) {
             'X-CSRF-TOKEN': token
         },
         success: function (response) {
-            if (response.result == true) {
-                e.target.classList.remove('bi-heart-fill')
-                e.target.classList.add('bi-heart')
+            if (response.result) {
+                $(e.target).removeClass('bi-heart-fill');
+                $(e.target).addClass('bi-heart');
             }
         }
     });
