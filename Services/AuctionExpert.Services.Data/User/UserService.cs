@@ -54,12 +54,11 @@
                 .Count();
         }
 
-        public async Task AddUserToRole(string userId, string roleName)
+        public async Task AddUserToRole(ApplicationUser user, string roleName)
         {
-            var user = await this.userManager.FindByIdAsync(userId);
             var roleExists = await this.roleManager.RoleExistsAsync(roleName);
 
-            if (user == null || roleExists == false)
+            if (!roleExists)
             {
                 throw new ArgumentNullException();
             }
@@ -67,12 +66,10 @@
             await this.userManager.AddToRoleAsync(user, roleName);
         }
 
-        public async Task RemoveUserFromRole(string userId, string roleName)
+        public async Task RemoveUserFromRole(ApplicationUser user, string roleName)
         {
-            var user = await this.userManager.FindByIdAsync(userId);
             var roleExists = await this.roleManager.RoleExistsAsync(roleName);
-
-            if (user == null || roleExists == false)
+            if (!roleExists)
             {
                 throw new ArgumentNullException();
             }

@@ -5,7 +5,7 @@
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Mapping;
 
-    public class AdminAuctionViewModel : IMapFrom<Auction>
+    public class AuctionModel : IMapFrom<Auction>
     {
         public int Id { get; set; }
 

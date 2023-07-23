@@ -77,11 +77,11 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> SellerProfile(string userId)
+        public async Task<IActionResult> SellerProfile(string id)
         {
             try
             {
-                var model = await this.userModelFactory.PrepareSellerProfileViewModelAsync(userId);
+                var model = await this.userModelFactory.PrepareSellerProfileViewModelAsync(id);
                 return this.View(model);
             }
             catch (ArgumentNullException)

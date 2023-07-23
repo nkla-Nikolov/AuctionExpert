@@ -78,7 +78,7 @@
         public IQueryable<T> GetAllPaginatedAuctions<T>(int page, int itemsPerPage)
         {
             return this.auctionRepository
-                .AllAsNoTracking()
+                .AllAsNoTrackingWithDeleted()
                 .Skip((page - 1) * itemsPerPage)
                 .Take(itemsPerPage)
                 .To<T>();

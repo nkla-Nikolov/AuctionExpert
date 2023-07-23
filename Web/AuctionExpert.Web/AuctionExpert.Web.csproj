@@ -62,7 +62,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Areas\Administration\Views\Countries\All.cshtml">
+    <Content Update="Areas\Administration\Views\Country\All.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

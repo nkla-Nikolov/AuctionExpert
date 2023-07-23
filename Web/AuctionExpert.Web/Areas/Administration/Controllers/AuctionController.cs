@@ -8,11 +8,11 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
-    public class AuctionsController : AdministrationController
+    public class AuctionController : AdministrationController
     {
         private readonly IAuctionService auctionService;
 
-        public AuctionsController(IAuctionService auctionService)
+        public AuctionController(IAuctionService auctionService)
         {
             this.auctionService = auctionService;
         }
@@ -22,7 +22,7 @@
             var itemsPerPage = 5;
 
             var auctions = await this.auctionService
-                .GetAllPaginatedAuctions<AdminAuctionViewModel>(id, itemsPerPage)
+                .GetAllPaginatedAuctions<AuctionModel>(id, itemsPerPage)
                 .ToListAsync();
 
             var model = new PaginatedAuctionListModel()
@@ -37,11 +37,11 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int auctionId)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                await this.auctionService.DeleteAsync(auctionId);
+                await this.auctionService.DeleteAsync(id);
             }
             catch (ArgumentNullException)
             {

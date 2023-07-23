@@ -6,35 +6,119 @@
 $(document).ready(function () {
     $('select').niceSelect();
     setInterval(countDown, 1000);
-    
+
     $('.like i').click(likeAuctionHandler);
     $('#loadSubCategories').change(getSubCategories);
     $('#loadSubCategoryId').change(getSubCategoryId);
     $('#adminCountriesPerPage').change(adminCountriesPerPage);
+    $('#adminUsersPerPage').change(adminUsersPerPage);
     $('#editAuctionGetSubCategories').change(getSubCategories);
     $('#editAuctionGetSubCategoryId').change(getSubCategoryId);
     $('#addCountry').click(addCountry);
     $('#search-country').on('input', searchCountry);
+    $('#search-user').on('input', searchUser);
+    $('#select-auctions-per-page').change(adminAuctionsPerPage);
 });
 
-function searchCountry(e) {
-    e.preventDefault();
-    let name = $(e.target).val();
+function adminAuctionsPerPage(e) {
+    let itemsPerPage = parseInt($(e.target).parent().find('.option.selected').attr('data-value'));
 
-    if (name.length > 0) {
+    $.ajax({
+        type: 'get',
+        data: { itemsPerPage },
+        url: '/Administration/Auction/All',
+        success: function (response) {
+
+        }
+    });
+}
+
+function makeAdmin(e) {
+    e.preventDefault();
+    let userId = $(e.target).attr('data-userId');
+    let token = $('#antiForgeryForm input').val();
+
+    $.ajax({
+        type: 'post',
+        data: { userId },
+        url: '/Administration/User/AddToRole',
+        headers: {
+            'X-CSRF-TOKEN': token
+        },
+        success: function (response) {
+            if (response.success) {
+                $(e.target).removeClass('btn-outline-success');
+                $(e.target).addClass('btn-outline-danger');
+                $(e.target).text('Remove Admin');
+                $(e.target).attr('onclick', 'removeAdmin(event)');
+            }
+        }
+    }); 
+}
+
+function removeAdmin(e) {
+    e.preventDefault();
+    let userId = $(e.currentTarget).attr('data-userId');
+    let token = $('#antiForgeryForm input').val();
+
+    $.ajax({
+        type: 'post',
+        data: { userId },
+        url: '/Administration/User/RemoveFromRole',
+        headers: {
+            'X-CSRF-TOKEN': token
+        },
+        success: function (response) {
+            if (response.success) {
+                $(e.target).removeClass('btn-outline-danger');
+                $(e.target).addClass('btn-outline-success');
+                $(e.target).text('Make Admin');
+                $(e.target).attr('onclick', 'makeAdmin(event)');
+            }
+        }
+    });
+}
+
+function searchUser(e) {
+    let searchTerm = $(e.target).val();
+
+    if (searchTerm.length > 1) {
         $.ajax({
             type: 'GET',
-            url: '/Administration/Countries/GetAllBySearchTerm',
-            data: { name },
+            url: '/Administration/User/GetAllBySearchTerm',
+            data: { searchTerm },
             success: function (response) {
-                $('#countries-table tbody').empty();
-                updateTable(response.countries);
+                $('#users-table tbody').empty();
+                updateTable('user', response);
+                $('.table-pagination').hide();
             }
         });
     }
     else {
-        loadCountries();
+        loadUsersIntoTable();
+        $('.table-pagination').show();
     }
+}
+
+function searchCountry(e) {
+    let name = $(e.target).val();
+
+    if (name.length > 1) {
+        $.ajax({
+            type: 'GET',
+            url: '/Administration/Country/GetAllBySearchTerm',
+            data: { name },
+            success: function (response) {
+                $('#countries-table tbody').empty();
+                updateTable('country', response);
+                $('.table-pagination').hide();
+            }
+        });
+    }
+    else if (name.length == 0) {
+        loadCountriesIntoTable();
+        $('.table-pagination').show();
+    }     
 }
 
 function addCountry() {
@@ -52,7 +136,7 @@ function addCountry() {
     let token = $('#antiForgeryForm input').val();
     $.ajax({
         type: 'POST',
-        url: '/Administration/Countries/Add',
+        url: '/Administration/Country/Add',
         data: { countryName },
         headers: {
             'X-CSRF-TOKEN': token
@@ -71,20 +155,56 @@ function addCountry() {
     });
 }
 
-function adminCountriesPerPage(e) {
+function adminUsersPerPage(e) {
     e.preventDefault();
 
-    let itemsPerPage = Number($(e.currentTarget).children('.nice-select').children('.list').children('.selected').attr('data-value'));
+    let itemsPerPage = parseInt($(e.currentTarget).parent().find('.selected').attr('data-value'));
     
     let postData = {
         itemsPerPage,
         currentPage: 1
     };
 
-    loadCountries(postData);
+    loadUsersIntoTable(postData);
 }
 
-function loadCountries(postData) {
+function loadUsersIntoTable(postData) {
+    if (postData == null) {
+        postData = {
+            itemsPerPage: 10,
+            currentPage: 1
+        };
+    }
+
+    $.ajax({
+        type: 'get',
+        url: '/Administration/User/GetAll',
+        data: postData,
+        success: function (response) {
+            if (response.success) {
+                $('#users-table tbody').empty();
+                updateTable('user', response.users);
+                if (response.pagesCount > 1) {
+                    pagination(response, 'adminUsersPagination', loadUsersIntoTable);
+                }
+            }
+        }
+    });
+}
+
+function adminCountriesPerPage(e) {
+    e.preventDefault();
+    let itemsPerPage = parseInt($(e.currentTarget).siblings().find('.option.selected').attr('data-value'));
+
+    let postData = {
+        itemsPerPage,
+        currentPage: 1
+    };
+
+    loadCountriesIntoTable(postData);
+}
+
+function loadCountriesIntoTable(postData) {
     if (postData == null) {
         postData = {
             itemsPerPage: 10,
@@ -94,20 +214,22 @@ function loadCountries(postData) {
 
     $.ajax({
         type: 'GET',
-        url: '/Administration/Countries/GetAll',
+        url: '/Administration/Country/GetAll',
         data: postData,
         success: function (data) {
             $('#countries-table tbody').empty();
             $('.pagination').empty();
 
-            updateTable(data.countries);
-            pagination(data);
+            updateTable('country', data.countries);
+            if (data.pagesCount > 1) {
+                pagination(data, 'adminCountriesPagination', loadCountriesIntoTable);
+            }
         }
     });
 };
 
-function pagination(data) {
-    let ul = $('#adminCountriesPagination');
+function pagination(data, htmlContainerId, loadDataFunction) {
+    let ul = $(`#${htmlContainerId}`);
     let fragment = $(document.createDocumentFragment());
 
     //prev element
@@ -200,70 +322,82 @@ function pagination(data) {
                     pageNumber = Number($(e.currentTarget).children().first().attr('data-pagenumber'));
                 }
 
-                let itemsPerPage = Number($('#adminCountriesPerPage').children('.nice-select').children('.list').children('.selected').attr('data-value'));
-                let postData = {
-                    currentPage: pageNumber,
-                    itemsPerPage
-                };
+                if (pageNumber != data.currentPage) {
 
-                loadCountries(postData);
+                    let postData = {
+                    currentPage: pageNumber,
+                    itemsPerPage: data.itemsPerPage
+                    };
+
+                    loadDataFunction(postData); 
+                }
             }
         });
     });
 };
 
-function updateTable(countries) {
+function updateTable(tableName, data) {
     let fragment = $(document.createDocumentFragment());
 
-    $(countries).each(function (index, country) {
+    if (tableName == 'country') {
+        $(data).each(function (index, country) {
+            let row = createCountryRow(country);
+            $(fragment).append(row);
+        });
 
-        let row = $(document.createElement('tr'));
+        $('#countries-table tbody').append(fragment);
+    }
+    else if (tableName == 'user') {
+        $(data).each(function (index, user) {
+            let row = createUserRow(user);
+            $(fragment).append(row);
+        });
 
-        let tdId = $(document.createElement('td'));
-        $(tdId).attr('data-label', 'Country ID');
-        $(tdId).text(country.id);
-
-        let tdName = $(document.createElement('td'));
-        $(tdName).attr('data-label', 'Country name');
-        $(tdName).text(country.name);
-
-        let tdCitiesCount = $(document.createElement('td'));
-        $(tdCitiesCount).attr('data-label', 'Cities count');
-        $(tdCitiesCount).text(country.citiesCount);
-
-        let tdDeleteButton = $(document.createElement('td'));
-        $(tdDeleteButton).attr('data-label', 'Delete');
-        let deleteButton = $(document.createElement('button'));
-        $(deleteButton).text('Delete');
-        $(deleteButton).addClass(['btn', 'btn-sm', 'btn-outline-danger']);
-        $(deleteButton).prop('id', `delete-country_${country.id}`);
-
-        $(deleteButton).click(deleteButtonHandler);
-        $(tdDeleteButton).append(deleteButton);
-
-        let tdEditButton = $(document.createElement('td'));
-        $(tdEditButton).attr('data-label', 'Edit');
-        let editButton = $(document.createElement('button'));
-        $(editButton).text('Edit');
-        $(editButton).addClass(['btn', 'btn-sm', 'btn-outline-warning']);
-        $(editButton).prop('id', `edit-country_${country.id}`);
-
-        $(editButton).click(editButtonHandler);
-        $(tdEditButton).append(editButton);
-
-        $(row).append(tdId);
-        $(row).append(tdName);
-        $(row).append(tdCitiesCount);
-        $(row).append(tdDeleteButton);
-        $(row).append(tdEditButton);
-
-        $(fragment).append(row);
-    });
-
-    $('#countries-table tbody').append(fragment);
+        $('#users-table tbody').append(fragment);
+    }
 };
 
-function deleteButtonHandler(e) {
+function createCountryRow(country) {
+    return `<tr>
+        <td data-label="Country ID">${country.id}</td>
+        <td data-label="Country name">${country.name}</td>
+        <td data-label="Cities count">${country.citiesCount}</td>
+        <td data-label="Delete">
+          <button onclick="deleteCountryButtonHandler(event)" class="btn btn-sm btn-outline-danger" id="delete-country_${country.id}">Delete</button>
+        </td>
+        <td data-label="Edit">
+          <button onclick="editCountryButtonHandler(event)" class="btn btn-sm btn-outline-warning" id="edit-country_${country.id}">Edit</button>
+        </td>
+    </tr>`;
+}
+
+function createUserRow(user) {
+    let adminRowTemplate = `<tr>
+                <td data-label="Username">${user.username}</td>
+                <td data-label="Email">${user.email}</td>
+                <td data-label="Join Date">${user.createdOn}</td>
+                <td data-label="Auctions Count">${user.auctionsCount}</td>
+                <td data-label="Profile"><a href="/User/SellerProfile/${user.id}" class="btn btn-sm btn-outline-secondary">Profile page</a></td>`
+    if (user.isAdmin) {
+        adminRowTemplate +=`<td data-label="Manage Roles">
+                                            <button onclick="removeAdmin(event)" data-userId="${user.id}" class="btn btn-sm btn-outline-danger">
+                                                Remove Admin
+                                            </button>
+                                    </td>`;
+    }
+    else {
+        adminRowTemplate += `<td data-label="Manage Roles">
+                                            <button onclick="makeAdmin(event)" data-userId="${user.id}" class="btn btn-sm btn-outline-success">
+                                                Make Admin
+                                            </button>
+                                    </td>`;
+    }
+    adminRowTemplate += `</tr>`;
+
+    return adminRowTemplate;
+}
+
+function deleteCountryButtonHandler(e) {
     let country = $(e.target).attr('id');
     let indexOfId = country.indexOf('_')
     let countryId = Number(country.substring(indexOfId + 1));
@@ -275,7 +409,7 @@ function deleteButtonHandler(e) {
 
     $.ajax({
         type: 'POST',
-        url: '/Administration/Countries/Delete',
+        url: '/Administration/Country/Delete',
         data: postData,
         headers: {
             'X-CSRF-TOKEN': token
@@ -294,14 +428,14 @@ function deleteButtonHandler(e) {
     });
 };
 
-function editButtonHandler(e) {
+function editCountryButtonHandler(e) {
     $(e.target).attr('disabled', 'disabled');
     let country = $(e.target).attr('id');
     let indexOfId = country.indexOf('_')
     let countryId = Number(country.substring(indexOfId + 1));
     let token = $('#antiForgeryForm input').val();
 
-    let tdElement = $(this).parent().parent().children()[1];
+    let tdElement = $(e.target).parent().parent().children()[1];
     let currentCountryName = $(tdElement).text();
     $(tdElement).text('');
     let div = $(document.createElement('div'));
@@ -340,7 +474,7 @@ function editButtonHandler(e) {
 
         $.ajax({
             type: 'POST',
-            url: '/Administration/Countries/Update',
+            url: '/Administration/Country/Update',
             data: data,
             headers: {
                 'X-CSRF-TOKEN': token
@@ -368,6 +502,40 @@ function editButtonHandler(e) {
         $(e.target).removeAttr('disabled');
     });
 };
+
+function updateCountryButtonHandler(e) {
+    e.preventDefault()
+
+    let inputValue = $(this).parent().children()[0];
+    let countryName = $(inputValue).val
+    let data = {
+        countryId,
+        countryName
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: '/Administration/Country/Update',
+        data: data,
+        headers: {
+            'X-CSRF-TOKEN': token
+        },
+        success: function (response) {
+            if (!response.result) {
+                alert(response.message);
+                $(cancelBtn).trigger('click');
+            }
+            else {
+                $(cancelBtn).trigger('click');
+                tdElement.textContent = countryName;
+            }
+        },
+        error: function (response) {
+            alert('Request failed. Please try again');
+            $(cancelBtn).trigger('click');
+        }
+    });
+}
 
 //Home Page timer
 function getTimers() {
@@ -537,7 +705,7 @@ function showSlides(n) {
     slides[slideIndex - 1].style.display = "block";
     dots[slideIndex - 1].className += " active";
     captionText.innerHTML = dots[slideIndex - 1].alt;
-}function openModal() {
+} function openModal() {
     document.getElementById("myModal").style.display = "block";
     document.querySelector('body').style.overflow = 'hidden';
 }

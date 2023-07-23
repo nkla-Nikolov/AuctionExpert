@@ -11,12 +11,12 @@
     using Microsoft.EntityFrameworkCore;
     using NToastNotify;
 
-    public class CountriesController : AdministrationController
+    public class CountryController : AdministrationController
     {
         private readonly ICountryService countryService;
         private readonly IToastNotification notificationService;
 
-        public CountriesController(
+        public CountryController(
             ICountryService countryService,
             IToastNotification notificationService)
         {
@@ -43,6 +43,7 @@
             var model = new
             {
                 PagesCount = pagesCount,
+                ItemsPerPage = itemsPerPage,
                 HasPreviousPage = currentPage > 1,
                 HasNextPage = currentPage < pagesCount,
                 Countries = countries,
@@ -59,7 +60,7 @@
                 .Where(x => x.Name.Contains(name))
                 .ToListAsync();
 
-            return this.Json(new { countries });
+            return this.Json(countries);
         }
 
         [HttpPost]

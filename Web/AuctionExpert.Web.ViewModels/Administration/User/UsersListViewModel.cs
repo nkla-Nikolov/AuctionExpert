@@ -1,7 +1,7 @@
 ﻿namespace AuctionExpert.Web.ViewModels.Administration.User
 {
     using System;
-
+    using System.Linq;
     using AuctionExpert.Data.Models;
     using AuctionExpert.Services.Mapping;
     using AutoMapper;
@@ -16,7 +16,7 @@
 
         public string ProfileImageUrl { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public string CreatedOn { get; set; }
 
         public int AuctionsCount { get; set; }
 
@@ -25,7 +25,8 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<ApplicationUser, UsersListViewModel>()
-            .ForMember(dest => dest.IsAdmin, opt => opt.MapFrom(x => x.Roles.Count == 0 ? false : true));
+            .ForMember(dest => dest.IsAdmin, opt => opt.MapFrom(x => x.Roles.Count() > 0 ? false : true))
+            .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(x => x.CreatedOn.ToShortDateString()));
         }
     }
 }

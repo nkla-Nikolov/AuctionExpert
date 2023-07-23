@@ -16,14 +16,14 @@
     </div>
     <div class="card-body">
         <div class="col g-3">
-            <div class="table-title-area" id="adminCountriesPerPage">
-                <select>
+            <div class="table-title-area">
+                <select id="adminCountriesPerPage">
                     <option value="10">Show: 10 per page</option>
                     <option value="20">Show: 20 per page</option>
                     <option value="30">Show: 30 per page</option>
                     <option value="50">Show: 50 per page</option>
                 </select>
-                <div class="d-flex col-md-2 align-items-center">
+                <div class="d-flex col-md-3 align-items-center">
                     <label class="form-check-label" style="margin-right: 12px;">Search</label>
                     <input id="search-country" class="form-control"/>
                 </div>
@@ -79,7 +79,7 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            loadCountries();
+            loadCountriesIntoTable();
         });
     </script>
 }

@@ -3,10 +3,28 @@
     this.ViewData["Title"] = "Auctions Administration";
 }
 
-<div class="container">
-    <div class="row g-4">
+<div class="card">
+    <div class="card-header border-transparent">
+        <h3 class="card-title">Auctions</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
         <div class="col g-3">
-            <h2 class="text-center pt-80 pb-80">@this.ViewData["Title"]</h2>
+            <div class="table-title-area" id="select-auctions-per-page">
+                <select>
+                    <option value="10">Show: 10 per page</option>
+                    <option value="20">Show: 20 per page</option>
+                    <option value="30">Show: 30 per page</option>
+                    <option value="50">Show: 50 per page</option>
+                </select>
+            </div>
             <div class="table-wrapper">
                 <table class="eg-table order-table table mb-0">
                     <thead>
@@ -24,6 +42,7 @@
                     <tbody>
                         @foreach (var auction in Model.Auctions)
                         {
+                            <form method="post" asp-action="Delete" asp-route-id="@auction.Id">
                             <tr>
                                 <td data-label="Id">@auction.Id</td>
                                 <td data-label="Title">@auction.Title</td>
@@ -32,23 +51,21 @@
                                 <td data-label="Created On">@auction.CreatedOn.ToShortDateString()</td>
                                 <td data-label="Closes In">@auction.ClosesIn.ToShortDateString()</td>
                                 <td data-label="Delete">
-                                    <form method="post">
-                                        <button asp-area="Administration"
-                                            asp-controller="Auctions"
-                                            asp-action="Delete"
-                                            asp-route-auctionId="@auction.Id" class="btn btn-sm btn-outline-danger">
-                                            Delete
-                                        </button>
-                                    </form>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        Delete
+                                    </button>
                                 </td>
                                 <td data-label="Edit">
-                                    <a asp-area="" 
-                                    asp-controller="Auction" 
-                                    asp-action="Edit"
-                                    asp-route-auctionId="@auction.Id" 
-                                   class="btn btn-sm btn-outline-warning">Edit</a>
+                                    <a asp-area="Administration"
+                                       asp-controller="Auction"
+                                       asp-action="Edit"
+                                       asp-route-auctionId="@auction.Id"
+                                       class="btn btn-sm btn-outline-warning">
+                                        Edit
+                                    </a>
                                 </td>
                             </tr>
+                            </form>
                         }
                     </tbody>
                 </table>

@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class PagingViewModel
+    public abstract class BasePageModel
     {
         public int PagesCount => (int)Math.Ceiling((double)this.ItemsCount / this.ItemsPerPage);
 
@@ -19,5 +19,7 @@
         public bool HasNextPage => this.PageNumber < this.PagesCount;
 
         public int NextPageNumber => this.PageNumber + 1;
+
+        public string AspAction { get; set; }
     }
 }

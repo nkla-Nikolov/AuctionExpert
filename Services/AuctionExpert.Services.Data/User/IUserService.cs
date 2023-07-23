@@ -18,8 +18,8 @@
 
         int GetCount();
 
-        Task AddUserToRole(string userId, string roleName);
+        Task AddUserToRole(ApplicationUser user, string roleName);
 
-        Task RemoveUserFromRole(string userId, string roleName);
+        Task RemoveUserFromRole(ApplicationUser user, string roleName);
     }
 }

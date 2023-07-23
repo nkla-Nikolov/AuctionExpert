@@ -4,7 +4,7 @@
 
     using AuctionExpert.Web.ViewModels.Shared;
 
-    public class MyAuctionsPaginatedViewModel : PagingViewModel
+    public class MyAuctionsPaginatedViewModel : BasePageModel
     {
         public IEnumerable<MyAuctionsViewModel> Auctions { get; set; }
 

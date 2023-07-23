@@ -4,8 +4,8 @@
 
     using AuctionExpert.Web.ViewModels.Shared;
 
-    public class PaginatedAuctionListModel : PagingViewModel
+    public class PaginatedAuctionListModel : BasePageModel
     {
-        public IEnumerable<AdminAuctionViewModel> Auctions { get; set; }
+        public IEnumerable<AuctionModel> Auctions { get; set; }
     }
 }
